@@ -83,12 +83,12 @@
 
     <f7-block-title>Checkboxes</f7-block-title>
     <f7-list form>
-      <f7-list-item v-for="n in 3" checkbox name="my-checkbox" :value="n" :title="'Checkbox ' + n"></f7-list-item>
+      <f7-list-item v-for="n in 3" checkbox :key="n" name="my-checkbox" :value="n" :title="'Checkbox ' + n"></f7-list-item>
     </f7-list>
 
     <f7-block-title>Radios</f7-block-title>
     <f7-list form>
-      <f7-list-item v-for="n in 3" radio name="my-radio" :checked="n === 1" :value="n" :title="'Radio ' + n"></f7-list-item>
+      <f7-list-item v-for="n in 3" radio name="my-radio" :key="n" :checked="n === 1" :value="n" :title="'Radio ' + n"></f7-list-item>
     </f7-list>
 
     <f7-block-title>Buttons</f7-block-title>
