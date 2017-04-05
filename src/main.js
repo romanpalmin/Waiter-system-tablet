@@ -27,6 +27,11 @@ import App from './app'
 // Init F7 Vue Plugin
 Vue.use(Framework7Vue)
 
+import axios from 'axios';
+import VueAxios from 'vue-axios';
+
+Vue.use(VueAxios, axios);
+
 // Init App
 new Vue({
   el: '#app',
