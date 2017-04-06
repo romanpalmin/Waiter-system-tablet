@@ -1,7 +1,7 @@
 <template>
     <div class="category-list">
         <f7-list v-for="item in list" :key="item.code">
-            <f7-list-item link="/about/" :title="item.name" link-animate-pages="false"></f7-list-item>
+            <f7-list-item link="/about/" :title="item.name" ></f7-list-item>
         </f7-list>
     </div>
 </template>

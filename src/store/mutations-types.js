@@ -1,0 +1,1 @@
+export const SET_WAITER = 'SET_WAITER'
