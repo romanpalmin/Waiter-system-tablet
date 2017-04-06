@@ -6,7 +6,7 @@ export default [
         "lastName": "Петрович",
         "status": "1",
         "shortFullName": "Петров П.П.",
-        "password": "111"
+        "password": "1111"
     },
     {
         "id": "2",
@@ -15,7 +15,7 @@ export default [
         "lastName": "Васильевич",
         "status": "1",
         "shortFullName": "Смирнов И.В.",
-        "password": "222"
+        "password": "2222"
     },
     {
         "id": "3",
@@ -24,7 +24,7 @@ export default [
         "lastName": "Семенович",
         "status": "1",
         "shortFullName": "Баранов А.С.",
-        "password": "333"
+        "password": "3333"
     },
     {
         "id": "4",
@@ -33,6 +33,6 @@ export default [
         "lastName": "Петрович",
         "status": "1",
         "shortFullName": "Струнов В.П.",
-        "password": "555"
+        "password": "4444"
     }
 ]

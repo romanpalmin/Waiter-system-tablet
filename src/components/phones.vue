@@ -72,12 +72,7 @@
             }
         },
         mounted(){
-            this.pass = [1,2,3,4].map(function(item){
-                return false;
-            })
-            this.stars = [1,2,3,4].map(function(item){
-                return 'star-not-active';
-            })
+            this.initArray();
         },
         watch:{
         },
@@ -100,6 +95,23 @@
             },
            checkUserPassword(){
                 console.log(this.currentPassword);
+                console.log(this.$store.state.waiter.password);
+                if (this.currentPassword === this.$store.state.waiter.password){
+                    console.log("Пароли совпадают, идем дальше");
+                } else {
+                    console.log("Пароли не совпадают");
+                    this.initArray();
+                    this.currentClick = 0;
+                    this.currentPassword = '';
+                }
+           },
+           initArray(){
+                this.pass = [1,2,3,4].map(function(item){
+                    return false;
+                })
+                this.stars = [1,2,3,4].map(function(item){
+                    return 'star-not-active';
+                })
            }
         }
     }
