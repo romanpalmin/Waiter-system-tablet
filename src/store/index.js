@@ -5,7 +5,8 @@ import * as types from './mutations-types'
 
 const store = new Vuex.Store({
     state: {
-        waiter: {}
+        waiter: {},
+        testMessage: 'Hello, world!'
     },
     mutations:{
         [types.SET_WAITER](state, payload){

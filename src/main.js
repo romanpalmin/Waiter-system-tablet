@@ -25,6 +25,7 @@ import store from './store';
 new Vue({
   el: '#app',
   template: '<app/>',
+  store,
   framework7: {
     root: '#app',
     routes: Routes,
