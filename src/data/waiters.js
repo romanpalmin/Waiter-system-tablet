@@ -6,7 +6,8 @@ export default [
         "lastName": "Петрович",
         "status": "1",
         "shortFullName": "Петров П.П.",
-        "password": "1111"
+        "password": "1111",
+        "avatar": "http://10.10.182.11/ept/waiter-tablet/images/dart2.png"
     },
     {
         "id": "2",
@@ -15,7 +16,8 @@ export default [
         "lastName": "Васильевич",
         "status": "1",
         "shortFullName": "Смирнов И.В.",
-        "password": "2222"
+        "password": "2222",
+        "avatar": "http://10.10.182.11/ept/waiter-tablet/images/dart.png"
     },
     {
         "id": "3",
@@ -24,7 +26,8 @@ export default [
         "lastName": "Семенович",
         "status": "1",
         "shortFullName": "Баранов А.С.",
-        "password": "3333"
+        "password": "3333",
+        "avatar": "http://10.10.182.11/ept/waiter-tablet/images/shrek.png"
     },
     {
         "id": "4",
@@ -33,6 +36,7 @@ export default [
         "lastName": "Петрович",
         "status": "1",
         "shortFullName": "Струнов В.П.",
-        "password": "4444"
+        "password": "4444",
+        "avatar": "http://10.10.182.11/ept/waiter-tablet/images/morph.png"
     }
 ]

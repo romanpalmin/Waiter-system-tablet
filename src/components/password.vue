@@ -89,6 +89,7 @@
         mixins:[logout],
         mounted(){
             this.initArray();
+            console.log(this.$router);
         },
         watch:{
             goToStart: function() {
@@ -119,7 +120,7 @@
             },
            checkUserPassword(){
                 if (this.currentPassword === this.$store.state.waiter.password){
-                    console.log("Password ok");
+                    this.$router.loadPage('/tables/');
                 } else {
                     this.initArray();
                     this.currentClick = 0;

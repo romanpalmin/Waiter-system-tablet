@@ -22,5 +22,9 @@ export default [
     {
         path: '/main/',
         component: require('./app.vue')
+    },
+    {
+        path: '/tables/',
+        component: require('./pages/tables.vue')
     }
 ]

@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Framework7 from 'framework7';
 import Framework7Vue from 'framework7-vue';
+
 import Vuex from 'vuex';
 
 // Import Styles
