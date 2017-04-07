@@ -26,9 +26,8 @@
         },
         methods: {
             getWaiter(item){
-                console.log(item);
                 this.$store.commit('SET_WAITER', {'waiter': item});
-                console.log(this.$store);
+
             }
         }
 
