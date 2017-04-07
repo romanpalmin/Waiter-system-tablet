@@ -32,6 +32,18 @@
                     <td></td>
                 </tr>
             </table>
+            <f7-popup :opened=showPopup>
+                <span @click="togglePopup"></span>
+                <f7-block inner>
+                    Пароль введен неверно. Повторить попытку?
+                </f7-block>
+                <f7-block inner no-hairlines>
+                    <f7-grid>
+                        <f7-col><f7-button  round fill center @click="togglePopup">Да</f7-button></f7-col>
+                        <f7-col><f7-button  round fill center @click="goToStart=true" href="/main/" >Нет</f7-button></f7-col>
+                    </f7-grid>
+                </f7-block>
+            </f7-popup>
         </f7-block>
     </div>
 </template>
@@ -61,6 +73,7 @@
     }
 </style>
 <script>
+    import logout from './mixins/logout.js'
     export default{
         data(){
             return{
@@ -68,13 +81,24 @@
                 pass:[],
                 currentClick: 0,
                 currentPassword: '',
-                stars:[]
+                stars:[],
+                showPopup: false,
+                goToStart: false
             }
         },
+        mixins:[logout],
         mounted(){
             this.initArray();
         },
         watch:{
+            goToStart: function() {
+                if (this.goToStart){
+                    this.showPopup = false;
+                    this.goToStart = false;
+                    this.logout();
+                }
+
+            }
         },
         methods: {
             pressNumber(num){
@@ -94,24 +118,26 @@
                 }
             },
            checkUserPassword(){
-                console.log(this.currentPassword);
-                console.log(this.$store.state.waiter.password);
                 if (this.currentPassword === this.$store.state.waiter.password){
-                    console.log("Пароли совпадают, идем дальше");
+                    console.log("Password ok");
                 } else {
-                    console.log("Пароли не совпадают");
                     this.initArray();
                     this.currentClick = 0;
                     this.currentPassword = '';
+                    this.togglePopup();
                 }
            },
            initArray(){
-                this.pass = [1,2,3,4].map(function(item){
+                const arr = [1,2,3,4];
+                this.pass = arr.map(function(item){
                     return false;
                 })
-                this.stars = [1,2,3,4].map(function(item){
+                this.stars = arr.map(function(item){
                     return 'star-not-active';
                 })
+           },
+           togglePopup(){
+                this.showPopup = !this.showPopup;
            }
         }
     }

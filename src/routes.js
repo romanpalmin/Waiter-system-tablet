@@ -18,5 +18,9 @@ export default [
     {
         path: '/password/',
         component: require('./pages/input-password.vue')
+    },
+    {
+        path: '/main/',
+        component: require('./app.vue')
     }
 ]

@@ -17,9 +17,14 @@ Vue.use(Framework7Vue);
 Vue.use(VueAxios, axios);
 
 
+
+
+
 import Routes from './routes.js';
 import App from './app';
 import store from './store';
+
+
 
 // Init App
 new Vue({
