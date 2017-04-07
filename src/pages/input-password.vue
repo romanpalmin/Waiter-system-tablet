@@ -2,8 +2,7 @@
     <f7-page>
         <f7-navbar title="Ввод пароля" back-link="Back" sliding></f7-navbar>
         <f7-block inner class="component">
-           <!-- <password/>-->
-            <phones/>
+            <password/>
         </f7-block>
     </f7-page>
 </template>
@@ -15,7 +14,6 @@
 </style>
 <script>
     import password from '../components/password.vue';
-    import phones from '../components/phones.vue';
     export default{
         data(){
             return {
@@ -23,8 +21,7 @@
             }
         },
         components:{
-            password,
-            phones
+            password
         }
     }
 
