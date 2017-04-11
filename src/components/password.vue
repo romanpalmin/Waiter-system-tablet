@@ -83,13 +83,16 @@
                 currentPassword: '',
                 stars:[],
                 showPopup: false,
-                goToStart: false
+                goToStart: false,
+                waitingInterval: 'begin'
             }
         },
         mixins:[logout],
         mounted(){
             this.initArray();
             console.log(this.$router);
+            console.log('Привязываем клавиатуру');
+            window.addEventListener('keyup', this.pressNumberFromKeyboard);
         },
         watch:{
             goToStart: function() {
@@ -98,12 +101,10 @@
                     this.goToStart = false;
                     this.logout();
                 }
-
             }
         },
         methods: {
             pressNumber(num){
-
                 if (this.currentClick < 4 ){
                     this.pass[this.currentClick] = true;
                     this.stars[this.currentClick] = 'star-active';
@@ -118,6 +119,11 @@
                     console.log(this.currentPassword);
                 }
             },
+           pressNumberFromKeyboard(evt){
+               if (evt.key > 0 && evt.key <9){
+                    this.pressNumber(evt.key);
+               }
+           },
            checkUserPassword(){
                 if (this.currentPassword === this.$store.state.waiter.password){
                     this.$router.loadPage('/tables/');
