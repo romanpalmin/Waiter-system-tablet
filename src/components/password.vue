@@ -106,15 +106,12 @@
                 if (this.currentClick < 4 ){
                     this.pass[this.currentClick] = true;
                     this.stars[this.currentClick] = 'star-active';
-                    this.stars = this.stars.map(function(item){return item});
+                    this.stars = this.stars.map((item)=>item);
                     this.currentClick++;
                     this.currentPassword += num;
                     if (this.currentPassword.length === 4){
                         this.checkUserPassword();
                     }
-                }
-                else {
-                    console.log(this.currentPassword);
                 }
             },
 
@@ -143,12 +140,8 @@
            },
            initArray(){
                 const arr = [1,2,3,4];
-                this.pass = arr.map(function(item){
-                    return false;
-                })
-                this.stars = arr.map(function(item){
-                    return 'star-not-active';
-                })
+                this.pass = arr.map(item => false);
+                this.stars = arr.map(item => 'star-not-active');
            },
            togglePopup(){
                 this.showPopup = !this.showPopup;
