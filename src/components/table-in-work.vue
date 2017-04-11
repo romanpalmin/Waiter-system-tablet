@@ -7,9 +7,9 @@
                     <div class="table-image"><f7-badge>{{table.id}}</f7-badge></div>
                     <div class="table-title">Стол №{{table.id}}</div>
                 </div>
-
             </div>
         </f7-block>
+        <add-table-button />
     </div>
 </template>
 <style scoped lang="less">
@@ -39,6 +39,7 @@
 <script>
     import tables from '../data/tables';
     import _ from 'lodash';
+    import btnAdd from './add-table-to-waitress';
     export default{
         data(){
             return{
@@ -53,6 +54,9 @@
             getTablesCurrentWaitress(){
                 this.currentTables = _.filter(tables, {waitress:this.$store.state.waiter.id});
             }
+        },
+        components:{
+            'add-table-button': btnAdd
         }
     }
 

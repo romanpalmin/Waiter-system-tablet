@@ -16,6 +16,10 @@ export default [
         component: require('./pages/select-user.vue')
     },
     {
+        path: '/halls/',
+        component: require('./pages/select-halls.vue')
+    },
+    {
         path: '/password/',
         component: require('./pages/input-password.vue')
     },
