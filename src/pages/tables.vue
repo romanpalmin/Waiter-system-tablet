@@ -2,8 +2,7 @@
     <div>
         <f7-page :cached="false">
             <navbar/>
-            столы
-            <f7-button @click="reload">test</f7-button>
+            <waiters-tables />
         </f7-page>
     </div>
 </template>
@@ -29,7 +28,7 @@
             reload(){
                 console.log('reload');
                 //this.$router.reloadPage('/main/');
-                this.$router.load({url: '/main/', force:true})
+                //this.$router.load({url: '/main/', force:true})
             }
         }
     }
