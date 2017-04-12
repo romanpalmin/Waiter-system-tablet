@@ -1,5 +1,6 @@
 <template>
     <div>
+
         <table-list :list="currentTables" />
         <add-table-button />
     </div>

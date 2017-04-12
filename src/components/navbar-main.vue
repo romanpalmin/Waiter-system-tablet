@@ -99,6 +99,11 @@
         },
         mixins:
             [logout],
+        computed:{
+            tabletNumber(){
+                return this.$store.state.tabletNumber;
+            }
+        },
         methods:{
             getStyle(type){
                 let str = '';

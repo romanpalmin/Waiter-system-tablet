@@ -29,10 +29,10 @@
         mounted(){
             console.log(this.componentName);
             if (this.$store.state.halls.length === 0){
-                console.log('Заполняем залы');
                 this.list = this.getHalls(halls);
-                console.log(this.$store.state.halls);
-                console.log(this.list);
+            }
+            else {
+                this.list = this.$store.state.halls;
             }
         },
         methods: {

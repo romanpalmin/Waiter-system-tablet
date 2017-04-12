@@ -2,6 +2,7 @@
     <div>
         <f7-page :cached="false">
             <!--<navbar/>    -->
+
             <waiters-tables />
         </f7-page>
     </div>
