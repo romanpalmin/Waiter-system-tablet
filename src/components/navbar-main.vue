@@ -102,26 +102,20 @@
         methods:{
             getStyle(type){
                 let str = '';
-                console.log('test: ' + type);
                 switch (type){
                     case 'avatar':
-                    console.log(678);
                          str = `background-image: url("${this.$store.state.waiter.avatar}");background-size: cover;`;
                          break;
                     case 'settings':
-                         console.log(123);
                          str = `background-image: url("http://10.10.182.11/ept/waiter-tablet/images/settings.png");background-size: cover; background-color: transparent;`;
                          break;
                     case 'exit':
-                    console.log(456);
                          str = `background-image: url("http://10.10.182.11/ept/waiter-tablet/images/exit.png");background-size: cover; background-color: transparent;`;
                          break;
                     default :
                          str = '';
-                         console.log(999);
                          break;
                 }
-                console.log(str);
                 return str;
             },
             exit(){
