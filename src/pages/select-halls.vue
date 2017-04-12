@@ -10,7 +10,10 @@
                     <f7-list-item class="test13">
                         <f7-input autofocus type="text" placeholder="Номер стола" :value="tableNumber" class="input-sub"
                                   @click="openPicker = true"
-                                  @blur="checkForPicker"/>
+                                  @blur="checkForPicker"
+                                  @input="update"
+                                  @keydown="update"
+                                  @keyup.delete="update" />
                         <f7-label><span class="hor-delimeter"><f7-link @click="back()">Отмена</f7-link></span>
                         </f7-label>
                     </f7-list-item>
@@ -109,7 +112,7 @@
                 this.openPicker = true;
             },
             back(){
-                //this.openPicker = false;
+                this.openPicker = false;
                 this.$router.back();
             },
             checkForPicker(){
@@ -133,6 +136,12 @@
                     this.pressNumber(evt.key);
                }
            },
+           update(evt){
+                this.number = evt;
+           },
+            delete(evt){
+                this.number = evt;
+            }
         }
     }
 
