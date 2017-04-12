@@ -2,42 +2,50 @@
     <div class="main-nav-bar">
         <f7-navbar>
             <f7-nav-left>
-                <f7-link open-panel="left" v-if="this.$store.state.login "><div class="avatar images" :style="getStyle('avatar')"></div></f7-link>
-                <f7-link v-if="!this.$store.state.login && this.$store.state.pages.main" @click="showPopup=true"><div class="avatar images" :style="getStyle('settings')"></div></f7-link>
+                <f7-link open-panel="left" v-if="this.$store.state.login ">
+                    <div class="avatar images" :style="getStyle('avatar')"></div>
+                </f7-link>
+                <f7-link v-if="!this.$store.state.login && this.$store.state.pages.main" @click="showPopup=true">
+                    <div class="avatar images" :style="getStyle('settings')"></div>
+                </f7-link>
             </f7-nav-left>
-            <f7-nav-center v-if="this.$store.state.pages.users"><div class="page-title">Список официантов</div></f7-nav-center>
+            <f7-nav-center v-if="this.$store.state.pages.users">
+                <div class="page-title">Список официантов</div>
+            </f7-nav-center>
             <f7-nav-center v-if="this.$store.state.login"> {{this.$store.state.waiter.shortFullName}}</f7-nav-center>
-            <f7-nav-center v-if="this.$store.state.pages.password"> {{this.$store.state.waiter.shortFullName}}</f7-nav-center>
-            <f7-nav-right >
-                <span @click="exit()" v-if="!this.$store.state.pages.main"><div class="avatar images" :style="getStyle('exit')"></div></span>
-                <!--<f7-link title="Logout" @click="logout()"><span>Выход</span></f7-link>-->
+            <f7-nav-center v-if="this.$store.state.pages.password"> {{this.$store.state.waiter.shortFullName}}
+            </f7-nav-center>
+            <f7-nav-right>
+                <span @click="exit()" v-if="!this.$store.state.pages.main"><div class="avatar images"
+                                                                                :style="getStyle('exit')"></div></span>
             </f7-nav-right>
         </f7-navbar>
 
         <f7-panel left layout="dark" :opened="openLeft">
 
-                        <f7-block inner>
-                            <p>Планшет №{{tabletNumber}}</p>
-                        </f7-block>
-                        <f7-block-title>Блок действий 1</f7-block-title>
-                        <f7-block inner>
-                            <p>Действие 1.1</p>
-                            <p>Действие 2.1</p>
-                            <p>Действие 3.1</p>
-                            <p>Действие 4.1</p>
-                        </f7-block>
-                        <f7-block-title>Блок действий 2</f7-block-title>
-                        <f7-block inner>
-                            <p>Действие 1.2</p>
-                            <p>Действие 2.2</p>
-                            <p>Действие 3.3</p>
-                            <p>Действие 4.4</p>
-                        </f7-block>
+            <f7-block inner>
+                <p>Планшет №{{tabletNumber}}</p>
+            </f7-block>
+            <f7-block-title>Блок действий 1</f7-block-title>
+            <f7-block inner>
+                <p>Действие 1.1</p>
+                <p>Действие 2.1</p>
+                <p>Действие 3.1</p>
+                <p>Действие 4.1</p>
+            </f7-block>
+            <f7-block-title>Блок действий 2</f7-block-title>
+            <f7-block inner>
+                <p>Действие 1.2</p>
+                <p>Действие 2.2</p>
+                <p>Действие 3.3</p>
+                <p>Действие 4.4</p>
+            </f7-block>
         </f7-panel>
 
         <f7-popup :opened=showPopup>
             <f7-navbar>
-                <f7-nav-right><span @click="showPopup=false"><div class="close-settings images" :style="getStyle('exit')"></div></span></f7-nav-right>
+                <f7-nav-left><span @click="showPopup=false"><div class="close-settings images"
+                                                                 :style="getStyle('exit')"></div></span></f7-nav-left>
             </f7-navbar>
             <f7-block-title>Настройки</f7-block-title>
             <f7-block>
@@ -58,22 +66,23 @@
             width: 100%;
             height: 100px
         }
-        .images{
+        .images {
             width: 30px;
             height: 30px;
             border-radius: 50%;
             background-color: darkgrey;
 
         }
-        .avatar{
+        .avatar {
 
         }
-        .page-title{
+        .page-title {
             width: 100%;
         }
 
     }
-    .close-settings{
+
+    .close-settings {
         width: 30px;
         height: 30px;
         border-radius: 50%;
@@ -84,18 +93,9 @@
     export default{
         data(){
             return{
-                fio: this.$store.state.waiter.shortFullName,
-                tabletNumber: this.$store.state.tabletNumber,
                 openLeft: false,
-                userLoginIn: this.$store.state.login,
                 showPopup: false
             }
-        },
-        mounted(){
-        },
-        watch(){
-            openLeft: ()=> {console.log('Сменилась панель');}
-            userLoginIn: ()=> console.log('Пользователь залогинился');
         },
         mixins:
             [logout],
@@ -124,5 +124,6 @@
             }
         }
     }
+
 
 </script>

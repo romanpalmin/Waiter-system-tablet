@@ -7,7 +7,7 @@ const store = new Vuex.Store({
     state: {
         tabletNumber: '13',
         waiter: {},
-        testMessage: 'Hello, world!',
+        testMessage: 'Планшет официанта!',
         halls: [],
         login: false,
         pages:{
