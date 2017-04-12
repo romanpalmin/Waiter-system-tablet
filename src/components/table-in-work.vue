@@ -1,14 +1,6 @@
 <template>
     <div>
-        <f7-block-title>Список столов</f7-block-title>
-        <f7-block>
-            <div class="list-of-tables">
-                <div class="table" v-for="table in currentTables">
-                    <div class="table-image"><f7-badge>{{table.id}}</f7-badge></div>
-                    <div class="table-title">Стол №{{table.id}}</div>
-                </div>
-            </div>
-        </f7-block>
+        <table-list :list="currentTables" />
         <add-table-button />
     </div>
 </template>
@@ -40,11 +32,12 @@
     import tables from '../data/tables';
     import _ from 'lodash';
     import btnAdd from './add-table-to-waitress';
+    import listTables from './list-of-tables';
     export default{
         data(){
             return{
                 name:'this component',
-                currentTables: []
+                currentTables: _.filter(tables, {waitress:this.$store.state.waiter.id})
             }
         },
         mounted(){
@@ -52,11 +45,11 @@
         },
         methods:{
             getTablesCurrentWaitress(){
-                this.currentTables = _.filter(tables, {waitress:this.$store.state.waiter.id});
             }
         },
         components:{
-            'add-table-button': btnAdd
+            'add-table-button': btnAdd,
+            'table-list' : listTables
         }
     }
 

@@ -1,7 +1,7 @@
 <template>
     <div>
         <f7-page :cached="false">
-            <navbar/>
+            <!--<navbar/>    -->
             <waiters-tables />
         </f7-page>
     </div>
@@ -19,6 +19,7 @@
             }
         },
         mounted(){
+            console.log(this.$store.state);
         },
         components: {
             navbar,

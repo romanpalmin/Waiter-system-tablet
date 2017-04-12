@@ -15,6 +15,10 @@
     export default{
         components:{
             users
+        },
+        mounted(){
+            console.log('Удаляем главную');
+            this.$store.commit('SET_MAIN_PAGE', {'main': false});
         }
     }
 

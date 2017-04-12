@@ -4,6 +4,7 @@
         <f7-views>
             <f7-view>
                 <f7-pages>
+                    <navbar/>
                     <f7-page>
                         <div class="center">
                             <f7-button big round fill center href="/users/" title="Войти" color="darkgray">Войти</f7-button>
@@ -13,6 +14,7 @@
             </f7-view>
         </f7-views>
     </div>
+
 </template>
 <style scoped lang="less">
     .app {
@@ -29,7 +31,17 @@
     }
 </style>
 <script>
-export default {}
+import navbar from './components/navbar-main';
+export default {
+
+    components:{
+        navbar
+    },
+    mounted(){
+        console.log('Выставляем главную');
+        this.$store.commit('SET_MAIN_PAGE', {'main': true});
+    }
+}
 
 
 

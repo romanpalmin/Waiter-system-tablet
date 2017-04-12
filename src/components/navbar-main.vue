@@ -2,18 +2,20 @@
     <div class="main-nav-bar">
         <f7-navbar>
             <f7-nav-left>
-                <f7-link open-panel="left"><div class="avatar images" :style="getStyle()"></div></f7-link>
+                <f7-link open-panel="left" v-if="this.$store.state.login "><div class="avatar images" :style="getStyle('avatar')"></div></f7-link>
+                <f7-link v-if="!this.$store.state.login && this.$store.state.pages.main" @click="showPopup=true"><div class="avatar images" :style="getStyle('settings')"></div></f7-link>
             </f7-nav-left>
-            <f7-nav-center> {{fio}}</f7-nav-center>
-
+            <f7-nav-center v-if="this.$store.state.pages.users"><div class="page-title">Список официантов</div></f7-nav-center>
+            <f7-nav-center v-if="this.$store.state.login"> {{this.$store.state.waiter.shortFullName}}</f7-nav-center>
+            <f7-nav-center v-if="this.$store.state.pages.password"> {{this.$store.state.waiter.shortFullName}}</f7-nav-center>
             <f7-nav-right >
-
-                <span @click="exit()">Выход</span>
+                <span @click="exit()" v-if="!this.$store.state.pages.main"><div class="avatar images" :style="getStyle('exit')"></div></span>
                 <!--<f7-link title="Logout" @click="logout()"><span>Выход</span></f7-link>-->
             </f7-nav-right>
         </f7-navbar>
 
         <f7-panel left layout="dark" :opened="openLeft">
+
                         <f7-block inner>
                             <p>Планшет №{{tabletNumber}}</p>
                         </f7-block>
@@ -32,6 +34,22 @@
                             <p>Действие 4.4</p>
                         </f7-block>
         </f7-panel>
+
+        <f7-popup :opened=showPopup>
+            <f7-navbar>
+                <f7-nav-right><span @click="showPopup=false"><div class="close-settings images" :style="getStyle('exit')"></div></span></f7-nav-right>
+            </f7-navbar>
+            <f7-block-title>Настройки</f7-block-title>
+            <f7-block>
+                Настройки 1
+            </f7-block>
+            <f7-block>
+                Настройки 2
+            </f7-block>
+            <f7-block>
+                Настройки 3
+            </f7-block>
+        </f7-popup>
     </div>
 </template>
 <style scoped lang="less">
@@ -45,10 +63,20 @@
             height: 30px;
             border-radius: 50%;
             background-color: darkgrey;
+
         }
         .avatar{
 
         }
+        .page-title{
+            width: 100%;
+        }
+
+    }
+    .close-settings{
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
     }
 </style>
 <script>
@@ -58,20 +86,43 @@
             return{
                 fio: this.$store.state.waiter.shortFullName,
                 tabletNumber: this.$store.state.tabletNumber,
-                openLeft: false
+                openLeft: false,
+                userLoginIn: this.$store.state.login,
+                showPopup: false
             }
         },
         mounted(){
         },
         watch(){
             openLeft: ()=> {console.log('Сменилась панель');}
+            userLoginIn: ()=> console.log('Пользователь залогинился');
         },
         mixins:
             [logout],
         methods:{
-            getStyle(){
-                //return `background-image: url("images/dart.png");background-size: cover;`;
-                return `background-image: url("${this.$store.state.waiter.avatar}");background-size: cover;`;
+            getStyle(type){
+                let str = '';
+                console.log('test: ' + type);
+                switch (type){
+                    case 'avatar':
+                    console.log(678);
+                         str = `background-image: url("${this.$store.state.waiter.avatar}");background-size: cover;`;
+                         break;
+                    case 'settings':
+                         console.log(123);
+                         str = `background-image: url("http://10.10.182.11/ept/waiter-tablet/images/settings.png");background-size: cover; background-color: transparent;`;
+                         break;
+                    case 'exit':
+                    console.log(456);
+                         str = `background-image: url("http://10.10.182.11/ept/waiter-tablet/images/exit.png");background-size: cover; background-color: transparent;`;
+                         break;
+                    default :
+                         str = '';
+                         console.log(999);
+                         break;
+                }
+                console.log(str);
+                return str;
             },
             exit(){
                 this.openLeft = false;

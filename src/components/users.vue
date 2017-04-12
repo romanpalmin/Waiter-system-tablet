@@ -22,15 +22,16 @@
             }
         },
         mounted(){
-            console.log(this.componentName);
+            console.log('Выставляем выбор пользователя');
+            this.$store.commit('SET_USERS_PAGE', {'users': true});
         },
         methods: {
             getWaiter(item){
                 this.$store.commit('SET_WAITER', {'waiter': item});
-
+                this.$store.commit('SET_USERS_PAGE', {'users': false});
+                this.$store.commit('SET_PASSWORD_PAGE', {'password': true});
             }
         }
-
     }
 
 </script>
