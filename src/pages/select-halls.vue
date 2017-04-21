@@ -2,18 +2,13 @@
     <div>
         <f7-page :cached="false" @click="openPicker = false">
             <f7-block>
-                {{tableNumber}}
-
-
-
             </f7-block>
             <f7-block>
                 <f7-list form class="test14">
                     <!-- Text Input -->
                     <f7-list-item class="test13">
                         <f7-input type="text" placeholder="Номер стола" readonly v-model="tableNumber" class="input-sub"
-                                  @click="openPicker = true"
-                                  @blur="checkForPicker"
+                                  @click="openPicker = !openPicker"
                                   @input="update"
                                   @keydown="update"
                                   @keyup.delete="update"/>
@@ -26,31 +21,30 @@
                 </div>
             </f7-block>
             <f7-picker-modal :opened="openPicker">
-                <f7-button @click="openPicker = false;">test</f7-button>
                 <table class="phone-table">
                     <tr>
                         <td v-for="n in 3">
-                            <f7-button  raised  @click="pressNumber(n)">{{n}}</f7-button>
+                            <f7-button raised @click="pressNumber(n)">{{n}}</f7-button>
                         </td>
                     </tr>
                     <tr>
                         <td v-for="n in 3">
-                            <f7-button  raised  @click="pressNumber(n+3)">{{n + 3}}</f7-button>
+                            <f7-button raised @click="pressNumber(n+3)">{{n + 3}}</f7-button>
                         </td>
                     </tr>
                     <tr>
 
 
                         <td v-for="n in 3">
-                            <f7-button  raised  @click="pressNumber(n+6)">{{n + 6}}</f7-button>
+                            <f7-button raised @click="pressNumber(n+6)">{{n + 6}}</f7-button>
                         </td>
                     </tr>
                     <tr>
-                        <td></td>
+                        <td><f7-button raised class="btn ok">*</f7-button></td>
                         <td>
-                            <f7-button  raised  @click="pressNumber(0)">0</f7-button>
+                            <f7-button raised @click="pressNumber(0)">0</f7-button>
                         </td>
-                        <td></td>
+                        <td> <f7-button raised class="btn back" @click="clearNumber(0)">#</f7-button></td>
                     </tr>
                 </table>
             </f7-picker-modal>
@@ -58,6 +52,19 @@
     </div>
 </template>
 <style scoped lang="less">
+    .ok{
+        font-size: xx-large;
+    }
+    .back{
+        font-size: large;
+    }
+    .btn{
+        width:100%;
+        .back{
+            background-size: cover;
+            background: url(http://10.10.182.11/ept/waiter-tablet/images/back2.png);
+        }
+    }
     .overlay-list {
         overflow: scroll;
     }
@@ -85,7 +92,8 @@
 
     .item-title.label {
     }
-    .phone-table{
+
+    .phone-table {
         width: 100%;
     }
 
@@ -102,9 +110,10 @@
     export default{
         data(){
             return {
+
                 name: 'this component',
                 openPicker: false,
-                tableNumber: '12',
+                tableNumber: '',
                 notHidePicker: false
             }
         },
@@ -149,6 +158,10 @@
             },
             delete(evt){
                 this.number = evt;
+            },
+
+            clearNumber(){
+                this.tableNumber = '';
             }
         }
     }
