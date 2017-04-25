@@ -1,7 +1,7 @@
 <template>
     <div class="category-list">
         <f7-list v-for="item in list" :key="item.id">
-            <f7-list-item link="/password/" :title="item.shortFullName" @click="getWaiter(item)"></f7-list-item>
+            <f7-list-item :title="item.shortFullName" @click="getWaiter(item)"></f7-list-item>
         </f7-list>
     </div>
 </template>
@@ -30,6 +30,7 @@
                 this.$store.commit('SET_WAITER', {'waiter': item});
                 this.$store.commit('SET_USERS_PAGE', {'users': false});
                 this.$store.commit('SET_PASSWORD_PAGE', {'password': true});
+                this.$router.load({'url':'/password/', 'reload':true});
             }
         }
     }

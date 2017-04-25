@@ -20,7 +20,6 @@
             }
         },
         mounted(){
-            console.log(this.$store.state);
         },
         components: {
             navbar,

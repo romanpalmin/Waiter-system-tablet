@@ -132,7 +132,9 @@
                     this.unbindKeyPress();
                     this.$store.commit('SET_USER_LOG_IN_OUT', {'login': true});
                     this.$store.commit('SET_PASSWORD_PAGE', {'password': false});
-                    this.$router.loadPage('/tables/');
+                    //this.$router.loadPage('/tables/');
+                    this.$router.load({'url':'/tables/', 'reload':true});
+
                 } else {
                     this.initArray();
                     this.currentClick = 0;

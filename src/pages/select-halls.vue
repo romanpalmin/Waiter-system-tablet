@@ -17,7 +17,7 @@
                     </f7-list-item>
                 </f7-list>
                 <div class="overlay-list">
-                    <halls/>
+                    <halls @click="closeSlider()"/>
                 </div>
             </f7-block>
             <f7-picker-modal :opened="openPicker">
@@ -127,6 +127,9 @@
         methods: {
             openSlider(){
                 this.openPicker = true;
+            },
+            closeSlider(){
+                this.openPicker = false;
             },
             back(){
                 this.openPicker = false;

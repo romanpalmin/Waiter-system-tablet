@@ -11,6 +11,9 @@ const store = new Vuex.Store({
         testMessage: 'Планшет официанта!',
         halls: [],
         login: false,
+        selectedHallId: 0,
+        guestsCount: 0,
+        currentTable:0,
         pages:{
             main: true,
             password: false,
@@ -35,6 +38,15 @@ const store = new Vuex.Store({
         },
         [types.SET_USERS_PAGE](state, payload){
             state.pages.users = payload.users;
+        },
+        [types.SET_SELECTED_HALL](state, payload){
+            state.selectedHallId = payload.hallId;
+        },
+        [types.SET_CURRENT_TABLE](state, payload){
+            state.currentTable = payload.tableId;
+        },
+        [types.SET_CURRENT_GUESTS](state, payload){
+            state.guestsCount = +payload.guestsCount;
         }
     }
 
