@@ -1,99 +1,47 @@
 <template>
     <div>
-        <f7-page :cached="false" @click="openPicker = false">
+        <f7-page :cached="false">
             <f7-block>
             </f7-block>
             <f7-block>
                 <f7-list form class="test14">
                     <!-- Text Input -->
-                    <f7-list-item class="test13">
-                        <f7-input type="text" placeholder="Номер стола" readonly v-model="tableNumber" class="input-sub"
-                                  @click="openPicker = !openPicker"
-                                  @input="update"
-                                  @keydown="update"
-                                  @keyup.delete="update"/>
+                    <f7-list-item>
+                        <input placeholder="Введите номер стола" type="text" v-model="tableNumber" class="input-sub"/>
                         <f7-label><span class="hor-delimeter"><f7-link @click="back()">Отмена</f7-link></span>
                         </f7-label>
                     </f7-list-item>
                 </f7-list>
                 <div class="overlay-list">
-                    <halls @click="closeSlider()"/>
+                    <halls/>
                 </div>
             </f7-block>
-            <f7-picker-modal :opened="openPicker">
-                <table class="phone-table">
-                    <tr>
-                        <td v-for="n in 3">
-                            <f7-button raised @click="pressNumber(n)">{{n}}</f7-button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td v-for="n in 3">
-                            <f7-button raised @click="pressNumber(n+3)">{{n + 3}}</f7-button>
-                        </td>
-                    </tr>
-                    <tr>
 
-
-                        <td v-for="n in 3">
-                            <f7-button raised @click="pressNumber(n+6)">{{n + 6}}</f7-button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><f7-button raised class="btn ok">*</f7-button></td>
-                        <td>
-                            <f7-button raised @click="pressNumber(0)">0</f7-button>
-                        </td>
-                        <td> <f7-button raised class="btn back" @click="clearNumber(0)">#</f7-button></td>
-                    </tr>
-                </table>
-            </f7-picker-modal>
         </f7-page>
     </div>
 </template>
 <style scoped lang="less">
-    .ok{
+    .ok {
         font-size: xx-large;
     }
-    .back{
+
+    .back {
         font-size: large;
     }
-    .btn{
-        width:100%;
-        .back{
-            background-size: cover;
-            background: url(http://10.10.182.11/ept/waiter-tablet/images/back2.png);
-        }
-    }
+
     .overlay-list {
         overflow: scroll;
     }
 
-    .picker-modal {
-        height: 200px;
-    }
-
     .item-input.input-sub {
-        background-color: #EFEFF4;
         margin: 1px;
         text-align: center;
-        padding-left: 2px;
+        background-color: #bcc0c5;
+        padding-left: 10px;
     }
 
     .hor-delimeter {
         text-align: center;
-        width: 100%;
-    }
-
-    .item-title label {
-        width: 100%;
-        text-align: center;
-    }
-
-    .item-title.label {
-    }
-
-    .phone-table {
         width: 100%;
     }
 
@@ -118,31 +66,37 @@
             }
         },
         mounted(){
+            const self = this;
             this.bindKeyPress();
+            this.$f7.keypad({
+                    toolbarCloseText: 'Готово',
+                    convertToPopover: false,
+                    closeByOutsideClick: false,
+                    scrollToInput:true,
+                    input: '.input-sub',
+                    dotButton: false,
+                    valueMaxLength: 3,
+                    inputReadOnly: true,
+                    onChange: function(p, value){
+                            this.tableNumber += +value;
+                        },
+                     onClose: function(e){
+                        console.log('Проверяем наличие стола с заданным значением ' + e.value);
+                     }
+                });
         },
         components: {
             halls,
             navbar
         },
         methods: {
-            openSlider(){
-                this.openPicker = true;
-            },
-            closeSlider(){
-                this.openPicker = false;
-            },
-            back(){
+           back(){
                 this.openPicker = false;
                 this.$router.back();
             },
-            checkForPicker(){
-                if (this.notHidePicker) {
-                    this.openPicker = true;
-                }
-            },
             pressNumber(n){
-                this.notHidePicker = true;
-                this.tableNumber += n;
+                console.log(n);
+                //this.tableNumber += n;
             },
             bindKeyPress(){
                 window.addEventListener('keyup', this.pressNumberFromKeyboard);
@@ -161,13 +115,11 @@
             },
             delete(evt){
                 this.number = evt;
-            },
-
-            clearNumber(){
-                this.tableNumber = '';
             }
         }
     }
+
+
 
 
 </script>

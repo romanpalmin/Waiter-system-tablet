@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import Framework7 from 'framework7';
 import Framework7Vue from 'framework7-vue';
-
+import keypad from '../bower_components/Framework7 Keypad/dist/framework7.keypad.min';
+import keypadCss from '../bower_components/Framework7 Keypad/dist/framework7.keypad.min.css';
 import Vuex from 'vuex';
 
 // Import Styles
