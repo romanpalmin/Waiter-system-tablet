@@ -28,8 +28,6 @@
         methods:{
             reload(){
                 console.log('reload');
-                //this.$router.reloadPage('/main/');
-                //this.$router.load({url: '/main/', force:true})
             }
         }
     }

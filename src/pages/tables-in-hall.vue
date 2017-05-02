@@ -7,7 +7,7 @@
                 <f7-navbar :title="getHallNumber" back-link="Отмена1" sliding ></f7-navbar>
             </f7-block>
             <f7-block>
-                <hall-tables  :list='getT()' />
+                <hall-tables  :list='getTables()' />
             </f7-block>
         </f7-page>
     </div>
@@ -27,16 +27,12 @@
             }
         },
         computed:{
-            getTablesOfCurrentHall(){
-
-            },
             getHallNumber: function(){
                 return 'Зал №' + this.$store.state.selectedHallId;
             }
         },
 
         mounted(){
-            console.log(this.name);
             if ( this.$store.state.currentTable === 0){
                     this.$store.commit('SET_CURRENT_GUESTS', {'guestsCount': 0});
                 }
@@ -46,16 +42,12 @@
             'hall-tables': hallTables
         },
         methods:{
-            getT(){
+            getTables(){
                 let list = (_.filter(this.$store.state.halls, {id: ''+this.$store.state.selectedHallId}))[0].tables;
                 list = _.map(list, function(item){
                     return {'id':item, 'status': +1};
                 });
                 return list;
-            },
-
-            getTablesByHallId(){
-                console.log('Получаем список столов с их статусами для конкретного зала');
             }
         },
             destroyed(){
