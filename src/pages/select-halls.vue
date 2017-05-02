@@ -58,7 +58,6 @@
     export default{
         data(){
             return {
-
                 name: 'this component',
                 openPicker: false,
                 tableNumber: '',
@@ -68,7 +67,6 @@
         },
         mounted(){
             const self = this;
-            this.bindKeyPress();
             this.keyPicker = this.$f7.keypad({
                     toolbarCloseText: 'Готово',
                     convertToPopover: false,
@@ -97,27 +95,6 @@
                 this.keyPicker.setValue('');
                 this.keyPicker.close();
                 this.$router.back();
-            },
-            pressNumber(n){
-                console.log(n);
-            },
-            bindKeyPress(){
-                window.addEventListener('keyup', this.pressNumberFromKeyboard);
-            },
-            unbindKeyPress(){
-                window.removeEventListener('keyup', this.pressNumberFromKeyboard);
-            },
-
-            pressNumberFromKeyboard(evt){
-                if (evt.key > 0 && evt.key < 9) {
-                    this.pressNumber(evt.key);
-                }
-            },
-            update(evt){
-                this.number = evt;
-            },
-            delete(evt){
-                this.number = evt;
             }
         }
     }
