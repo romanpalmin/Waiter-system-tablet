@@ -17,7 +17,8 @@ const store = new Vuex.Store({
         pages:{
             main: true,
             password: false,
-            users: false
+            users: false,
+            addorder: false
         }
     },
     mutations:{
@@ -35,6 +36,9 @@ const store = new Vuex.Store({
         },
         [types.SET_PASSWORD_PAGE](state, payload){
             state.pages.password = payload.password;
+        },
+        [types.SET_ADD_ORDER_PAGE](state, payload){
+            state.pages.addorder = payload.addorder;
         },
         [types.SET_USERS_PAGE](state, payload){
             state.pages.users = payload.users;

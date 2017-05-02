@@ -3,11 +3,12 @@
         <f7-block>
             <div class="list-of-tables">
                 <div class="table" v-for="table in list">
-
+                    <f7-link :href="nextLink">
                         <div class="table-image" @click="selectTable(table)">
                             <f7-badge>{{table.status}}</f7-badge>
                         </div>
-                        <div class="table-title">Стол №{{table.id}}</div>
+                    </f7-link>
+                    <div class="table-title">Стол №{{table.id}}</div>
 
                 </div>
             </div>
@@ -43,11 +44,19 @@
         data(){
             return{
                 name:'Список столов',
-                currentList: []
+                currentList: [],
+                nextLink: ''
             }
         },
         mounted(){
            this.currentList = this.list;
+           if (this.$store.state.pages.addorder){
+                console.log(111);
+                this.nextLink = '/guest-count/'
+           } else {
+                console.log(222);
+                this.nextLink = '/guest-count/'; // edit-page
+           }
         },
         props: ['list'],
         methods:{
@@ -55,11 +64,12 @@
             console.log(table);
             if (table.status && table.status === 1){
                     this.$store.commit('SET_CURRENT_TABLE', {'tableId': table.id});
-                    this.$router.load({'url':'/guest-count/', 'reload':true});
+                    //this.$router.load({'url':'/guest-count/', 'reload':true});
                 }
             }
         }
 
     }
+
 
 </script>

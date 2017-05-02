@@ -62,13 +62,14 @@
                 name: 'this component',
                 openPicker: false,
                 tableNumber: '',
-                notHidePicker: false
+                notHidePicker: false,
+                keyPicker:  {}
             }
         },
         mounted(){
             const self = this;
             this.bindKeyPress();
-            this.$f7.keypad({
+            this.keyPicker = this.$f7.keypad({
                     toolbarCloseText: 'Готово',
                     convertToPopover: false,
                     closeByOutsideClick: false,
@@ -78,7 +79,7 @@
                     valueMaxLength: 3,
                     inputReadOnly: true,
                     onChange: function(p, value){
-                            this.tableNumber += +value;
+                            this.tableNumber = +value;
                         },
                      onClose: function(e){
                         console.log('Проверяем наличие стола с заданным значением ' + e.value);
@@ -91,12 +92,14 @@
         },
         methods: {
            back(){
-                this.openPicker = false;
+                this.tableNumber = '';
+                this.$store.commit('SET_ADD_ORDER_PAGE', {addorder: false});
+                this.keyPicker.setValue('');
+                this.keyPicker.close();
                 this.$router.back();
             },
             pressNumber(n){
                 console.log(n);
-                //this.tableNumber += n;
             },
             bindKeyPress(){
                 window.addEventListener('keyup', this.pressNumberFromKeyboard);

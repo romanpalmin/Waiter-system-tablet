@@ -1,6 +1,6 @@
 <template>
     <div>
-        <f7-link href="/halls/"><div class="add-table-button"></div></f7-link>
+        <f7-link href="/halls/" @click="addNewOrder()"><div class="add-table-button"></div></f7-link>
     </div>
 </template>
 <style scoped lang="less">
@@ -25,6 +25,12 @@
         },
         props: ["waitressId", "tableId", "position"],
         mounted(){
+            this.$store.commit('SET_ADD_ORDER_PAGE', {addorder: false});
+        },
+        methods:{
+            addNewOrder(){
+                this.$store.commit('SET_ADD_ORDER_PAGE', {addorder: true});
+            }
         }
     }
 </script>

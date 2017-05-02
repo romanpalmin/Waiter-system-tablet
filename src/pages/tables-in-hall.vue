@@ -4,7 +4,7 @@
             <f7-block>
             </f7-block>
             <f7-block class="come-back">
-                <f7-navbar :title="getHallNumber" back-link="Отмена" sliding ></f7-navbar>
+                <f7-navbar :title="getHallNumber" back-link="Отмена1" sliding ></f7-navbar>
             </f7-block>
             <f7-block>
                 <hall-tables  :list='getT()' />
@@ -37,8 +37,9 @@
 
         mounted(){
             console.log(this.name);
-            /*this.$store.commit('SET_CURRENT_TABLE', {'tableId': 0});
-            this.$store.commit('SET_SELECTED_HALL', {'hallId': 0});*/
+            if ( this.$store.state.currentTable === 0){
+                    this.$store.commit('SET_CURRENT_GUESTS', {'guestsCount': 0});
+                }
         },
         components: {
             navbar,
@@ -58,7 +59,9 @@
             }
         },
             destroyed(){
-                this.$store.commit('SET_SELECTED_HALL', {'hallId': 0});
+                if ( this.$store.state.currentTable === 0){
+                    this.$store.commit('SET_SELECTED_HALL', {'hallId': 0});
+                }
             }
 
     }

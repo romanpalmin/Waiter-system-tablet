@@ -42,7 +42,6 @@
             },
             selectHall(id){
                 this.$store.commit('SET_SELECTED_HALL', {'hallId': +id});
-                console.log(this.$parent.openPicker);
                 this.$parent.openPicker = false;
             }
         },

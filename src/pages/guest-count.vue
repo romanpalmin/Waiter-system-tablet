@@ -4,50 +4,14 @@
             <f7-block>
             </f7-block>
             <f7-block class="come-back">
-                <f7-navbar :title="pageTitle" back-link="Отмена" sliding></f7-navbar>
+                <f7-navbar :title="pageTitle" back-link="Отмена" sliding @click="back"></f7-navbar>
             </f7-block>
 
 
             <f7-block-title>Стол №{{tableNumber}}</f7-block-title>
             <f7-block class="simple-input">
-                <input type="text" class="simple" :value="currentGuestCount" readonly/>
+                <input type="text" class="simple input-sub" :value="currentGuestCount" readonly/>
             </f7-block>
-            <div class="component-table">
-                <f7-block inner>
-                    <table class="phone-table">
-                        <tr>
-                            <td v-for="n in 3">
-                                <f7-button big raised round @click="pressNumber(n)">{{n}}</f7-button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td v-for="n in 3">
-                                <f7-button big raised round @click="pressNumber(n+3)">{{n+3}}</f7-button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td v-for="n in 3">
-                                <f7-button big raised round @click="pressNumber(n+6)">{{n+6}}</f7-button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <f7-button big raised round class="clear" @click="clearGuestNumber()">*</f7-button>
-                            </td>
-                            <td>
-                                <f7-button big raised round @click="pressNumber(0)">0</f7-button>
-                            </td>
-                            <td>
-                                <f7-button big raised round class="minus-symbol" @click="minusSymbolInGuestNumber()">#
-                                </f7-button>
-                            </td>
-                        </tr>
-                    </table>
-                </f7-block>
-                <f7-block>
-                    <f7-button big raised round class="minus-symbol" @click="beginFormOrder()">Оформить заказ</f7-button>
-                </f7-block>
-            </div>
         </f7-page>
     </div>
 </template>
@@ -66,24 +30,14 @@
         }
     }
 
-    .component-table {
-        text-align: center;
-        .phone-table {
-            width: 80%;
-            margin: 0 auto;
-            td {
-                text-align: center;
-                padding: 10px;
-            }
-        }
-    }
 </style>
 <script>
     export default{
         data(){
             return{
                 name:'this component',
-                currentGuestCount: ''
+                currentGuestCount: '',
+                keyPicker: {}
             }
         },
         computed:{
@@ -96,15 +50,14 @@
         },
         methods: {
                 pressNumber(num){
-                    console.log(num);
                     this.currentGuestCount += num;
                 },
 
                 bindKeyPress(){
-                     window.addEventListener('keyup', this.pressNumberFromKeyboard);
+                     //window.addEventListener('keyup', this.pressNumberFromKeyboard);
                 },
                 unbindKeyPress(){
-                    window.removeEventListener('keyup', this.pressNumberFromKeyboard);
+                    //window.removeEventListener('keyup', this.pressNumberFromKeyboard);
                 },
 
                 pressNumberFromKeyboard(evt){
@@ -123,17 +76,43 @@
                 beginFormOrder(){
                     if (this.currentGuestCount){
                         this.$store.commit('SET_CURRENT_GUESTS', {'guestsCount': this.currentGuestCount});
-                        console.log('Переходим к оформлению заказа');
+                        console.log('переходим к оформлению заказа');
                     }
+                },
+                back(){
+                    console.log('Очищаем гостей');
+                    this.$store.commit('SET_CURRENT_GUESTS', {'guestsCount': 0});
                 }
            },
         mounted(){
-            this.bindKeyPress();
+        const self = this;
+            //this.bindKeyPress();
+            this.keyPicker = this.$f7.keypad({
+                    toolbarCloseText: 'Готово',
+                    convertToPopover: false,
+                    closeByOutsideClick: false,
+                    scrollToInput:true,
+                    input: '.input-sub',
+                    dotButton: false,
+                    valueMaxLength: 3,
+                    inputReadOnly: true,
+                    onChange: function(p, value){
+                            self.currentGuestCount = +value;
+                        },
+                    onClose: function(e){
+                    if (self.$store.state.currentTable !== 0){
+                        console.log('Фиксируем количество гостей ' + e.value + ' и ');
+                        self.beginFormOrder();
+                        }
+                    }
+                });
         },
         destroyed(){
             this.$store.commit('SET_CURRENT_TABLE', {'tableId': 0});
-            console.log('Отбиндиваем кнопки');
+            this.$store.commit('SET_CURRENT_GUESTS', {'guestsCount': 0});
+            this.keyPicker.setValue('');
             this.unbindKeyPress();
+            this.keyPicker.close();
         }
     }
 
