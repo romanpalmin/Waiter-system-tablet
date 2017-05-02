@@ -49,30 +49,6 @@
             }
         },
         methods: {
-                pressNumber(num){
-                    this.currentGuestCount += num;
-                },
-
-                bindKeyPress(){
-                     //window.addEventListener('keyup', this.pressNumberFromKeyboard);
-                },
-                unbindKeyPress(){
-                    //window.removeEventListener('keyup', this.pressNumberFromKeyboard);
-                },
-
-                pressNumberFromKeyboard(evt){
-                   if (evt.key >= 0 && evt.key <9){
-                        this.pressNumber(evt.key);
-                   }
-                },
-                clearGuestNumber(){
-                    this.currentGuestCount = '';
-                },
-                minusSymbolInGuestNumber(){
-                    if (this.currentGuestCount.length > 0){
-                        this.currentGuestCount = this.currentGuestCount.substring(0, this.currentGuestCount.length - 1)
-                    }
-                },
                 beginFormOrder(){
                     if (this.currentGuestCount){
                         this.$store.commit('SET_CURRENT_GUESTS', {'guestsCount': this.currentGuestCount});
@@ -86,7 +62,6 @@
            },
         mounted(){
         const self = this;
-            //this.bindKeyPress();
             this.keyPicker = this.$f7.keypad({
                     toolbarCloseText: 'Готово',
                     convertToPopover: false,
