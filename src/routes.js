@@ -1,15 +1,15 @@
 export default [
     {
         path: '/about/',
-        component: require('./pages/about.vue')
+        component: require('./pages/old/about.vue')
     },
     {
         path: '/form/',
-        component: require('./pages/form.vue')
+        component: require('./pages/old/form.vue')
     },
     {
         path: '/dynamic-route/blog/:blogId/post/:postId/',
-        component: require('./pages/dynamic-route.vue')
+        component: require('./pages/old/dynamic-route.vue')
     },
     {
         path: '/users/',
@@ -38,5 +38,9 @@ export default [
     {
         path: '/guest-count/',
         component: require('./pages/guest-count.vue')
+    },
+    {
+        path: '/add-order/',
+        component: require('./pages/new-order.vue')
     }
 ]

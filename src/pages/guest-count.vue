@@ -4,7 +4,7 @@
             <f7-block>
             </f7-block>
             <f7-block class="come-back">
-                <f7-navbar :title="pageTitle" back-link="Отмена" sliding @click="back"></f7-navbar>
+                <f7-navbar :title="pageTitle" back-link="Отмена" sliding ></f7-navbar>
             </f7-block>
 
 
@@ -53,15 +53,12 @@
                     if (this.currentGuestCount){
                         this.$store.commit('SET_CURRENT_GUESTS', {'guestsCount': this.currentGuestCount});
                         console.log('переходим к оформлению заказа');
+                        this.$router.load({url:'/add-order/', reload:true});
                     }
-                },
-                back(){
-                    console.log('Очищаем гостей');
-                    this.$store.commit('SET_CURRENT_GUESTS', {'guestsCount': 0});
                 }
            },
         mounted(){
-        const self = this;
+            const self = this;
             this.keyPicker = this.$f7.keypad({
                     toolbarCloseText: 'Готово',
                     convertToPopover: false,
@@ -75,18 +72,19 @@
                             self.currentGuestCount = +value;
                         },
                     onClose: function(e){
+                    console.log(e);
                     if (self.$store.state.currentTable !== 0){
-                        console.log('Фиксируем количество гостей ' + e.value + ' и ');
-                        self.beginFormOrder();
+                            console.log('Фиксируем количество гостей ' + e.value + ' и ');
+                            self.beginFormOrder();
+                            }
                         }
-                    }
-                });
+                    });
+             this.keyPicker.open();
         },
         destroyed(){
-            this.$store.commit('SET_CURRENT_TABLE', {'tableId': 0});
-            this.$store.commit('SET_CURRENT_GUESTS', {'guestsCount': 0});
+            /*this.$store.commit('SET_CURRENT_TABLE', {'tableId': 0});
+            this.$store.commit('SET_CURRENT_GUESTS', {'guestsCount': 0});*/
             this.keyPicker.setValue('');
-            this.unbindKeyPress();
             this.keyPicker.close();
         }
     }
