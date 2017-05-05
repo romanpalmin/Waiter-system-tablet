@@ -1,6 +1,6 @@
 <template>
     <div class="main-content">
-        <f7-page :cached="false">
+        <f7-page :cached="false" class="current-padding">
             <f7-navbar sliding></f7-navbar>
             <f7-block-title class="title-table">
                 Стол № {{$store.state.currentTable}}
@@ -17,7 +17,9 @@
     .content-block-title.title-table {
         padding-top: 40px;
     }
-
+    .current-padding{
+        padding-top: 70px;
+    }
 
 </style>
 <script>

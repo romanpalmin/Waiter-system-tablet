@@ -1,6 +1,6 @@
 <template>
     <div>
-        <f7-page :cached="false">
+        <f7-page :cached="false"  class="current-padding">
             <!--<navbar/>    -->
 
             <waiters-tables />
@@ -8,7 +8,9 @@
     </div>
 </template>
 <style scoped lang="less">
-
+    .current-padding{
+        padding-top: 70px;
+    }
 </style>
 <script>
     import navbar from '../components/navbar-main.vue';

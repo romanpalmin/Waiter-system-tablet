@@ -10,6 +10,7 @@ const store = new Vuex.Store({
         waiter: {},
         testMessage: 'Планшет официанта!',
         halls: [],
+        category: [],
         login: false,
         selectedHallId: 0,
         guestsCount: 0,
@@ -51,6 +52,9 @@ const store = new Vuex.Store({
         },
         [types.SET_CURRENT_GUESTS](state, payload){
             state.guestsCount = +payload.guestsCount;
+        },
+        [types.SET_CATEGORY](state, payload){
+            state.category = payload.category;
         }
     }
 

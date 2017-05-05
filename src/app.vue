@@ -5,7 +5,7 @@
             <f7-view view main mainView>
                 <f7-pages>
                     <navbar/>
-                    <f7-page>
+                    <f7-page class="padding-top">
                         <div class="center">
                             <f7-button big round fill center  title="Войти" color="darkgray" @click="goToUsersList()">Войти</f7-button>
                         </div>
@@ -21,6 +21,9 @@
         background-color: darkgray;
         width: 100%;
         text-align: center;
+        .padding-top{
+            padding: 100px;
+        }
         .center {
             height: 100px;
             margin: 0 auto;

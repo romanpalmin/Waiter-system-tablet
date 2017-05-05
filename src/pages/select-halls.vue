@@ -1,6 +1,6 @@
 <template>
     <div>
-        <f7-page :cached="false">
+        <f7-page :cached="false" class="current-padding">
             <f7-block>
             </f7-block>
             <f7-block>
@@ -48,7 +48,10 @@
     form.list-block {
         margin: 3px 0;
         font-size: 17px;
-        padding-top: 14px;
+        padding-top: 50px;
+    }
+    .current-padding{
+        padding-top: 20px;
     }
 
 </style>

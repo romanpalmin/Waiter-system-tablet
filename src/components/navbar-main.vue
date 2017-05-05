@@ -1,6 +1,6 @@
 <template>
     <div class="main-nav-bar">
-        <f7-navbar>
+        <f7-navbar class="navbar-style">
             <f7-nav-left>
                 <f7-link open-panel="left" v-if="this.$store.state.login ">
                     <div class="avatar images" :style="getStyle('avatar')"></div>
@@ -62,13 +62,17 @@
 </template>
 <style scoped lang="less">
     .main-nav-bar {
+        height: 120px;
+        .navbar-style{
+            height: 100px;
+        }
         .navbar .center {
             width: 100%;
             height: 100px
         }
         .images {
-            width: 30px;
-            height: 30px;
+            width: 75px;
+            height: 75px;
             border-radius: 50%;
             background-color: darkgrey;
 

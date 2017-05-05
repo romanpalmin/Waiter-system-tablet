@@ -17,7 +17,7 @@
 </template>
 <style scoped lang="less">
     .come-back {
-        padding-top: 25px;
+        padding-top: 100px;
     }
     .simple-input{
         width:100%;

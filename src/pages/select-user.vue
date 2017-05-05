@@ -1,5 +1,5 @@
 <template>
-        <f7-page :cached="false">
+        <f7-page :cached="false" class="current-padding">
             <f7-navbar title="Выбор официанта" back-link="Back" sliding></f7-navbar>
             <f7-block inner>
                 <users/>
@@ -8,7 +8,9 @@
 </template>
 
 <style scoped lang="less">
-
+    .current-padding{
+        padding-top: 70px;
+    }
 </style>
 <script>
     import users from '../components/users.vue';

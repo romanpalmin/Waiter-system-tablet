@@ -1,7 +1,7 @@
 <template>
     <div class="category-list">
         <f7-list v-for="item in list" :key="item.id">
-            <f7-list-item :title="item.shortFullName" @click="getWaiter(item)"></f7-list-item>
+            <f7-list-item :title="item.shortFullName" @click="getWaiter(item)" link="#"></f7-list-item>
         </f7-list>
     </div>
 </template>

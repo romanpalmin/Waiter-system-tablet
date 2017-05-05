@@ -1,5 +1,5 @@
 <template>
-        <f7-page :cached="false">
+        <f7-page :cached="false"  class="current-padding">
             <f7-navbar title="Ввод пароля" back-link="Back" sliding></f7-navbar>
             <f7-block inner class="component">
                 <password/>
@@ -10,6 +10,9 @@
 <style scoped lang="less">
     input[type=password] {
         text-align: center;
+    }
+    .current-padding{
+        padding-top: 70px;
     }
 </style>
 <script>

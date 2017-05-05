@@ -1,6 +1,6 @@
 <template>
     <div>
-        <f7-page :cached="false">
+        <f7-page :cached="false" class="current-padding">
             <f7-block>
             </f7-block>
             <f7-block class="come-back">
@@ -15,6 +15,9 @@
 <style scoped lang="less">
     .come-back{
         padding-top:25px;
+    }
+    .current-padding{
+        padding-top: 70px;
     }
 </style>
 <script>
