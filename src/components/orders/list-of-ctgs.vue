@@ -2,7 +2,7 @@
     <div>
         <f7-picker-modal :opened="showBottomMenu" class="myClass" :style="getPickerStyle()">
             <f7-list v-for="item in catList" :key="item.code">
-                <f7-list-item :title="item.name" :data-id="item.code" link="#"></f7-list-item>
+                <f7-list-item :title="item.name" :data-id="item.code" link="#" @click="selectCat(item.code)"></f7-list-item>
             </f7-list>
         </f7-picker-modal>
     </div>
@@ -41,6 +41,9 @@
                 let countOfStrings = this.catList.length;
                 let height = countOfStrings * this.stringHeight;
                 return `height: ${height}px`;
+            },
+            selectCat(id){
+                console.log(id);
             }
 
         }

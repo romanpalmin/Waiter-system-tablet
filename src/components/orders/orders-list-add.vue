@@ -4,15 +4,17 @@
             <!-- <div class="order-string" v-for="n in 100">Строка заказа №{{n*2}}</div>-->
             <f7-grid>
                 <template v-for="n in 40">
-                    <f7-col width="60" class="order-string" :data-id="n"><span @click="console(n)">Строка заказа №{{n*2}}</span>
+                    <f7-col width="80" class="order-string" :data-id="n">
+                        <span @click="console(n)">Строка заказа №{{n*2}}</span>
                     </f7-col>
-                    <f7-col width="20">{{n%3}} X</f7-col>
-                    <f7-col width="20">{{n}} руб.</f7-col>
+                    <f7-col width="3">{{n%3}}</f7-col>
+                    <f7-col width="3">X</f7-col>
+                    <f7-col width="14">{{n}} руб.</f7-col>
                 </template>
             </f7-grid>
         </div>
         <f7-block>
-            <category />
+            <category/>
         </f7-block>
     </div>
 
@@ -29,7 +31,6 @@
             text-align: left;
         }
     }
-
 
 
 </style>
@@ -56,6 +57,7 @@
             category
         }
     }
+
 
 
 
