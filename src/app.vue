@@ -35,6 +35,7 @@
 </style>
 <script>
 import navbar from './components/navbar-main';
+import ctgs from './data/ctgs.js';
 export default {
 
     components:{
@@ -43,12 +44,22 @@ export default {
     methods:{
         goToUsersList(){
             this.$f7.views[0].router.load({'url':'/users/', 'reload':true});
-        }
+        },
+        loadPositions(){
+        const payload = {};
+        payload.ctgs = ctgs;
+        this.$store.dispatch('SET_POSITIONS_TO_CATEGORY', payload);
+    }
+
     },
     mounted(){
         console.log('Выставляем главную');
         this.$store.commit('SET_MAIN_PAGE', {'main': true});
-    }
+        console.log('Заполняем товары');
+        this.loadPositions();
+    },
+
+
 }
 
 

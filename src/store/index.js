@@ -2,6 +2,19 @@ import Vue from 'vue'
 import Vuex from 'vuex';
 Vue.use(Vuex);
 import * as types from './mutations-types'
+import * as a_types from './actions-types'
+
+import cat332020 from '../components/data/332020.js';
+import cat342020 from '../components/data/342020.js';
+import cat352020 from '../components/data/352020.js';
+import cat392020 from '../components/data/392020.js';
+import cat412020 from '../components/data/412020.js';
+import cat422020 from '../components/data/422020.js';
+import cat432020 from '../components/data/432020.js';
+import cat462020 from '../components/data/462020.js';
+import cat472020 from '../components/data/472020.js';
+import cat482020 from '../components/data/482020.js';
+import cat492020 from '../components/data/492020.js';
 
 const store = new Vuex.Store({
     strict: process.env.NODE_ENV !== 'production',
@@ -55,6 +68,20 @@ const store = new Vuex.Store({
         },
         [types.SET_CATEGORY](state, payload){
             state.category = payload.category;
+            if (payload.callback && typeof(payload.callback) === "function") {
+                payload.callback();
+            }
+        }
+    },
+
+    actions:{
+        [a_types.SET_POSITIONS_TO_CATEGORY]({commit}, payload){
+            let pl = {};
+            pl.category = payload.ctgs;
+            pl.callback = function(){
+                console.log('Выполняется коллбэк');
+            };
+            commit('SET_CATEGORY', pl);
         }
     }
 
