@@ -1,1 +1,2 @@
 export const SET_POSITIONS_TO_CATEGORY = 'SET_POSITIONS_TO_CATEGORY';
+export const GET_MENU = 'GET_MENU';

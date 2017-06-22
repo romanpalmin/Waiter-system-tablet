@@ -19,26 +19,30 @@ Vue.use(Framework7Vue);
 Vue.use(VueAxios, axios);
 
 
-
-
-
 import Routes from './routes.js';
 import App from './app';
 import store from './store';
 
 
-
 // Init App
 new Vue({
-  el: '#app',
-  template: '<app/>',
-  store,
-  framework7: {
-    root: '#app',
-    routes: Routes,
-  },
-  // Register App Component
-  components: {
-    app: App
-  }
+    el: '#app',
+    template: '<app/>',
+    store,
+    framework7: {
+        root: '#app',
+        routes: Routes,
+    },
+    // Register App Component
+    components: {
+        app: App
+    },
+    methods: {
+        getNewJsonFullTree(){
+            this.$store.dispatch('GET_MENU');
+        }
+    },
+    mounted(){
+        this.getNewJsonFullTree();
+    }
 });
