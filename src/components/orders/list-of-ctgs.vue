@@ -1,208 +1,183 @@
 <template>
-    <div>
-
+    <div class="picker-component">
         <f7-picker-modal :opened="showBottomMenu" class="current-picker" :style="getPickerStyle()">
-            <f7-navbar>
+            <f7-navbar class="picker-navbar sub-navbar">
                 <f7-nav-left v-if="showBack">
-                  <i class="icon icon-back" @click="returnToPrevList()"></i> <a href="#" class="title-left_padding" @click="returnToPrevList()">{{title}}</a>
+                    <i class="icon icon-back" @click="selectPrevSubMenu()"></i> <a href="#" class="title-left_padding"
+                                                                                   @click="selectPrevSubMenu()">{{title}}</a>
                 </f7-nav-left>
                 <f7-nav-center v-if="!showBack">
-                   Разделы
+                    Меню
                 </f7-nav-center>
+                <f7-nav-right>
+                    <img :src="getImages('exit')" width="30px" @click="togglePicker()">
+                </f7-nav-right>
             </f7-navbar>
-            <f7-list v-for="item in currentList" :key="item.code">
-                <f7-list-item :title="item.name" :data-id="item.code" link="#" @click="selectCat(item.code, item.name)"></f7-list-item>
-            </f7-list>
+            <div class="menu-wrapper">
+                <template v-if="!showPositions">
+                    <f7-list v-for="item in currentMenuList" :key="item.code">
+                        <f7-list-item :title="item.name" :data-id="item.code" link="#"
+                                      @click="selectNextSubMenu(item)"/>
+                    </f7-list>
+                </template>
+                <template v-else>
+                    <positions-list :CurrentPositionsList="positionsList" />
+                </template>
+            </div>
         </f7-picker-modal>
+        <div @click="togglePicker()">
+            <f7-block class="bottom-menu-bar">
+                <f7-navbar @click="togglePicker()">
+                    <f7-nav-left>
+                        Menu
+                    </f7-nav-left>
+                    <f7-nav-right>
+                        <span> top </span>
+                    </f7-nav-right>
+                </f7-navbar>
+            </f7-block>
+        </div>
     </div>
 </template>
 <style scoped lang="less">
+    .bottom-menu-bar {
+        background-color: #fff;
+        position: absolute;
+        left: 0;
+        bottom: -40px;
+        height: 44px;
+        width: 100%;
+
+    }
+
+    .sub-navbar {
+        position: fixed;
+    }
+
+    .menu-wrapper {
+        height: 83%;
+        overflow: scroll;
+        padding-top: 44px;
+
+    }
+
     .picker-modal {
-        /*height:550px;*/
-        overflow: hidden;
+        overflow: scroll;
         .list-block {
             margin: 0 0;
         }
     }
-    .left_padding, .title-left_padding{
+
+    .left_padding, .title-left_padding {
         padding-left: 10px;
     }
 </style>
 <script>
-
-    import cat332020 from '../data/332020.js';
-    import cat342020 from '../data/342020.js';
-    import cat352020 from '../data/352020.js';
-    import cat392020 from '../data/392020.js';
-    import cat412020 from '../data/412020.js';
-    import cat422020 from '../data/422020.js';
-    import cat432020 from '../data/432020.js';
-    import cat462020 from '../data/462020.js';
-    import cat472020 from '../data/472020.js';
-    import cat482020 from '../data/482020.js';
-    import cat492020 from '../data/492020.js';
+    import positionsList from './positions-list.vue';
     export default{
         data(){
-            return{
-                name:'this component',
+            return {
+                name: 'this component',
                 showBottomMenu: true,
-                startLevel: [],
+                showPositions: false,
                 stringHeight: 44,
-                catArr: [],
-                showBack : false,
-                currentList : [],
-                firstLevel: [],
-                secondLevel: [],
-                currentLevel: 0,
-                selectedCategory: '',
-                selectedIndexLevelOne: 0,
-                selectedIndexLevelTwo: 0,
-                title: ''
+                showBack: false,
+                title: '',
+                currentMenuList: [],
+                prevMenuList: [],
+                positionsList: []
             }
         },
         mounted(){
-            this.populateList();
-            this.populateArrayOfCtgs();
+            this.populateMenuList();
         },
-        methods:{
-            populateArrayOfCtgs(){
-            this.catArr=[
-                    {'id': 332020, 'ctg': cat332020},
-                    {'id': 342020, 'ctg': cat342020},
-                    {'id': 352020, 'ctg': cat352020},
-                    {'id': 392020, 'ctg': cat392020},
-                    {'id': 412020, 'ctg': cat412020},
-                    {'id': 422020, 'ctg': cat422020},
-                    {'id': 432020, 'ctg': cat432020},
-                    {'id': 462020, 'ctg': cat462020},
-                    {'id': 472020, 'ctg': cat472020},
-                    {'id': 482020, 'ctg': cat482020},
-                    {'id': 492020, 'ctg': cat492020}
-                ]
+
+        computed: {},
+
+        methods: {
+            getImages(imgName){
+                let src = '';
+                switch (imgName) {
+                    case 'exit':
+                        src = 'http://10.10.182.11/ept/waiter-tablet/images/exit.png';
+                        break;
+                    default:
+                        src = '';
+
+                }
+                return src;
             },
-            populateList(){
-                //this.$store.commit('SET_CATEGORY', {'category':ctgs});
-                this.startLevel = _.map(this.$store.state.category, function(item){
+
+            togglePicker(){
+                this.showBottomMenu = !this.showBottomMenu;
+            },
+            populateMenuList(){
+                this.currentMenuList = _.map(this.$store.state.FullTree, (item) => {
+                    item.name = item.name_RU;
                     return item;
                 });
-                this.currentList = this.startLevel;
-            },
-            getPickerStyle(){
-                let countOfStrings = this.startLevel.length + 1; // количество строк + навигационная панель
-                let height = countOfStrings * this.stringHeight;
-                return `height: ${height}px`;
-            },
-            selectCat( id , name){
-                const self = this;
-                let item;
-                let newItem;
-                let newList = [];
-
-                switch (this.currentLevel){
-                    case 0:
-                        {
-                            this.title = name;
-                            this.selectedCategory = id;
-                            item = _.find(this.catArr, {'id':+id});
-                            if (item && item.ctg){
-                                this.firstLevel = _.map(item.ctg, (item)=>{return item;})
-                                this.updateList(item.ctg, 1);
-                            };
-                        };
-                        break;
-                    case 1:
-                        console.log('Проверяем, есть ли второй уровень вложенности категории '+ this.selectedCategory);
-                        item = _.find(this.catArr, {'id':+this.selectedCategory});
-
-                        if (item && item.ctg){
-                            this.selectedIndexLevelOne = id;
-                            newItem = item.ctg[id].groups1;
-                            newList = [];
-                            newItem.forEach(function(item, index){
-                                if (newItem.length === 1){
-                                        console.log('Ничего не делаем, передаем управление компоненту показа товаров');
-                                        return;
-                                    }
-                                else {
-                                    console.log('второй уровень');
-                                    self.title = name;
-                                    newList.push(item);
-                                    if (newItem.length-1 === index){
-                                            self.secondLevel = _.map(newList, (item)=>{return item});
-                                            console.log(self.secondLevel);
-                                            self.updateList(self.secondLevel, 2);
-                                        }
-                                    }
-                                });
-                            }
-                        break;
-                    case 2:
-                         console.log('Проверяем, есть ли третий уровень вложенности категории '+ this.selectedCategory);
-                         item = _.find(this.catArr, {'id':+this.selectedCategory});
-                         this.selectedIndexLevelTwo = id;
-                         newItem = item.ctg[id].groups1;
-                         console.log(newItem);
-                         newItem = newItem.groups2;
-                         console.log(newItem);
-                        break;
-                    default: break;   
-                }
             },
 
-            updateList(items, level){
-                let subList = [];
-                let newItem = {};
-                const self = this;
-                if (items.length === 1){
-                    console.log('Ничего не делаем, передаем управление компоненту показа товаров');
-                    return;
-                }
-                items.forEach(function(item, index){
-                    newItem = {'name': item.name, 'code': index};
-                    subList.push(newItem);
-                    if (index === items.length-1){
-                        self.reBindList(subList, level);
+            selectNextSubMenu(item){
+                if (item.groups.length > 0) {
+                    this.showBack = true;
+                    this.prevMenuList.push({'menu': this.currentMenuList, 'title': item.name});
+                    this.getBreadTitle();
+                    this.currentMenuList = _.map(item.groups, (item) => {
+                        item.name = item.name_RU;
+                        return item;
+                    });
+                } else {
+                    if (item.items.length > 0) {
+                        console.log('Передаем список товаров в компонент показа товаров');
+                        //console.log(item.items);
+                        this.positionsList = item.items;
+                        this.prevMenuList.push({'menu': this.currentMenuList, 'title': item.name});
+                        this.getBreadTitle();
+                        this.openPositions();
                     }
-                });
-            },
-
-            reBindList(list, level){
-                this.showBack = true;
-                this.currentList = _.map(list, function(item){
-                    return item;
-                });
-                if (level === 1){
-                    this.firstLevel = _.cloneDeep(this.currentList);
-                    }
-                if (level === 2) {
-                    this.secondLevel = _.cloneDeep(this.currentList);
                 }
-                this.currentLevel = level;
             },
-            returnToPrevList(){
-                console.log(this.currentLevel);
 
-                switch (this.currentLevel){
-                    case 1: {
-                        this.currentLevel = 0;
+            selectPrevSubMenu(){
+                if (this.prevMenuList.length > 0) {
+                    let prev = this.prevMenuList.pop();
+                    this.currentMenuList = _.map(prev.menu, (item) => {
+                        this.getBreadTitle();
+                        return item;
+                    });
+                    if (this.prevMenuList.length === 0) {
                         this.showBack = false;
-                        this.currentList = _.map(this.startLevel, (item)=>{return item;});
-                        break;
-                        }
-                    case 2: {
-                        this.currentLevel = 1;
-                        this.showBack = true;
-                        console.log(this.firstLevel);
-                        this.currentList = _.map(this.firstLevel, (item)=>{return item;});
-                        break;
-                        }
-                    default: {
-                        break;
                     }
-
+                    this.showPositions = this.showPositions ? !this.showPositions : this.showPositions;
                 }
-            }
+            },
+            /**
+             Заголовок предыдущего раздела для "хлебных крошек"
+             */
+            getBreadTitle(){
+                if (this.prevMenuList.length > 1) {
+                    this.title = this.prevMenuList[this.prevMenuList.length - 2].title;
+                } else {
+                    this.title = 'Меню';
+                }
+            },
 
+            getPickerStyle(){
+                /*let countOfStrings = this.startLevel.length + 1; // количество строк + навигационная панель
+                 let height = countOfStrings * this.stringHeight;
+                 return `height: ${height}px`;*/
+            },
+
+            openPositions(){
+                console.log(this.positionsList);
+                this.showPositions = true;
+            }
+        },
+        components:{
+            'positions-list': positionsList
         }
     }
+
+
 </script>
