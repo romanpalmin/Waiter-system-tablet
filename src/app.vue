@@ -48,7 +48,7 @@ export default {
         loadPositions(){
         const payload = {};
         payload.ctgs = ctgs;
-        this.$store.dispatch('SET_POSITIONS_TO_CATEGORY', payload);
+        //this.$store.dispatch('SET_POSITIONS_TO_CATEGORY', payload);
     }
 
     },

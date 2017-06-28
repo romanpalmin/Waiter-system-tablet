@@ -38,7 +38,7 @@
         data(){
             return{
                 name:'this component',
-                currentTables: _.filter(tables, {waitress:this.$store.state.waiter.id})
+                currentTables: []//_.filter(tables, {waitress:this.$store.state.waiter.id})
             }
         },
         mounted(){

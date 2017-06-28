@@ -1,4 +1,5 @@
 import * as m_types from './mutations-types';
+import _ from 'lodash';
 export default {
     [m_types.SET_FULL_MENU](state, payload){
         state.FullTree = payload;
@@ -39,5 +40,75 @@ export default {
         if (payload.callback && typeof(payload.callback) === "function") {
             payload.callback();
         }
+    },
+    [m_types.SET_NEW_ORDER](state, payload){
+        state.orders = payload.order;
+    },
+
+    /**
+     * Добавляет новый товар и мутирует состояние
+     * @param state
+     * @param payload
+     */
+        [m_types.ADD_NEW_ORDER_STRING](state, payload){
+        state.orders.current.push(payload);
+        console.log(state.orders.current);
+        if (payload.callback && typeof(payload.callback) === "function") {
+            payload.callback();
+        }
+    },
+
+    /**
+     * Удаляет элемент по индексу, подсчитывает сумму и мутирует массив для обновлений через map
+     * @param state
+     * @param payload index, callback
+     */
+        [m_types.REMOVE_STRING_FROM_ORDER](state, payload){
+        if (payload.index >= 0) {
+            _.pullAt(state.orders.current, [payload.index]);
+            if (payload.callback && typeof(payload.callback) === "function") {
+                state.orders.current = _.map(state.orders.current, (item) => {
+                    return item
+                });
+                payload.callback();
+            }
+        }
+    },
+
+    /**
+     * Удаляет все строки из заказа по заданным условиям
+     * @param state
+     * @param payload
+     */
+        [m_types.REMOVE_ALL_STRINGS_FROM_ORDER](state, payload){
+
+        if (payload.indexes.length >= 0) {
+            _.pullAt(state.orders.current, payload.indexes);
+            if (payload.callback && typeof(payload.callback) === "function") {
+                state.orders.current = _.map(state.orders.current, (item) => {
+                    return item
+                });
+                payload.callback();
+                console.log(state.orders.current);
+            }
+        }
+    },
+
+
+    [m_types.CHANGE_COUNT_ORDER_STRING](state, payload){
+        state.orders.current[payload.index].count = state.orders.current[payload.index].count + payload.inc;
+        console.log(state.orders.current[payload.index].count);
+        if (state.orders.current[payload.index].count === 0) {
+            _.pullAt(state.orders.current, payload.index);
+            //state.orders.current = _.map(state.orders.current, (item)=>{return item});
+        }
+    },
+    [m_types.SET_CURRENT_SUMMARY](state, payload){
+        state.orders.summary = payload;
+    },
+    [m_types.SET_CURRENT_COURSE](state, payload){
+        console.log(state.orders.current[payload.index]);
+        console.log('index: ' + payload.index);
+        state.orders.current[payload.index].course = payload.course;
     }
 }

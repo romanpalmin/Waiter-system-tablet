@@ -1,29 +1,33 @@
 <template>
     <div>
-        <f7-block v-for="item in currentList" class="position-item">
-            <f7-card class="card">
-                <f7-card-content class="img-wrapper" :inner="false" :style="getStyle(item)"><!--<span class="price-wrapper">{{item.price}} руб.</span>-->
-                    <f7-badge color="black">{{item.price}} руб.</f7-badge>
-                </f7-card-content>
-                <f7-card-footer>{{getName(item)}}</f7-card-footer>
-            </f7-card>
+        <f7-block v-for="item in currentList" class="position-item" @click="addPositionToOrder(item)">
+            <div @click="addPositionToOrder(item)">
+                <f7-card class="card">
+
+                    <f7-card-content class="img-wrapper" :inner="false" :style="getStyle(item)">
+                        <!--<span class="price-wrapper">{{item.price}} руб.</span>-->
+                        <f7-badge color="black">{{item.price}} руб.</f7-badge>
+                    </f7-card-content>
+                    <f7-card-footer><span>{{getName(item)}}</span></f7-card-footer>
+                </f7-card>
+            </div>
         </f7-block>
     </div>
 </template>
 <style scoped lang="less">
-    .position-item{
+    .position-item {
         background-color: #CFD5DA;
         width: 130px;
         float: left;
         height: 150px;
-        .img-wrapper{
+        .img-wrapper {
             width: 105px;
             height: 105px;
             border: 3px solid #636357;
             border-radius: 20%;
             background-size: cover;
             text-align: right;
-            .price-wrapper{
+            .price-wrapper {
                 font-weight: bolder;
                 color: #000;
                 background-color: #fff;
@@ -31,11 +35,11 @@
                 padding: 3px;
             }
         }
-        .card{
+        .card {
             background-color: #fafafa
         }
 
-        .card-footer{
+        .card-footer {
             text-align: center;
             display: block;
             color: #000;
@@ -61,10 +65,22 @@
             },
             getName(item){
                 return item.name_ru;
+            },
+            addPositionToOrder(item){
+                let payload = {
+                    item: item,
+                    course: 0,
+                    waiterId: this.$store.state.waiter.id,
+                    tableId: this.$store.state.currentTable,
+                    guestId: 1,
+                    ts: Date.now()
+                };
+                this.$store.dispatch('ADD_POSITION_TO_ORDER', payload);
             }
         },
         mounted(){
             this.currentList = this.CurrentPositionsList;
         }
     }
+
 </script>

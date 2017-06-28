@@ -21,7 +21,11 @@ const store = new Vuex.Store({
             users: false,
             addorder: false
         },
-        FullTree: []
+        FullTree: [],
+        orders: {
+            current: [],
+            summary: 0
+        }
     },
     mutations: mutations,
     actions: actions

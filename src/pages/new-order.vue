@@ -28,10 +28,6 @@
         overflow: hidden;
     }
 
-   /* .page-content{
-        overflow: hidden;
-    }
-*/
 </style>
 <script>
     import navbar from '../components/navbar-main.vue';
