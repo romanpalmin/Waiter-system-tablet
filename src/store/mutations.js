@@ -3,7 +3,6 @@ import _ from 'lodash';
 export default {
     [m_types.SET_FULL_MENU](state, payload){
         state.FullTree = payload;
-        console.log(payload);
     },
     [m_types.SET_WAITER](state, payload){
         state.waiter = payload.waiter;
@@ -35,12 +34,6 @@ export default {
     [m_types.SET_CURRENT_GUESTS](state, payload){
         state.guestsCount = +payload.guestsCount;
     },
-    [m_types.SET_CATEGORY](state, payload){
-        state.category = payload.category;
-        if (payload.callback && typeof(payload.callback) === "function") {
-            payload.callback();
-        }
-    },
     [m_types.SET_NEW_ORDER](state, payload){
         state.orders = payload.order;
     },
@@ -52,7 +45,6 @@ export default {
      */
         [m_types.ADD_NEW_ORDER_STRING](state, payload){
         state.orders.current.push(payload);
-        console.log(state.orders.current);
         if (payload.callback && typeof(payload.callback) === "function") {
             payload.callback();
         }
@@ -89,26 +81,14 @@ export default {
                     return item
                 });
                 payload.callback();
-                console.log(state.orders.current);
             }
         }
     },
 
-
-    [m_types.CHANGE_COUNT_ORDER_STRING](state, payload){
-        state.orders.current[payload.index].count = state.orders.current[payload.index].count + payload.inc;
-        console.log(state.orders.current[payload.index].count);
-        if (state.orders.current[payload.index].count === 0) {
-            _.pullAt(state.orders.current, payload.index);
-            //state.orders.current = _.map(state.orders.current, (item)=>{return item});
-        }
-    },
     [m_types.SET_CURRENT_SUMMARY](state, payload){
         state.orders.summary = payload;
     },
     [m_types.SET_CURRENT_COURSE](state, payload){
-        console.log(state.orders.current[payload.index]);
-        console.log('index: ' + payload.index);
         state.orders.current[payload.index].course = payload.course;
     }
 }

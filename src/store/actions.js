@@ -1,33 +1,6 @@
 import * as a_types from './actions-types'
 import fullMenu from '../components/data/full.js';
 export default {
-    /*    [a_types.ADD_POSITION_STRING_TO_ORDER]({state, commit, dispatch}, payload){
-     let isAddNew = true;
-     let str = {'item': payload.item, 'count': 1};
-     if (state.orders.current.length > 0) {
-     for (let i = 0; i < state.orders.current.length; i++) {
-     if (state.orders.current[i].item.code === payload.item.code) {
-     commit('CHANGE_COUNT_ORDER_STRING', {'index': i, 'inc': payload.increase});
-     dispatch('CALCULATE_SUMMARY_OF_CURRENT_ORDER');
-     isAddNew = false;
-     break;
-     }
-     if (i === state.orders.current.length - 1 && isAddNew) {
-     addNewString(str);
-     break;
-     }
-     }
-     }
-     else {
-     addNewString(str);
-     }
-     function addNewString(str) {
-     commit('ADD_NEW_ORDER_STRING', {'orderString': str});
-     dispatch('CALCULATE_SUMMARY_OF_CURRENT_ORDER');
-     }
-
-     },*/
-
     /**
      * Добавояет товар в текущий заказ
      * @param payload - параметры (item, table, course, waiterId...)
@@ -67,10 +40,6 @@ export default {
      * @param payload - параметры (item, table, course ...)
      */
         [a_types.REMOVE_POSITION_STRING_FROM_ORDER]({state, commit, dispatch}, payload){
-        console.log('Удаление строки из заказа');
-        /*let newOrder = _.map(state.orders.current, function(item){
-
-         });*/
         let indexArr = [];
         let cursor = 0;
         let comitPayload = {
@@ -92,9 +61,6 @@ export default {
                 commit('REMOVE_ALL_STRINGS_FROM_ORDER', comitPayload);
             }
         });
-
-        //commit('REMOVE_ALL_STRINGS_FROM_ORDER', payload);
-
     },
 
     /**
@@ -113,27 +79,6 @@ export default {
         // комитим сумму в хранилище
         commit('SET_CURRENT_SUMMARY', result);
     },
-
-    /*    [a_types.CALCULATE_SUMMARY_OF_CURRENT_ORDER]({state, commit}, payload){
-     let result = 0;
-     if (state.orders.current.length > 0) {
-     result = _.reduce(state.orders.current, function (sum, curItem) {
-     return sum + curItem.count * curItem.item.price;
-     }, 0);
-     commit('SET_CURRENT_SUMMARY', result);
-     }
-     },*/
-
-    /*        [a_types.SET_POSITIONS_TO_CATEGORY]({commit}, payload)
-     {
-     let pl = {};
-     pl.category = payload.ctgs;
-     pl.callback = function () {
-     console.log('Выполняется коллбэк');
-     };
-     commit('SET_CATEGORY', pl);
-     }
-     ,*/
 
     /**
      * Получение полного меню
