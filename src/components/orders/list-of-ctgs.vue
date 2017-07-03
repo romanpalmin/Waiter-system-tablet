@@ -170,7 +170,6 @@
             },
 
             openPositions(){
-                console.log(this.positionsList);
                 this.showPositions = true;
             }
         },

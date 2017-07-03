@@ -6,26 +6,31 @@
             <f7-grid>
                 <f7-col>Количество</f7-col>
                 <f7-col>Курс</f7-col>
-                <f7-col>Модификаторы</f7-col>
+                <f7-col>Мод-ры</f7-col>
                 <f7-col>Гости</f7-col>
+                <f7-col>Удалить</f7-col>
             </f7-grid>
             <f7-grid>
                 <f7-col>
                     <f7-buttons color="gray">
                         <f7-button @click="minus()">-1</f7-button>
-                        <f7-button @click="remove()">X</f7-button>
+                        <f7-button @click="remove()">Калькулятор</f7-button>
                         <f7-button @click="plus()">+1</f7-button>
                     </f7-buttons>
                 </f7-col>
                 <f7-col>
-                    <f7-button color="gray" open-popover data-popover=".popover-course">{{getPositionCourse}}
+                    <f7-button color="gray" open-popover data-popover=".popover-course"><!--{{getPositionCourse}-->Курс
                     </f7-button>
                 </f7-col>
                 <f7-col>
-                    <f7-button color="gray" open-popover data-popover=".popover-mods">Модификаторы</f7-button>
+                    <!--<f7-button color="gray" open-popover data-popover=".popover-mods">Модификаторы</f7-button>-->
+                    <f7-button color="gray" open-popover data-popover=".popover-mods">Мод-ры</f7-button>
                 </f7-col>
                 <f7-col>
-                    <f7-button color="gray">Гости</f7-button>
+                    <f7-button color="gray" open-popover data-popover=".popover-guests" @click="eraseCountDish()">Гости</f7-button>
+                </f7-col>
+                <f7-col>
+                    <f7-button color="gray" @click="remove()" >X</f7-button>
                 </f7-col>
             </f7-grid>
         </div>
@@ -64,7 +69,23 @@
         </f7-popover>
         <f7-popover class="popover-mods">
             Модификаторы
-            <div class="popover-content">666</div>
+            <div class="popover-content">Панедь модификаторов</div>
+        </f7-popover>
+        <f7-popover class="popover-guests">
+            Гости
+            <div class="popover-content">
+                <f7-block>
+                    <f7-buttons color="gray">
+                        <f7-button @click="guestCountDish('minus')">-1</f7-button>
+                        <f7-button>{{getCurrentDishCount}} {{getGuestsDish()}}</f7-button>
+                        <f7-button @click="guestCountDish('plus')">+1</f7-button>
+                    </f7-buttons>
+                </f7-block>
+                <f7-list>
+                    <f7-list-item  v-for="n in getGuestsCount" :key="n" >
+                       <f7-link href="#" class="close-popover list-of-guests">Гость {{n}}</f7-link></f7-list-item>
+                </f7-list>
+            </div>
         </f7-popover>
     </div>
 </template>
@@ -80,13 +101,18 @@
         width: 50%;
         margin: 0 auto;
         padding: 20px;
+        .list-of-guests{
+            text-align: center;
+            margin: 0 auto;
+        }
     }
 </style>
 <script>
     export default{
         data(){
             return{
-                name:'this component'
+                name:'this component',
+                currentDishCount: 1
             }
         },
         computed:{
@@ -107,17 +133,28 @@
                 else {
                     return 'Курс';
                 }
+            },
+            getGuestsCount: function(){
+                return this.$store.state.guestsCount;
+            },
+            getCurrentDishCount: function(){
+                return this.currentDishCount;
             }
         },
-        props: ['items'],
+        props: ['items', 'count', 'it'],
         watched:{
             getPositionIndex: function(){
                 console.log('change');
             }
         },
         mounted(){
+
         },
         methods:{
+            getGuestsDish(){
+                return this.currentDishCount;
+            },
+
             getPayload(){
                 return {
                     item: this.items.item,
@@ -142,8 +179,39 @@
                 this.$store.dispatch('REMOVE_POSITION_STRING_FROM_ORDER', payload);
             },
             setCourse(course){
-                console.log(this.getPositionIndex);
-                this.$store.commit('SET_CURRENT_COURSE', {'index': this.getPositionIndex, 'course': course});
+                console.log('Устанавливаем курс');
+                //console.log(this.getPositionIndex);
+                //this.$store.commit('SET_CURRENT_COURSE', {'index': this.getPositionIndex, 'course': course});
+            },
+            eraseCountDish(){
+                console.log('Сбрасываем текущее значение');
+                this.currentDishCount = 1;
+                console.log('Сбрасываем текущее значение 2 ' + this.getCurrentDishCount);
+                console.log('Сбрасываем текущее значение 3 ' + this.currentDishCount);
+            },
+            guestCountDish(type){
+                console.log('Текущее значение: ' + this.currentDishCount);
+                switch(type){
+                    case 'plus':
+                            if (1 === 1) {
+                                console.log('Старое значение: ' + this.currentDishCount);
+                                this.currentDishCount++;
+                                console.log('Новое значение: ' + this.currentDishCount);
+                            }
+                            break;
+
+                    case 'minus':
+                            this.currentDishCount--;
+                            break;
+
+                    case 'one':
+                            console.log('NEW');
+                            this.currentDishCount = 1;
+                            console.log('NEW ' + this.currentDishCount);
+                            break;
+
+                    default: break;
+                }
             }
         }
     }

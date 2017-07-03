@@ -1,6 +1,6 @@
 <template>
     <div>
-        <f7-block v-for="item in currentList" class="position-item" @click="addPositionToOrder(item)">
+        <f7-block v-for="item in currentList" class="position-item" @click="addPositionToOrder(item)" :key="item.code">
             <div @click="addPositionToOrder(item)">
                 <f7-card class="card">
 
@@ -59,7 +59,6 @@
         methods:{
             getStyle(item){
                 let url = 'http://10.10.182.11/images/' + item.urlImage;
-                console.log(url);
                 let style = `;background-image: url(${url});`;
                 return style;
             },
@@ -67,15 +66,18 @@
                 return item.name_ru;
             },
             addPositionToOrder(item){
-                let payload = {
-                    item: item,
-                    course: 0,
-                    waiterId: this.$store.state.waiter.id,
-                    tableId: this.$store.state.currentTable,
-                    guestId: 1,
-                    ts: Date.now()
-                };
-                this.$store.dispatch('ADD_POSITION_TO_ORDER', payload);
+                if (this.$store.state.currentGuest && this.$store.state.currentGuest > 0 ){
+                    let payload = {
+                        item: item,
+                        course: 0,
+                        waiterId: this.$store.state.waiter.id,
+                        tableId: this.$store.state.currentTable,
+                        guestId: this.$store.state.currentGuest,
+                        ts: Date.now()
+                    };
+                    console.log(payload.guestId);
+                    this.$store.dispatch('ADD_POSITION_TO_ORDER', payload);
+                }
             }
         },
         mounted(){

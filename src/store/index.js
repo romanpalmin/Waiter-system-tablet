@@ -15,6 +15,7 @@ const store = new Vuex.Store({
         selectedHallId: 0,
         guestsCount: 0,
         currentTable:0,
+        currentGuest:0,
         pages:{
             main: true,
             password: false,

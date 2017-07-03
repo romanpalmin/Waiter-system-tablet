@@ -17,7 +17,7 @@ export default {
      * @param payload - параметры (item, table, course ...)
      */
         [a_types.REMOVE_POSITION_FROM_ORDER]({state, commit, dispatch}, payload){
-        console.log('Удаление позиции из заказа');
+        //console.log('Удаление позиции из заказа');
         let index = _.findLastIndex(state.orders.current, function (items) {
             return (
             items.item.code === payload.item.code &&

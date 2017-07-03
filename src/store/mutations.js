@@ -34,6 +34,9 @@ export default {
     [m_types.SET_CURRENT_GUESTS](state, payload){
         state.guestsCount = +payload.guestsCount;
     },
+    [m_types.SET_CURRENT_GUEST](state, payload){
+        state.currentGuest = +payload.currentGuest;
+    },
     [m_types.SET_NEW_ORDER](state, payload){
         state.orders = payload.order;
     },
