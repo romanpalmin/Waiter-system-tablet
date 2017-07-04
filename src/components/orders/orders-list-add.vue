@@ -107,6 +107,7 @@
             width: 100%;
             //min-height:20px;
             background-color: #ffffff;
+            overflow: scroll;
 
         }
         .guest-string {

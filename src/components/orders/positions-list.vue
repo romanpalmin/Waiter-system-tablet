@@ -75,7 +75,6 @@
                         guestId: this.$store.state.currentGuest,
                         ts: Date.now()
                     };
-                    console.log(payload.guestId);
                     this.$store.dispatch('ADD_POSITION_TO_ORDER', payload);
                 }
             }
