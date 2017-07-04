@@ -1,15 +1,15 @@
 <template>
     <div>
         <div class="list-of-orders">
-           <!-- <div class="select-view-type">
+            <div class="select-view-type">
                 <f7-buttons color="gray" class="btns-type-list">
                     <f7-button @click="setViewType('all')">Все</f7-button>
                     <f7-button @click="setViewType('byGuests')">По гостям</f7-button>
                 </f7-buttons>
-            </div>-->
+            </div>
             <div v-if="showType === 'all'">
                 <f7-accordion>
-                    <template v-for="items in currentOrdersAll">
+                    <template v-for="items in currentOrderByPosition">
                         <f7-accordion-item :key="items.el.code">
                             <f7-accordion-toggle>
                                 <f7-grid>
@@ -84,6 +84,7 @@
         .select-view-type{
             width: 100%;
             text-align: right;
+            padding: 10px 10px 10px 0px;
             .btns-type-list{
                 width: 40%;
                 display: inline-flex;
@@ -94,6 +95,8 @@
             text-align: left;
             padding-top: 15px;
             padding-bottom: 15px;
+            padding-left: 15px;
+            padding-right: 15px;
         }
         .guest-number-string{
             //background-color: #5ac8fa;
@@ -103,9 +106,10 @@
             width: 100%;
             //min-height:20px;
             background-color: #ffffff;
+
         }
         .guest-string{
-            background-color: antiquewhite;
+            background-color: lightgrey;
             height: 40px;
             display: block;
             line-height: 40px;
@@ -141,7 +145,6 @@
                 return this.$store.state.guestsCount;
             },
             currentOrdersAll: function(){
-                console.log('Пересчет');
                 let filtered = _.filter(this.$store.state.orders.current, (item)=>{return item.tableId === this.$store.state.currentTable});
                 if (filtered.length === 0) return;
                 if (filtered.length > 1){
@@ -174,10 +177,43 @@
                     return [{el: filtered[0], count: 1}];
                 }
             },
+            currentOrderByPosition(){
+                let filtered = _.filter(this.$store.state.orders.current, (item)=>{return item.tableId === this.$store.state.currentTable});
+                if (filtered.length === 0) return;
+                if (filtered.length > 1){
+                    let groupByProps = [];
+                    groupByProps.push({el: filtered[0], count: 1});
+                    for (let idx = 1; idx < filtered.length; idx++){
+                        for (let innerIdx = 0; innerIdx < groupByProps.length; innerIdx++){
+                            if (
+                                    filtered[idx].item.code === groupByProps[innerIdx].el.item.code &&
+                                    filtered[idx].course === groupByProps[innerIdx].el.course &&
+                                    //filtered[idx].guestId === groupByProps[innerIdx].el.guestId &&
+                                    filtered[idx].tableId === groupByProps[innerIdx].el.tableId &&
+                                    filtered[idx].waiterId === groupByProps[innerIdx].el.waiterId
+                            ){
+                                groupByProps[innerIdx].count++;
+                                break;
+                            } else {
+                                if (innerIdx === groupByProps.length-1){
+                                    groupByProps.push({el: filtered[idx], count: 1});
+                                    break;
+                                }
+                            }
+                        }
+                        if (idx === filtered.length - 1){
+                            return groupByProps;
+                        }
+                    }
+                }
+                else {
+                    return [{el: filtered[0], count: 1}];
+                }
+            },
             currentOrderForCurrentGuest: function(){
-
+                const self = this;
                 if (1 === 1){ // поставим проверки на существование
-                    /*let filtered = _.filter(this.currentOrdersAll, (item)=>{return item.el.guestId === this.$store.state.currentGuest});
+                    let filtered = _.filter(this.currentOrdersAll, (item)=>{return item.el.guestId === this.$store.state.currentGuest});
                     if (filtered.length === 0){
                         console.log('нет данных');
                         this.firstTime = true;
@@ -185,15 +221,21 @@
                         if (this.firstTime){
                             console.log('firstTime');
                             console.log(filtered);
-                            //this.openGuest(1);
+                            //this.openGuest(this.$store.state.currentGuest);
                             this.firstTime = false;
+                            setTimeout(()=>{
+                                //let el = this.$$('.accordion-item.guest-item[data-main-id="1"]');
+                                //console.log(el);
+                                self.openGuest(self.$store.state.currentGuest);
+                            }, 0);
                             return filtered;
                         }
                         //filtered = _.map(filtered, (item)=>{return item;})
                     }
-                    return filtered;*/
-                    console.log(this.currentOrdersAll);
-                    return _.filter(this.currentOrdersAll, (item)=>{return item.el.guestId === this.$store.state.currentGuest});
+                    //this.openGuest(this.$store.state.currentGuest);
+                    return filtered;
+                    //console.log(this.currentOrdersAll);
+                    //return _.filter(this.currentOrdersAll, (item)=>{return item.el.guestId === this.$store.state.currentGuest});
                 }
             }
         },
@@ -204,9 +246,19 @@
         methods:{
             setViewType(type){
                 this.showType = type;
+                const self = this;
                 if (type === 'byGuests') {
-                    console.log('Открываем 1');
-                    this.openGuest(1);
+                    console.log('Открываем 1-ю');
+                    console.log(this.$store.state.currentGuest);
+                    //let el = this.$$('.accordion-item.guest-item');//[data-main-id="1"].guest-item
+                    //console.log(el);
+                    setTimeout(()=>{
+                        //let el = this.$$('.accordion-item.guest-item[data-main-id="1"]');
+                        //console.log(el);
+                        self.openGuest(1);
+                        self.setHandlers();
+                    }, 0);
+                    //this.openGuest(1);
                 }
             },
             setHandlers(){
@@ -221,7 +273,10 @@
                     }
                 });
                 this.$$('.accordion-item.guest-item').on('accordion:closed', function (el) {
+
                     let selected = self.$$('.accordion-item.guest-item.accordion-item-expanded');
+                    console.log('selected');
+                    console.log(selected);
                     if(selected.length === 0){
                         self.openGuest(1);
                     }
@@ -237,6 +292,14 @@
             },
             selectGuest(num){
                 console.log('Выбран гость №' + num);
+                const self = this;
+                this.$store.commit('SET_CURRENT_GUEST', {'currentGuest': num, 'callback': function(){
+                    //let selected = self.$$('.accordion-item.guest-item.accordion-item-expanded');
+                    //console.log(selected);
+                    //self.openGuest(1);
+                }});
+
+                //self.openGuest(num);
             }
         },
         components:{

@@ -77,7 +77,7 @@
                 <f7-block>
                     <f7-buttons color="gray">
                         <f7-button @click="guestCountDish('minus')">-1</f7-button>
-                        <f7-button>{{getCurrentDishCount}} {{getGuestsDish()}}</f7-button>
+                        <f7-button>{{getCurrentDishCount}}</f7-button>
                         <f7-button @click="guestCountDish('plus')">+1</f7-button>
                     </f7-buttons>
                 </f7-block>
