@@ -242,7 +242,6 @@
         },
         methods: {
             setViewType(type){
-                this.$store.commit('SET_CURRENT_GUEST', {'currentGuest': 1});
                 this.showType = type;
                 const self = this;
                 if (type === 'byGuests') {
@@ -251,13 +250,16 @@
                         self.setHandlers();
                     }, 0);
                 }
+                if (type === 'all') {
+                    this.$store.commit('SET_CURRENT_GUEST', {'currentGuest': 1, 'callback':()=>{console.log('openView')}});
+                }
             },
             setHandlers(){
                 const self = this;
                 this.$$('.accordion-item.guest-item').on('accordion:open', function (el) {
                     let currentGuest = el.target.firstChild.dataset.id;
                     if (!isNaN(currentGuest)) {
-                        self.$store.commit('SET_CURRENT_GUEST', {'currentGuest': currentGuest})
+                        //self.$store.commit('SET_CURRENT_GUEST', {'currentGuest': currentGuest, 'callback':()=>{console.log('openTab')}});
                     }
                 });
                 this.$$('.accordion-item.guest-item').on('accordion:closed', function (el) {
@@ -270,7 +272,9 @@
             },
             openGuest(guestId){
                 let el = this.$$('.accordion-item[data-main-id="' + guestId + '"]');
-                this.$store.commit('SET_CURRENT_GUEST', {'currentGuest': guestId});
+                if (!this.$store.state.currentGuest || this.$store.state.currentGuest === 0){
+                    this.$store.commit('SET_CURRENT_GUEST', {'currentGuest': guestId, 'callback':()=>{console.log('openGuest')}});
+                }
                 this.$f7.accordionOpen(el);
             },
             closePicker(){
