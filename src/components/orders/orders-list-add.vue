@@ -29,14 +29,14 @@
                 </f7-accordion>
             </div>
             <div v-else-if="showType === 'byGuests'">
-               <!-- В разрезе гостей-->
+                <!-- В разрезе гостей-->
                 <f7-accordion>
                     <f7-accordion-item :key="n" v-for="n in getGuestsCount" :data-main-id="n" class="guest-item">
                         <f7-accordion-toggle class="guest-number-string" :data-id="n">
-                            <div  @click="selectGuest(n)" class="guest-string">Гость {{n}}</div>
+                            <div @click="selectGuest(n)" class="guest-string">Гость {{n}}</div>
                         </f7-accordion-toggle>
                         <f7-accordion-content class="guest-order-string">
-                            <br />
+                            <br/>
                             <f7-accordion>
                                 <template v-for="items in currentOrderForCurrentGuest">
                                     <f7-accordion-item :key="items.el.code">
@@ -47,7 +47,8 @@
                                                 </f7-col>
                                                 <f7-col class="order-string" width="7">{{items.count}}</f7-col>
                                                 <f7-col class="order-string" width="4">X</f7-col>
-                                                <f7-col class="order-string" width="12">{{items.el.item.price}} руб.</f7-col>
+                                                <f7-col class="order-string" width="12">{{items.el.item.price}} руб.
+                                                </f7-col>
                                             </f7-grid>
                                         </f7-accordion-toggle>
                                         <f7-accordion-content>
@@ -81,11 +82,11 @@
         min-height: 200px;
         max-height: 500px;
         overflow-y: scroll;
-        .select-view-type{
+        .select-view-type {
             width: 100%;
             text-align: right;
             padding: 10px 10px 10px 0px;
-            .btns-type-list{
+            .btns-type-list {
                 width: 40%;
                 display: inline-flex;
             }
@@ -98,17 +99,17 @@
             padding-left: 15px;
             padding-right: 15px;
         }
-        .guest-number-string{
+        .guest-number-string {
             //background-color: #5ac8fa;
             border-top: 1px solid gray;
         }
-        .guest-order-string{
+        .guest-order-string {
             width: 100%;
             //min-height:20px;
             background-color: #ffffff;
 
         }
-        .guest-string{
+        .guest-string {
             background-color: lightgrey;
             height: 40px;
             display: block;
@@ -129,46 +130,48 @@
     import panel from './buttons-panel.vue';
     export default{
         data(){
-            return{
-                name:'this component',
+            return {
+                name: 'this component',
                 showBottomMenu: true,
                 //showType: 'all',
                 showType: 'byGuests',
                 firstTime: false
             }
         },
-        computed:{
-            getSumAmount: function(){
+        computed: {
+            getSumAmount: function () {
                 return this.$store.state.orders.summary;
             },
-            getGuestsCount: function(){
+            getGuestsCount: function () {
                 return this.$store.state.guestsCount;
             },
-            currentOrdersAll: function(){
-                let filtered = _.filter(this.$store.state.orders.current, (item)=>{return item.tableId === this.$store.state.currentTable});
+            currentOrdersAll: function () {
+                let filtered = _.filter(this.$store.state.orders.current, (item) => {
+                    return item.tableId === this.$store.state.currentTable
+                });
                 if (filtered.length === 0) return;
-                if (filtered.length > 1){
+                if (filtered.length > 1) {
                     let groupByProps = [];
                     groupByProps.push({el: filtered[0], count: 1});
-                    for (let idx = 1; idx < filtered.length; idx++){
-                        for (let innerIdx = 0; innerIdx < groupByProps.length; innerIdx++){
+                    for (let idx = 1; idx < filtered.length; idx++) {
+                        for (let innerIdx = 0; innerIdx < groupByProps.length; innerIdx++) {
                             if (
-                                    filtered[idx].item.code === groupByProps[innerIdx].el.item.code &&
-                                    filtered[idx].course === groupByProps[innerIdx].el.course &&
-                                    filtered[idx].guestId === groupByProps[innerIdx].el.guestId &&
-                                    filtered[idx].tableId === groupByProps[innerIdx].el.tableId &&
-                                    filtered[idx].waiterId === groupByProps[innerIdx].el.waiterId
-                            ){
+                                filtered[idx].item.code === groupByProps[innerIdx].el.item.code &&
+                                filtered[idx].course === groupByProps[innerIdx].el.course &&
+                                filtered[idx].guestId === groupByProps[innerIdx].el.guestId &&
+                                filtered[idx].tableId === groupByProps[innerIdx].el.tableId &&
+                                filtered[idx].waiterId === groupByProps[innerIdx].el.waiterId
+                            ) {
                                 groupByProps[innerIdx].count++;
                                 break;
                             } else {
-                                if (innerIdx === groupByProps.length-1){
+                                if (innerIdx === groupByProps.length - 1) {
                                     groupByProps.push({el: filtered[idx], count: 1});
                                     break;
                                 }
                             }
                         }
-                        if (idx === filtered.length - 1){
+                        if (idx === filtered.length - 1) {
                             return groupByProps;
                         }
                     }
@@ -178,30 +181,32 @@
                 }
             },
             currentOrderByPosition(){
-                let filtered = _.filter(this.$store.state.orders.current, (item)=>{return item.tableId === this.$store.state.currentTable});
+                let filtered = _.filter(this.$store.state.orders.current, (item) => {
+                    return item.tableId === this.$store.state.currentTable
+                });
                 if (filtered.length === 0) return;
-                if (filtered.length > 1){
+                if (filtered.length > 1) {
                     let groupByProps = [];
                     groupByProps.push({el: filtered[0], count: 1});
-                    for (let idx = 1; idx < filtered.length; idx++){
-                        for (let innerIdx = 0; innerIdx < groupByProps.length; innerIdx++){
+                    for (let idx = 1; idx < filtered.length; idx++) {
+                        for (let innerIdx = 0; innerIdx < groupByProps.length; innerIdx++) {
                             if (
-                                    filtered[idx].item.code === groupByProps[innerIdx].el.item.code &&
-                                    filtered[idx].course === groupByProps[innerIdx].el.course &&
-                                    //filtered[idx].guestId === groupByProps[innerIdx].el.guestId &&
-                                    filtered[idx].tableId === groupByProps[innerIdx].el.tableId &&
-                                    filtered[idx].waiterId === groupByProps[innerIdx].el.waiterId
-                            ){
+                                filtered[idx].item.code === groupByProps[innerIdx].el.item.code &&
+                                filtered[idx].course === groupByProps[innerIdx].el.course &&
+                                //filtered[idx].guestId === groupByProps[innerIdx].el.guestId &&
+                                filtered[idx].tableId === groupByProps[innerIdx].el.tableId &&
+                                filtered[idx].waiterId === groupByProps[innerIdx].el.waiterId
+                            ) {
                                 groupByProps[innerIdx].count++;
                                 break;
                             } else {
-                                if (innerIdx === groupByProps.length-1){
+                                if (innerIdx === groupByProps.length - 1) {
                                     groupByProps.push({el: filtered[idx], count: 1});
                                     break;
                                 }
                             }
                         }
-                        if (idx === filtered.length - 1){
+                        if (idx === filtered.length - 1) {
                             return groupByProps;
                         }
                     }
@@ -210,32 +215,23 @@
                     return [{el: filtered[0], count: 1}];
                 }
             },
-            currentOrderForCurrentGuest: function(){
+            currentOrderForCurrentGuest: function () {
                 const self = this;
-                if (1 === 1){ // поставим проверки на существование
-                    let filtered = _.filter(this.currentOrdersAll, (item)=>{return item.el.guestId === this.$store.state.currentGuest});
-                    if (filtered.length === 0){
-                        console.log('нет данных');
+                if (1 === 1) { // поставим проверки на существование
+                    let filtered = _.filter(this.currentOrdersAll, (item) => {
+                        return item.el.guestId === this.$store.state.currentGuest
+                    });
+                    if (filtered.length === 0) {
                         this.firstTime = true;
                     } else {
-                        if (this.firstTime){
-                            console.log('firstTime');
-                            console.log(filtered);
-                            //this.openGuest(this.$store.state.currentGuest);
-                            this.firstTime = false;
-                            setTimeout(()=>{
-                                //let el = this.$$('.accordion-item.guest-item[data-main-id="1"]');
-                                //console.log(el);
+                        if (this.firstTime) {
+                            setTimeout(() => {
                                 self.openGuest(self.$store.state.currentGuest);
                             }, 0);
                             return filtered;
                         }
-                        //filtered = _.map(filtered, (item)=>{return item;})
                     }
-                    //this.openGuest(this.$store.state.currentGuest);
                     return filtered;
-                    //console.log(this.currentOrdersAll);
-                    //return _.filter(this.currentOrdersAll, (item)=>{return item.el.guestId === this.$store.state.currentGuest});
                 }
             }
         },
@@ -243,77 +239,55 @@
             this.openGuest(1);
             this.setHandlers();
         },
-        methods:{
+        methods: {
             setViewType(type){
+                this.$store.commit('SET_CURRENT_GUEST', {'currentGuest': 1});
                 this.showType = type;
                 const self = this;
                 if (type === 'byGuests') {
-                    console.log('Открываем 1-ю');
-                    console.log(this.$store.state.currentGuest);
-                    //let el = this.$$('.accordion-item.guest-item');//[data-main-id="1"].guest-item
-                    //console.log(el);
-                    setTimeout(()=>{
-                        //let el = this.$$('.accordion-item.guest-item[data-main-id="1"]');
-                        //console.log(el);
+                    setTimeout(() => {
                         self.openGuest(1);
                         self.setHandlers();
                     }, 0);
-                    //this.openGuest(1);
                 }
             },
             setHandlers(){
                 const self = this;
                 this.$$('.accordion-item.guest-item').on('accordion:open', function (el) {
                     let currentGuest = el.target.firstChild.dataset.id;
-                    if (!isNaN(currentGuest)){
+                    if (!isNaN(currentGuest)) {
                         self.$store.commit('SET_CURRENT_GUEST', {'currentGuest': currentGuest})
-                        console.log('Текущий пользователь: ' + self.$store.state.currentGuest);
-                        console.log(self.currentOrdersAll);
-                        console.log(self.currentOrderForCurrentGuest);
                     }
                 });
                 this.$$('.accordion-item.guest-item').on('accordion:closed', function (el) {
 
                     let selected = self.$$('.accordion-item.guest-item.accordion-item-expanded');
-                    console.log('selected');
-                    console.log(selected);
-                    if(selected.length === 0){
+                    if (selected.length === 0) {
                         self.openGuest(1);
                     }
                 });
             },
             openGuest(guestId){
                 let el = this.$$('.accordion-item[data-main-id="' + guestId + '"]');
-                this.$store.commit('SET_CURRENT_GUEST', {'currentGuest': guestId})
+                this.$store.commit('SET_CURRENT_GUEST', {'currentGuest': guestId});
                 this.$f7.accordionOpen(el);
             },
             closePicker(){
                 this.showBottomMenu = false;
             },
             selectGuest(num){
-                console.log('Выбран гость №' + num);
+                console.log('Выбирается гость №' + num);
                 const self = this;
-                this.$store.commit('SET_CURRENT_GUEST', {'currentGuest': num, 'callback': function(){
-                    //let selected = self.$$('.accordion-item.guest-item.accordion-item-expanded');
-                    //console.log(selected);
-                    //self.openGuest(1);
-                }});
-
-                //self.openGuest(num);
+                this.$store.commit('SET_CURRENT_GUEST', {
+                    'currentGuest': num, 'callback': function () {
+                        console.log('Установлен текущий гость №' + num);
+                    }
+                });
             }
         },
-        components:{
+        components: {
             category,
             'buttons-panel': panel
         }
     }
-
-
-
-
-
-
-
-
-
 </script>
