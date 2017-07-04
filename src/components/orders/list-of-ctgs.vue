@@ -119,6 +119,24 @@
             },
 
             selectNextSubMenu(item){
+                if (item.groups.length === 1){
+                        /* Случай, когда только вложенная группа одна*/
+                        let title = item.name;
+                        if (item.groups[0].groups && item.groups[0].groups.length === 0) {
+                            /* Случай, когда только вложенная группа одна и нет других вложенных групп*/
+                            this.showBack = true;
+                            item = item.groups[0];
+                            this.positionsList = item.items;
+                            this.prevMenuList.push({'menu': this.currentMenuList, 'title': item.name});
+                            this.getBreadTitle();
+                            this.openPositions();
+                            return;
+                        }
+                        item = item.groups[0];
+                        if (!item.name){
+                            item.name = title;
+                        }
+                  }
                 if (item.groups.length > 0) {
                     this.showBack = true;
                     this.prevMenuList.push({'menu': this.currentMenuList, 'title': item.name});
@@ -129,8 +147,6 @@
                     });
                 } else {
                     if (item.items.length > 0) {
-                        console.log('Передаем список товаров в компонент показа товаров');
-                        //console.log(item.items);
                         this.positionsList = item.items;
                         this.prevMenuList.push({'menu': this.currentMenuList, 'title': item.name});
                         this.getBreadTitle();
