@@ -14,7 +14,7 @@
                 <f7-col>
                     <f7-buttons color="gray">
                         <f7-button @click="minus()">-1</f7-button>
-                        <f7-button @click="remove()">Калькулятор</f7-button>
+                        <f7-button @click="calc()">Калькулятор</f7-button>
                         <f7-button @click="plus()">+1</f7-button>
                     </f7-buttons>
                 </f7-col>
@@ -171,6 +171,13 @@
             minus(){
                 let payload = this.getPayload();
                 this.$store.dispatch('REMOVE_POSITION_FROM_ORDER', payload);
+            },
+
+            calc(){
+                let payload = this.getPayload();
+                this.$f7.alert('Здесь будет калькулятор для ' + payload.item.name, 'Пользовательский ввод количества', ()=>{
+                        this.$f7.alert('Выбрано значение ' + '%nnn%');
+                });
             },
             remove(){
                 //this.$store.commit('CHANGE_COUNT_ORDER_STRING', {'index': this.getPositionIndex, 'inc': -this.items.count});
