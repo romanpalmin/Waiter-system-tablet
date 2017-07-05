@@ -161,13 +161,11 @@ export default {
     /**
      * Загрузка общих модификаторов
      * @param commit
-     * @param payload пераметры ( URL или JSON )
+     * @param payload пераметры ( URL или JSON, callback )
      */
         [a_types.LOAD_COMMON_MODS]({commit}, payload){
-        // payload = {commonModsArray, callback}
         let result = modsCommon;
         let commitPayload = {};
-        console.log(result);
 
         if (payload.callback) {
             commitPayload.callback = payload.callback;
@@ -179,13 +177,11 @@ export default {
     /**
      * Загрузка модификаторов товара
      * @param commit
-     * @param payload пераметры ( URL или JSON )
+     * @param payload пераметры ( URL или JSON, callback  )
      */
         [a_types.LOAD_POSITIONS_MODS]({commit}, payload){
-        // payload = {positionsModsArray, callback}
-        let result = modsPosition;
+        let result = _.filter(modsPosition, (item)=>{return item.code.length > 2;});
         let commitPayload = {};
-        console.log(result);
 
         if (payload.callback) {
             commitPayload.callback = payload.callback;
@@ -193,5 +189,4 @@ export default {
         commitPayload.mods = result;
         commit('SET_POSITIONS_MODS', commitPayload);
     }
-
 }

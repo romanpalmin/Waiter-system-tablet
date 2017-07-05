@@ -10,7 +10,6 @@ const store = new Vuex.Store({
         waiter: {},
         testMessage: 'Планшет официанта!',
         halls: [],
-        category: [],
         login: false,
         selectedHallId: 0,
         guestsCount: 0,

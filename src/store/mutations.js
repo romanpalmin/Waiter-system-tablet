@@ -120,7 +120,6 @@ export default {
         state.modsCommon = payload.mods;
         if (payload.callback && typeof(payload.callback) === "function") {
             payload.callback();
-            console.log(state.modsCommon);
         }
     },
 
@@ -133,7 +132,6 @@ export default {
         state.modsPosition = payload.mods;
         if (payload.callback && typeof(payload.callback) === "function"){
             payload.callback();
-            console.log(state.modsPosition);
         }
     }
 }
