@@ -40,6 +40,8 @@ new Vue({
     methods: {
         getNewJsonFullTree(){
             this.$store.dispatch('GET_MENU');
+            this.$store.dispatch('LOAD_POSITIONS_MODS', ()=>{console.log('Модификаторы товаров загружены');});
+            this.$store.dispatch('LOAD_COMMON_MODS', ()=>{console.log('Общие модификаторы загружены');});
         }
     },
     mounted(){

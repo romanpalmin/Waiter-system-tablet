@@ -22,6 +22,8 @@ const store = new Vuex.Store({
             users: false,
             addorder: false
         },
+        modsCommon:[],
+        modsPosition:[],
         FullTree: [],
         orders: {
             current: [],

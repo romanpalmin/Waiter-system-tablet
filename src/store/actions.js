@@ -1,5 +1,8 @@
 import * as a_types from './actions-types'
+//import axios from 'axios';
 import fullMenu from '../components/data/full.js';
+import modsPosition from '../components/data/modsPosition';
+import modsCommon from '../components/data/modsCommon';
 export default {
     /**
      * Добавояет товар в текущий заказ
@@ -47,16 +50,16 @@ export default {
                 dispatch('CALCULATE_ORDER_SUMMARY', payload.tableId)
             }
         };
-        state.orders.current.forEach(function(item, index, arr){
+        state.orders.current.forEach(function (item, index, arr) {
             cursor++;
             if (item.item.code === payload.item.code &&
                 item.course === payload.course &&
                 item.tableId === payload.tableId &&
                 item.waiterId === payload.waiterId &&
-                item.guestId === payload.guestId){
+                item.guestId === payload.guestId) {
                 indexArr.push(index);
             }
-            if (cursor === arr.length){
+            if (cursor === arr.length) {
                 comitPayload.indexes = indexArr;
                 commit('REMOVE_ALL_STRINGS_FROM_ORDER', comitPayload);
             }
@@ -143,5 +146,52 @@ export default {
             });
             commit('SET_FULL_MENU', roots);
         }
+    },
+
+
+    [a_types.LOAD_ORDER_FROM_GUEST_TABLET]({state, commit}, payload){
+        // payload = {tabletId, tableId, callback}
+
+    },
+
+    [a_types.LOAD_GUEST_TABLETS](){
+
+    },
+
+    /**
+     * Загрузка общих модификаторов
+     * @param commit
+     * @param payload пераметры ( URL или JSON )
+     */
+        [a_types.LOAD_COMMON_MODS]({commit}, payload){
+        // payload = {commonModsArray, callback}
+        let result = modsCommon;
+        let commitPayload = {};
+        console.log(result);
+
+        if (payload.callback) {
+            commitPayload.callback = payload.callback;
+        }
+        commitPayload.mods = result;
+        commit('SET_COMMON_MODS', commitPayload);
+    },
+
+    /**
+     * Загрузка модификаторов товара
+     * @param commit
+     * @param payload пераметры ( URL или JSON )
+     */
+        [a_types.LOAD_POSITIONS_MODS]({commit}, payload){
+        // payload = {positionsModsArray, callback}
+        let result = modsPosition;
+        let commitPayload = {};
+        console.log(result);
+
+        if (payload.callback) {
+            commitPayload.callback = payload.callback;
+        }
+        commitPayload.mods = result;
+        commit('SET_POSITIONS_MODS', commitPayload);
     }
+
 }

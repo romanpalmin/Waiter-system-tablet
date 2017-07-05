@@ -96,5 +96,44 @@ export default {
     },
     [m_types.SET_CURRENT_COURSE](state, payload){
         state.orders.current[payload.index].course = payload.course;
+    },
+    [m_types.SET_ORDER_FROM_GUEST_TABLET](state, payload){
+        state.orders.current = state.orders.current.concat(payload.order);
+        if (payload.callback && typeof(payload.callback) === "function") {
+            state.orders.current = _.map(state.orders.current, (item) => {
+                return item
+            });
+            payload.callback();
+        }
+    },
+
+    [m_types.SET_GUEST_TABLET](state, payload){
+
+    },
+
+    /**
+     * Установка общих модификаторов
+     * @param state состояние
+     * @param payload параметры (массив, callback*)
+     */
+    [m_types.SET_COMMON_MODS](state, payload){
+        state.modsCommon = payload.mods;
+        if (payload.callback && typeof(payload.callback) === "function") {
+            payload.callback();
+            console.log(state.modsCommon);
+        }
+    },
+
+    /**
+     * Установка модификаторов товаров
+     * @param state состояние
+     * @param payload параметры (массив, callback*)
+     */
+    [m_types.SET_POSITIONS_MODS](state, payload){
+        state.modsPosition = payload.mods;
+        if (payload.callback && typeof(payload.callback) === "function"){
+            payload.callback();
+            console.log(state.modsPosition);
+        }
     }
 }
