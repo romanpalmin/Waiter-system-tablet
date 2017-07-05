@@ -22,24 +22,7 @@
         </f7-navbar>
 
         <f7-panel left layout="dark" :opened="openLeft">
-
-            <f7-block inner>
-                <p>Планшет №{{tabletNumber}}</p>
-            </f7-block>
-            <f7-block-title>Блок действий 1</f7-block-title>
-            <f7-block inner>
-                <p>Действие 1.1</p>
-                <p>Действие 2.1</p>
-                <p>Действие 3.1</p>
-                <p>Действие 4.1</p>
-            </f7-block>
-            <f7-block-title>Блок действий 2</f7-block-title>
-            <f7-block inner>
-                <p>Действие 1.2</p>
-                <p>Действие 2.2</p>
-                <p>Действие 3.3</p>
-                <p>Действие 4.4</p>
-            </f7-block>
+            <left-panel />
         </f7-panel>
 
         <f7-popup :opened=showPopup>
@@ -94,6 +77,7 @@
 </style>
 <script>
     import logout from './mixins/logout.js'
+    import leftPanel from './left-panel.vue'
     export default{
         data(){
             return{
@@ -131,6 +115,9 @@
                 this.openLeft = false;
                 this.logout();
             }
+        },
+        components:{
+            'left-panel': leftPanel
         }
     }
 
