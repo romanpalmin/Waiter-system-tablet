@@ -27,7 +27,8 @@ export default {
             items.course === payload.course &&
             items.tableId === payload.tableId &&
             items.waiterId === payload.waiterId &&
-            items.guestId === payload.guestId)
+            items.guestId === payload.guestId &&
+            items.modsPosition === payload.modsPosition)
         });
         let comitPayload = {
             'index': index,
@@ -56,7 +57,8 @@ export default {
                 item.course === payload.course &&
                 item.tableId === payload.tableId &&
                 item.waiterId === payload.waiterId &&
-                item.guestId === payload.guestId) {
+                item.guestId === payload.guestId &&
+                item.modsPosition === payload.modsPosition) {
                 indexArr.push(index);
             }
             if (cursor === arr.length) {

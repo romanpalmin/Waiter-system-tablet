@@ -53,7 +53,7 @@
             console.log('showLogin: ' + this.showLogin);
         },
         updated(){
-            console.log(123);
+
         },
 
         methods:{

@@ -14,7 +14,12 @@
                             <f7-accordion-toggle>
                                 <f7-grid>
                                     <f7-col width="60" class="order-string" :data-id="items.el.item.code">
-                                        <span>{{items.el.item.name}}</span>
+                                        <span>
+                                            {{items.el.item.name}}
+                                            <template v-if="items.el.modsPosition !== ''">
+                                                      / {{items.el.modsPosition}}
+                                            </template>
+                                        </span>
                                     </f7-col>
                                     <f7-col class="order-string" width="7">{{items.count}}</f7-col>
                                     <f7-col class="order-string" width="4">X</f7-col>
@@ -43,7 +48,12 @@
                                         <f7-accordion-toggle>
                                             <f7-grid>
                                                 <f7-col width="60" class="order-string" :data-id="items.el.item.code">
-                                                    <span>{{items.el.item.name}}</span>
+                                                    <span>{{items.el.item.name}}
+                                                     {{items.el.item.modsPosition}}
+                                                        <template v-if="items.el.modsPosition !== ''">
+                                                             / {{items.el.modsPosition}}
+                                                        </template>
+                                                    </span>
                                                 </f7-col>
                                                 <f7-col class="order-string" width="7">{{items.count}}</f7-col>
                                                 <f7-col class="order-string" width="4">X</f7-col>
@@ -161,7 +171,9 @@
                                 filtered[idx].course === groupByProps[innerIdx].el.course &&
                                 filtered[idx].guestId === groupByProps[innerIdx].el.guestId &&
                                 filtered[idx].tableId === groupByProps[innerIdx].el.tableId &&
-                                filtered[idx].waiterId === groupByProps[innerIdx].el.waiterId
+                                filtered[idx].waiterId === groupByProps[innerIdx].el.waiterId &&
+                                filtered[idx].modsPosition === groupByProps[innerIdx].el.modsPosition &&
+                                filtered[idx].modsCommon === groupByProps[innerIdx].el.modsCommon
                             ) {
                                 groupByProps[innerIdx].count++;
                                 break;
@@ -196,7 +208,9 @@
                                 filtered[idx].course === groupByProps[innerIdx].el.course &&
                                 //filtered[idx].guestId === groupByProps[innerIdx].el.guestId &&
                                 filtered[idx].tableId === groupByProps[innerIdx].el.tableId &&
-                                filtered[idx].waiterId === groupByProps[innerIdx].el.waiterId
+                                filtered[idx].waiterId === groupByProps[innerIdx].el.waiterId &&
+                                filtered[idx].modsPosition === groupByProps[innerIdx].el.modsPosition&&
+                                filtered[idx].modsCommon === groupByProps[innerIdx].el.modsCommon
                             ) {
                                 groupByProps[innerIdx].count++;
                                 break;
@@ -295,4 +309,7 @@
             'buttons-panel': panel
         }
     }
+
+
+
 </script>

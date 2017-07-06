@@ -73,12 +73,45 @@
                         waiterId: this.$store.state.waiter.id,
                         tableId: this.$store.state.currentTable,
                         guestId: this.$store.state.currentGuest,
+                        modsPosition: '',
+                        modsCommon: ' ',
                         ts: Date.now()
                     };
-                    this.$store.dispatch('ADD_POSITION_TO_ORDER', payload);
+                    if (item.mod !== null){
+                        this.alertMods(item.mod, (res)=>{
+                            payload.modsPosition = res;
+                            this.$store.dispatch('ADD_POSITION_TO_ORDER', payload);
+                        });
+                    } else {
+                        this.$store.dispatch('ADD_POSITION_TO_ORDER', payload);
+                    }
                 }
-            }
         },
+         alertMods(id, callback){
+                let buttons = [];
+                let selectedMods = _.filter(this.$store.state.modsPosition, (item)=>{
+                    return +item.code.substring(0,2) === +id;
+                });
+                buttons = _.map(selectedMods, (item)=>{
+                    var button  = {};
+                    button.text = item.name;
+                    button.onClick = ()=>{
+                        if (callback && typeof(callback) === "function") {
+                            callback(item.name);
+                        }
+                        return item.code;
+                    };
+                    return button;
+                });
+
+                this.$f7.modal({
+                    title:  'Выберите модификатор',
+                    text: 'Выберите модификатор товара',
+                    verticalButtons: true,
+                    buttons
+                  })
+                }
+            },
         mounted(){
             this.currentList = this.CurrentPositionsList;
         }

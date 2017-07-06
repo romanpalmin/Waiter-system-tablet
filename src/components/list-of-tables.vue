@@ -51,10 +51,8 @@
         mounted(){
            this.currentList = this.list;
            if (this.$store.state.pages.addorder){
-                console.log(111);
                 this.nextLink = '/guest-count/'
            } else {
-                console.log(222);
                 this.nextLink = '/guest-count/'; // edit-page
            }
         },
