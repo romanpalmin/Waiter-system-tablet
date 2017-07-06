@@ -10,22 +10,29 @@
             <div v-if="showType === 'all'">
                 <f7-accordion>
                     <template v-for="items in currentOrderByPosition">
-                        <f7-accordion-item :key="items.el.code">
-                            <f7-accordion-toggle>
-                                <f7-grid>
-                                    <f7-col width="60" class="order-string" :data-id="items.el.item.code">
+
+                        <f7-accordion-item :key="items.el.code" class="order-string-item">
+                            <div @click="setCurrentPayload(items.el)">
+                                <f7-accordion-toggle :data-id="items.el.item.code">
+                                    <f7-grid>
+                                        <f7-col width="60" class="order-string" :data-id="items.el.item.code">
                                         <span>
                                             {{items.el.item.name}}
-                                            <template v-if="items.el.modsPosition !== ''">
-                                                      / {{items.el.modsPosition}}
+                                            <template
+                                                    v-if="items.el.modsPosition !== '' && items.el.modsPosition !== ' '">
+                                                       / {{getModsPositionName(items.el.modsPosition)}}
+                                            </template>
+                                            <template v-if="items.el.modsCommon !== '' && items.el.modsCommon !== ' '">
+                                                       / {{getModsCommonName(items.el.modsCommon)}}
                                             </template>
                                         </span>
-                                    </f7-col>
-                                    <f7-col class="order-string" width="7">{{items.count}}</f7-col>
-                                    <f7-col class="order-string" width="4">X</f7-col>
-                                    <f7-col class="order-string" width="12">{{items.el.item.price}} руб.</f7-col>
-                                </f7-grid>
-                            </f7-accordion-toggle>
+                                        </f7-col>
+                                        <f7-col class="order-string" width="7">{{items.count}}</f7-col>
+                                        <f7-col class="order-string" width="4">X</f7-col>
+                                        <f7-col class="order-string" width="12">{{items.el.item.price}} руб.</f7-col>
+                                    </f7-grid>
+                                </f7-accordion-toggle>
+                            </div>
                             <f7-accordion-content>
                                 <buttons-panel :items="items.el" :count="items.count" :it="items"/>
                             </f7-accordion-content>
@@ -44,27 +51,30 @@
                             <br/>
                             <f7-accordion>
                                 <template v-for="items in currentOrderForCurrentGuest">
-                                    <f7-accordion-item :key="items.el.code">
-                                        <f7-accordion-toggle>
-                                            <f7-grid>
-                                                <f7-col width="60" class="order-string" :data-id="items.el.item.code">
+                                    <div @click="setCurrentPayload(items.el)">
+                                        <f7-accordion-item :key="items.el.code" class="order-string-item">
+                                            <f7-accordion-toggle>
+                                                <f7-grid>
+                                                    <f7-col width="60" class="order-string"
+                                                            :data-id="items.el.item.code">
                                                     <span>{{items.el.item.name}}
                                                      {{items.el.item.modsPosition}}
                                                         <template v-if="items.el.modsPosition !== ''">
                                                              / {{items.el.modsPosition}}
                                                         </template>
                                                     </span>
-                                                </f7-col>
-                                                <f7-col class="order-string" width="7">{{items.count}}</f7-col>
-                                                <f7-col class="order-string" width="4">X</f7-col>
-                                                <f7-col class="order-string" width="12">{{items.el.item.price}} руб.
-                                                </f7-col>
-                                            </f7-grid>
-                                        </f7-accordion-toggle>
-                                        <f7-accordion-content>
-                                            <buttons-panel :items="items.el" :count="items.count" :it="items"/>
-                                        </f7-accordion-content>
-                                    </f7-accordion-item>
+                                                    </f7-col>
+                                                    <f7-col class="order-string" width="7">{{items.count}}</f7-col>
+                                                    <f7-col class="order-string" width="4">X</f7-col>
+                                                    <f7-col class="order-string" width="12">{{items.el.item.price}} руб.
+                                                    </f7-col>
+                                                </f7-grid>
+                                            </f7-accordion-toggle>
+                                            <f7-accordion-content>
+                                                <buttons-panel :items="items.el" :count="items.count" :it="items"/>
+                                            </f7-accordion-content>
+                                        </f7-accordion-item>
+                                    </div>
                                 </template>
                             </f7-accordion>
 
@@ -144,8 +154,8 @@
             return {
                 name: 'this component',
                 showBottomMenu: true,
-                //showType: 'all',
-                showType: 'byGuests',
+                showType: 'all',
+                //showType: 'byGuests',
                 firstTime: false
             }
         },
@@ -289,19 +299,37 @@
                 if (!this.$store.state.currentGuest || this.$store.state.currentGuest === 0){
                     this.$store.commit('SET_CURRENT_GUEST', {'currentGuest': guestId, 'callback':()=>{console.log('openGuest')}});
                 }
-                this.$f7.accordionOpen(el);
+                if (el.length > 0){
+                    this.$f7.accordionOpen(el);
+                }
             },
             closePicker(){
                 this.showBottomMenu = false;
             },
             selectGuest(num){
-                console.log('Выбирается гость №' + num);
                 const self = this;
                 this.$store.commit('SET_CURRENT_GUEST', {
                     'currentGuest': num, 'callback': function () {
                         console.log('Установлен текущий гость №' + num);
                     }
                 });
+            },
+            getModsPositionName(code){
+                let res = _.find(this.$store.state.modsPosition, (mod)=>{
+                    return mod.code === code;
+                });
+
+                return res ? res.name : '';
+            },
+            getModsCommonName(code){
+                let res = _.find(this.$store.state.modsCommon, (mod)=>{
+                    return mod.code === code;
+                });
+
+                return res ? res.name : '';
+            },
+            setCurrentPayload(item){
+                this.$store.commit('SET_CURRENT_PAYLOAD', item);
             }
         },
         components: {
@@ -309,6 +337,8 @@
             'buttons-panel': panel
         }
     }
+
+
 
 
 

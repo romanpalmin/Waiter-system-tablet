@@ -13,6 +13,7 @@ export default {
             dispatch('CALCULATE_ORDER_SUMMARY', payload.tableId);
         };
         commit('ADD_NEW_ORDER_STRING', payload);
+        commit('SET_CURRENT_PAYLOAD', payload);
     },
 
     /**

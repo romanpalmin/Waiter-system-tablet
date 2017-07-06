@@ -47,7 +47,8 @@
             </f7-grid>
             <f7-grid>
                 <f7-col>
-                    <f7-button color="gray" open-popover class="mods-common-button" data-popover=".popover-mods-common" @click="openModsCommon()">
+                    <f7-button color="gray" open-popover class="mods-common-button" data-popover=".popover-mods-common"
+                               @click="openModsCommon()">
                         {{getModsCommonName}}
                     </f7-button>
                 </f7-col>
@@ -140,7 +141,8 @@
             <div class="popover-content">
                 <f7-list>
                     <f7-list-item v-for="item in getModsCommon" :key="item.code">
-                        <f7-link href="#" class="close-popover list-of-mods-common" :data-id="item.code">{{item.name}}
+                        <f7-link href="#" class="close-popover list-of-mods-common" :data-id="item.code"
+                                 @click="updateModsCommon(item.code)">{{item.name}}
                         </f7-link>
                     </f7-list-item>
                 </f7-list>
@@ -149,8 +151,9 @@
         <f7-popover class="popover-mods-position">
             <div class="popover-content">
                 <f7-list>
-                    <f7-list-item v-for="item in getModsPosition" :key="item.code">
-                        <f7-link href="#" class="close-popover list-of-mods-common" :data-id="item.code">{{item.name}}
+                    <f7-list-item v-for="item in getModsPosition()" :key="item.code">
+                        <f7-link href="#" class="close-popover list-of-mods-common" :data-id="item.code"
+                                 @click="updateModsPosition(item.code)">{{item.name}}
                         </f7-link>
                     </f7-list-item>
                 </f7-list>
@@ -177,7 +180,8 @@
         }
 
     }
-    .mods-common-button{
+
+    .mods-common-button {
         max-width: 250px;
         margin: 0 auto;
     }
@@ -197,11 +201,6 @@
             },
             getModsCommon: function(){
                 return this.$store.state.modsCommon;
-            },
-            getModsPosition: function(){
-                let res =  _.filter(this.$store.state.modsPosition, (mods)=>{return mods.code.substring(0,2) === this.items.item.mod});
-                this.showModsPositionButton = !(res.length === 0);
-                return res;
             },
             getPositionIndex: function(){
                 const self = this;
@@ -230,33 +229,40 @@
                         return res.name;
                     }
                 } else {
-                    res = _.find(this.$store.state.modsCommon,(item)=>{return item.name === this.items.modsCommon});
+                    res = _.find(this.$store.state.modsCommon,(item)=>{return item.code === this.items.modsCommon});
                      if (res && res.code){
                         return res.name;
                     }
                 }
             },
             getModsPositionName: function(){
-                let res = 'Без модификатора';
-                /*if (this.items.modsPosition && this.items.modsPosition !== ''){
-                    // todo в случае хранения кода модификатора делаем поиск по нему и возвращаем name
-                    return this.items.modsPosition;
-                } else {
-                    return res;
-                }*/
-                return this.items.modsPosition && this.items.modsPosition !== '' ? this.items.modsPosition : res;
+                let src = 'Без модификатора';
+                let res = {};
+                res = _.find(this.$store.state.modsPosition, (mod)=>{
+                    return mod.code === this.items.modsPosition
+                });
+                return res && res.name ? res.name : src;//this.items.modsPosition && this.items.modsPosition !== '' ? this.items.modsPosition : res;
             }
         },
         props: ['items', 'count', 'it'],
         watched:{
             getPositionIndex: function(){
                 console.log('change');
+            },
+            items: function(){
+                console.log('Изменился контекст');
             }
         },
         mounted(){
 
         },
         methods:{
+            getModsPosition(){
+                let res =  _.filter(this.$store.state.modsPosition, (mods)=>{return mods.code.substring(0,2) === this.$store.state.currentPayload.item.mod});
+                this.showModsPositionButton = !(res.length === 0);
+                return res;
+            },
+
             getGuestsDish(){
                 return this.currentDishCount;
             },
@@ -299,10 +305,7 @@
                 //this.$store.commit('SET_CURRENT_COURSE', {'index': this.getPositionIndex, 'course': course});
             },
             eraseCountDish(){
-                console.log('Сбрасываем текущее значение');
                 this.currentDishCount = 1;
-                console.log('Сбрасываем текущее значение 2 ' + this.getCurrentDishCount);
-                console.log('Сбрасываем текущее значение 3 ' + this.currentDishCount);
             },
             guestCountDish(type){
                 console.log('Текущее значение: ' + this.currentDishCount);
@@ -327,23 +330,28 @@
                 }
             },
             openModsCommon(){
-                console.log(this.items);
+                this.$store.commit('SET_CURRENT_PAYLOAD', this.getPayload());
+
             },
             openModsPosition(){
-                console.log(this.items);
+                this.$store.commit('SET_CURRENT_PAYLOAD', this.getPayload());
+            },
+            updateModsCommon(newValue){
+                const payload = {
+                    params: this.$store.state.currentPayload,
+                    newValue: newValue
+                }
+                this.$store.commit('UPDATE_COMMON_MODS', payload)
+            },
+            updateModsPosition(newValue){
+                const payload = {
+                    params: this.$store.state.currentPayload,
+                    newValue: newValue
+                }
+                this.$store.commit('UPDATE_POSITIONS_MODS', payload)
             }
         }
     }
-
-
-
-
-
-
-
-
-
-
 
 
 </script>

@@ -116,7 +116,7 @@ export default {
      * @param state состояние
      * @param payload параметры (массив, callback*)
      */
-    [m_types.SET_COMMON_MODS](state, payload){
+        [m_types.SET_COMMON_MODS](state, payload){
         state.modsCommon = payload.mods;
         if (payload.callback && typeof(payload.callback) === "function") {
             payload.callback();
@@ -128,10 +128,69 @@ export default {
      * @param state состояние
      * @param payload параметры (массив, callback*)
      */
-    [m_types.SET_POSITIONS_MODS](state, payload){
+        [m_types.SET_POSITIONS_MODS](state, payload){
         state.modsPosition = payload.mods;
-        if (payload.callback && typeof(payload.callback) === "function"){
+        if (payload.callback && typeof(payload.callback) === "function") {
             payload.callback();
         }
+    },
+
+    /**
+     * Обновляет общий модификатор для выбранной строки
+     * @param state
+     * @param payload параметры строки, новое значение
+     */
+        [m_types.UPDATE_COMMON_MODS](state, payload){
+        let params = payload.params;
+        console.log(params);
+        console.log(payload.newValue);
+        state.orders.current = _.map(state.orders.current, (item) => {
+            if (
+                item.item.code === params.item.code &&
+                item.course === params.course &&
+                item.waiterId === params.waiterId &&
+                item.tableId === params.tableId &&
+                item.guestId === params.guestId &&
+                item.modsPosition === params.modsPosition &&
+                item.modsCommon === params.modsCommon
+            ) {
+                item.modsCommon = payload.newValue;
+            }
+            return item;
+        });
+        console.log('Новый массив:');
+        console.log(state.orders.current);
+    },
+
+    /**
+     * Обновляет модификатор товара для выбранной строки
+     * @param state
+     * @param payload параметры строки, новое значение
+     */
+        [m_types.UPDATE_POSITIONS_MODS](state, payload){
+        let params = payload.params;
+        state.orders.current = _.map(state.orders.current, (item) => {
+            if (
+                item.item.code === params.item.code &&
+                item.course === params.course &&
+                item.waiterId === params.waiterId &&
+                item.tableId === params.tableId &&
+                item.guestId === params.guestId &&
+                item.modsPosition === params.modsPosition &&
+                item.modsCommon === params.modsCommon
+            ) {
+                item.modsPosition = payload.newValue;
+            }
+            return item;
+        });
+    },
+
+    /**
+     * Устанавливает текущую выбранную строку для взаимодействия между компонентами
+     * @param state
+     * @param строка заказа
+     */
+    [m_types.SET_CURRENT_PAYLOAD](state, payload){
+            state.currentPayload = payload;
     }
 }

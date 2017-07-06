@@ -97,7 +97,7 @@
                     button.text = item.name;
                     button.onClick = ()=>{
                         if (callback && typeof(callback) === "function") {
-                            callback(item.name);
+                            callback(item.code);
                         }
                         return item.code;
                     };

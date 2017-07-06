@@ -27,7 +27,8 @@ const store = new Vuex.Store({
         orders: {
             current: [],
             summary: 0
-        }
+        },
+        currentPayload: {}
     },
     mutations: mutations,
     actions: actions
