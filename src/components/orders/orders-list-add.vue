@@ -59,8 +59,12 @@
                                                             :data-id="items.el.item.code">
                                                     <span>{{items.el.item.name}}
                                                      {{items.el.item.modsPosition}}
-                                                        <template v-if="items.el.modsPosition !== ''">
-                                                             / {{items.el.modsPosition}}
+                                                       <template
+                                                               v-if="items.el.modsPosition !== '' && items.el.modsPosition !== ' '">
+                                                                   / {{getModsPositionName(items.el.modsPosition)}}
+                                                        </template>
+                                                        <template v-if="items.el.modsCommon !== '' && items.el.modsCommon !== ' '">
+                                                                   / {{getModsCommonName(items.el.modsCommon)}}
                                                         </template>
                                                     </span>
                                                     </f7-col>

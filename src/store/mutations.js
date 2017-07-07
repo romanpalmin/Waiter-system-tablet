@@ -142,8 +142,7 @@ export default {
      */
         [m_types.UPDATE_COMMON_MODS](state, payload){
         let params = payload.params;
-        console.log(params);
-        console.log(payload.newValue);
+
         state.orders.current = _.map(state.orders.current, (item) => {
             if (
                 item.item.code === params.item.code &&
@@ -158,8 +157,6 @@ export default {
             }
             return item;
         });
-        console.log('Новый массив:');
-        console.log(state.orders.current);
     },
 
     /**
