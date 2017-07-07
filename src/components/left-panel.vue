@@ -23,6 +23,7 @@
             <hr />
             <select-tablet />
         </f7-popup>
+        <print-order />
     </div>
 
 </template>
@@ -31,6 +32,7 @@
 </style>
 <script>
     import selectTablet from './select-tablet.vue';
+    import printOrder from './orders/print-order.vue';
     export default{
         data(){
             return{
@@ -38,13 +40,6 @@
             }
         },
         mounted(){
-            const self = this;
-            this.$$('.print-order').on('click', function () {
-                self.$f7.showPreloader('Печать стола №' + self.$store.state.currentTable);
-                setTimeout(function () {
-                    self.$f7.hidePreloader();
-                }, 2000);
-            });
         },
         computed:{
             tabletNumber(){
@@ -52,7 +47,8 @@
             }
         },
         components:{
-            'select-tablet': selectTablet
+            'select-tablet': selectTablet,
+            'print-order': printOrder
         }
     }
 </script>
