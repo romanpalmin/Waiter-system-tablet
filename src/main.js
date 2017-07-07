@@ -32,6 +32,9 @@ new Vue({
     framework7: {
         root: '#app',
         routes: Routes,
+        uniqueHistory: true,
+        uniqueHistoryIgnoreGetParameters: true,
+        cache: false
     },
     // Register App Component
     components: {
@@ -40,8 +43,16 @@ new Vue({
     methods: {
         getNewJsonFullTree(){
             this.$store.dispatch('GET_MENU');
-            this.$store.dispatch('LOAD_POSITIONS_MODS', {'callback':function(){console.log('Модификаторы товаров загружены');}});
-            this.$store.dispatch('LOAD_COMMON_MODS', {'callback':function(){console.log('Общие модификаторы загружены');}});
+            this.$store.dispatch('LOAD_POSITIONS_MODS', {
+                'callback': function () {
+                    console.log('Модификаторы товаров загружены');
+                }
+            });
+            this.$store.dispatch('LOAD_COMMON_MODS', {
+                'callback': function () {
+                    console.log('Общие модификаторы загружены');
+                }
+            });
         }
     },
     mounted(){

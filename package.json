@@ -17,10 +17,12 @@
     "url": ""
   },
   "dependencies": {
+    "axios": "^0.16.2",
     "framework7": "^1.5.4",
     "framework7-icons": "^0.8.9",
     "framework7-vue": "^0.8.5",
     "vue": "^2.2.4",
+    "vue-axios": "^2.0.2",
     "vue-router": "^2.3.1",
     "vuex": "^2.2.1"
   },
