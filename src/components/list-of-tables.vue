@@ -3,7 +3,8 @@
         <f7-block>
             <div class="list-of-tables">
                 <div class="table" v-for="table in list">
-                    <f7-link :href="nextLink">
+                    <!--<f7-link :href="nextLink">-->
+                    <f7-link>
                         <div class="table-image" @click="selectTable(table)">
                             <f7-badge>{{table.status}}</f7-badge>
                         </div>
@@ -45,29 +46,138 @@
             return{
                 name:'Список столов',
                 currentList: [],
-                nextLink: ''
+                nextLink: '',
+                usrID: '241182',
+                url: this.$store.state.settings.apiUrl
             }
         },
         mounted(){
            this.currentList = this.list;
-           if (this.$store.state.pages.addorder){
+           /*if (this.$store.state.pages.addorder){
                 this.nextLink = '/guest-count/'
            } else {
                 this.nextLink = '/guest-count/'; // edit-page
-           }
+           }*/
         },
         props: ['list'],
         methods:{
             selectTable(table){
-            console.log(table);
-            if (table.status && table.status === 1){
-                    this.$store.commit('SET_CURRENT_TABLE', {'tableId': table.id});
-                    //this.$router.load({'url':'/guest-count/', 'reload':true});
+                console.log(table);
+                this.$f7.showPreloader('Открытие стола №' + table.id);
+                this.addNewOrder(table);
+                if (table.status && table.status === 1){
+                        //this.$store.commit('SET_CURRENT_TABLE', {'tableId': table.id});
+                        //this.$router.load({'url':'/guest-count/', 'reload':true});
+                    }
+            },
+
+            addNewOrder(table){
+                console.log(table);
+                let url = this.url;
+                let options = {
+                    'cmd_garson' : 'NEW',
+                    'table' : table.id,
+                    'numTablet' : '05',
+                    'usrID' : this.usrID,
+                    'guests' : 1,
+                    'uuid' : '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7',
+                    'zakNo' : ''
+                };
+                this.axios.get(url, {params: options})
+                    .then((resp) => {
+                        /** генерация тестовой ошибки
+                         throw new Error('Ошибка добавления заказа');
+                         */
+                        console.log('Добавлены строки:');
+                        console.log(resp.data);
+
+                        this.checkForAnswerCode(resp.data, table);
+                    })
+                    .catch((err) => {
+                        this.$f7.hidePreloader();
+                        console.log('Ошибка создания заказа: ' + err);
+                        if (this.$store.state.settings.isDebug){
+                            if (table.status && table.status === 1) {
+                                let debugOrderId = 111;
+                                this.nextPage(table.id, debugOrderId);
+                            }
+                        } else { // что то пошло не так, проверяем наличие заказа на столе
+                            this.checkOrderInTables(table.id);
+                        }
+                    });
+            },
+
+            /**
+                Проверяем код ответа, в зависимости от кода ответа выбираем действие
+            */
+            checkForAnswerCode(data, table){
+                if (data && data.answCode){
+                    switch (data.answCode){
+                        case '0': // Все ок
+                            this.nextPage(table.id, data.zakaz);
+                            break;
+                        case '13': // На данном столе уже открыт заказ
+                            this.$f7.hidePreloader();
+                            this.$f7.alert(`Код ошибки: ${data.answCode} : ${data.answText}`, 'Ошибка!');
+                            break;
+                        default:  // что то пошло не так, проверяем наличие заказа на столе
+                            this.checkOrderInTables(table.id);
+                            break;
+                    }
+                } else { // что то пошло не так, проверяем наличие заказа на столе
+                    this.checkOrderInTables(table.id);
                 }
+            },
+
+            /**
+                В случае успеха сохраняем номер заказа, номер  стола, скрываем прелоадер переходим на следующую страницу
+            */
+            nextPage(tableId, orderId){
+                this.$f7.hidePreloader();
+                this.$store.commit('SET_CURRENT_TABLE', {'tableId': tableId});
+                this.$store.commit('SET_CURRENT_ORDER_ID', {'orderId': orderId});
+                this.$router.load({'url':'/guest-count/', 'reload':true});
+            },
+
+            /**
+                Проверяем, не создался ли заказ для данного стола
+            */
+            checkOrderInTables(table){
+                console.log('Номер стола: ' + table);
+                let url = this.url;
+                let options = {
+                    'cmd_garson' : 'getTableSt',
+                    'numTablet' : '05',
+                    'usrID' : this.usrID,
+                    'table' : table,
+                    'guests' : 1,
+                    'uuid' : '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7'
+                };
+
+                this.axios.get(url, {params: options})
+                    .then((resp)=>{
+                        console.log(resp.data);
+                        this.$f7.hidePreloader();
+                        if (resp.data.length > 0){
+                            let res = _.find(resp.data, (item)=>{
+                                return (item.table === +table && item.garson === +this.usrID)
+                            });
+                            console.log(res);
+                            // если найден заказ по заданным столу и официанту, считаем, что все ок, переходим на следующую страницу
+                            if (res && res.zakNo && res.zakNo > 0){
+                                this.nextPage(table, res.zakNo);
+                            } else { // в противном случае выводим ошибку
+                                this.$f7.hidePreloader();
+                                this.$f7.alert(`Не удалось открыть стол №:${table}`, 'Ошибка!');
+                            }
+                        }
+                    })
+                    .catch((err) => {
+                        this.$f7.hidePreloader();
+                        this.$f7.alert(`Текст ошибки: ${err}`, 'Ошибка!');
+                    });
             }
         }
 
     }
-
-
 </script>

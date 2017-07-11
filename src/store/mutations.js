@@ -189,5 +189,14 @@ export default {
      */
     [m_types.SET_CURRENT_PAYLOAD](state, payload){
             state.currentPayload = payload;
+    },
+
+    /**
+     * Устанавливает текущий номер заказа
+     * @param state
+     * @param payload
+     */
+    [m_types.SET_CURRENT_ORDER_ID](state, payload){
+        state.orders.currentOrderId = payload.orderId;
     }
 }
