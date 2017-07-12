@@ -14,6 +14,7 @@
 </style>
 <script>
     import users from '../data/waiters.js';
+    import usersWs from '../data/waiters-ws.js';
     export default{
         data(){
             return{

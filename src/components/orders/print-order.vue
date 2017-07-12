@@ -108,7 +108,14 @@
                 this.$f7.hidePreloader();
                 this.axios.get(this.apiUrl.addOrder, {params: options})
                     .then((resp) => {
-                        console.log(resp.data);
+                        let response = {};
+                        if (resp && resp.data && resp.data[0] && resp.data[0].str1 && resp.data[0].str1[0]){
+                            response = resp.data[0].str1[0];
+
+                        } else {
+                            console.log(resp.data);
+                            throw new Error(resp.data);
+                        }
                         this.$f7.hidePreloader();
                     })
                     .catch((err=>{
@@ -137,6 +144,10 @@
 
                 });
                 return orderStrings;
+            },
+
+            successAdding(resp){
+
             },
 
             addNewOrderOld(params){

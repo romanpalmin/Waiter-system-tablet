@@ -40,9 +40,11 @@ export default {
             payload.callback();
         }
     },
+/*
     [m_types.SET_NEW_ORDER](state, payload){
         state.orders = payload.order;
     },
+*/
 
     /**
      * Добавляет новый товар и мутирует состояние
@@ -198,5 +200,24 @@ export default {
      */
     [m_types.SET_CURRENT_ORDER_ID](state, payload){
         state.orders.currentOrderId = payload.orderId;
+    },
+
+    /**
+     * Копирует текущий заказ в структуру хранения текущего заказа по столам
+     * @param state
+     * @param payload
+     */
+        [m_types.COPY_CURRENT_ORDER_TO_BYTABLES_CURRENTED](state, payload){
+            //let tableId = payload.
+            //state.orders.byTables.
+    },
+
+    /**
+     * Копирует текущий заказ в структуру хранения отправленного на печать заказа по столам
+     * @param state
+     * @param payload
+     */
+        [m_types.COPY_CURRENT_ORDER_TO_BYTABLES_PRINTED](state, payload){
+
     }
 }

@@ -111,14 +111,17 @@
                 Проверяем код ответа, в зависимости от кода ответа выбираем действие
             */
             checkForAnswerCode(data, table){
-                if (data && data.answCode){
-                    switch (data.answCode){
+                console.log(data);
+                const resp = data[0].str1[0];
+                console.log(resp);
+                if (data[0] && resp && resp.answCode){
+                    switch (resp.answCode){
                         case '0': // Все ок
-                            this.nextPage(table.id, data.zakaz);
+                            this.nextPage(table.id, resp.zakaz);
                             break;
                         case '13': // На данном столе уже открыт заказ
                             this.$f7.hidePreloader();
-                            this.$f7.alert(`Код ошибки: ${data.answCode} : ${data.answText}`, 'Ошибка!');
+                            this.$f7.alert(`Код ошибки: ${resp.answCode} : ${resp.answText}`, 'Ошибка!');
                             break;
                         default:  // что то пошло не так, проверяем наличие заказа на столе
                             this.checkOrderInTables(table.id);
@@ -133,6 +136,7 @@
                 В случае успеха сохраняем номер заказа, номер  стола, скрываем прелоадер переходим на следующую страницу
             */
             nextPage(tableId, orderId){
+                console.log('Новый заказ: ' + orderId);
                 this.$f7.hidePreloader();
                 this.$store.commit('SET_CURRENT_TABLE', {'tableId': tableId});
                 this.$store.commit('SET_CURRENT_ORDER_ID', {'orderId': orderId});

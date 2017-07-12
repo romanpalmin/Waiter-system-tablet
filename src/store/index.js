@@ -31,7 +31,8 @@ const store = new Vuex.Store({
         orders: {
             current: [],
             summary: 0,
-            currentOrderId: 0
+            currentOrderId: 0,
+            byTables: []
         },
         currentPayload: {}
     },
