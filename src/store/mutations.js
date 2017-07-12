@@ -40,11 +40,11 @@ export default {
             payload.callback();
         }
     },
-/*
-    [m_types.SET_NEW_ORDER](state, payload){
-        state.orders = payload.order;
-    },
-*/
+    /*
+     [m_types.SET_NEW_ORDER](state, payload){
+     state.orders = payload.order;
+     },
+     */
 
     /**
      * Добавляет новый товар и мутирует состояние
@@ -189,8 +189,8 @@ export default {
      * @param state
      * @param строка заказа
      */
-    [m_types.SET_CURRENT_PAYLOAD](state, payload){
-            state.currentPayload = payload;
+        [m_types.SET_CURRENT_PAYLOAD](state, payload){
+        state.currentPayload = payload;
     },
 
     /**
@@ -198,7 +198,7 @@ export default {
      * @param state
      * @param payload
      */
-    [m_types.SET_CURRENT_ORDER_ID](state, payload){
+        [m_types.SET_CURRENT_ORDER_ID](state, payload){
         state.orders.currentOrderId = payload.orderId;
     },
 
@@ -208,8 +208,19 @@ export default {
      * @param payload
      */
         [m_types.COPY_CURRENT_ORDER_TO_BYTABLES_CURRENTED](state, payload){
-            //let tableId = payload.
-            //state.orders.byTables.
+        let current = state.orders.current;
+        let byTableItem = {};
+        /*if (current.length > 0) {
+            byTableItem = {
+                tableId: current[0].item.tableId,
+                currentOrderId: state.orders.currentOrderId,
+                currentedSummary: state.orders.summary,
+                currented: current
+            };
+
+        }*/
+
+        //state.orders.byTables.
     },
 
     /**
