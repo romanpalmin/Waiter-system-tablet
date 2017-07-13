@@ -21,23 +21,23 @@
         max-height: 600px;
         overflow: scroll;
         .table {
-            width: 70px;
+            /*width: 70px;*/
             height: 69px;
             float: left;
             margin: 15px;
             .table-image {
                 border: 1px solid gray;
-                width: 100%;
-                height: 100%;
+                width: 60px;
+                height: 60px;
                 background-size: cover;
                 background: url(http://10.10.182.11/ept/waiter-tablet/images/table.png);
                 border-radius: 20px;
-
             }
             .title {
                 border: 2px solid gray;
                 width: 100%;
                 height: 100%;
+                font-size: smaller;
             }
         }
     }
@@ -60,7 +60,6 @@
             selectTable(table){
                 if (this.$store.state.pages.addorder){
                     console.log('Создаем новый стол');
-                    console.log(this.$router);
                     this.$f7.showPreloader('Открытие стола №' + table.table);
                     this.addNewOrder(table);
                 } else {
@@ -71,7 +70,6 @@
             },
 
             editOrder(table){
-                console.log('Переходим к редактированию стола №' + JSON.stringify(table));
                 this.$store.commit('SET_CURRENT_TABLE', {'tableId': table.table});
                 this.$store.commit('SET_CURRENT_ORDER_ID', {'orderId': table.zakNo});
                 this.$router.load({'url':'/add-order/', 'reload':true});
@@ -154,7 +152,6 @@
                 Проверяем, не создался ли заказ для данного стола
             */
             checkOrderInTables(table){
-                console.log('Номер стола: ' + table);
                 let url = this.url;
                 let options = {
                     'cmd_garson' : 'getTableSt',
@@ -167,7 +164,6 @@
 
                 this.axios.get(url, {params: options})
                     .then((resp)=>{
-                        console.log(resp.data);
                         this.$f7.hidePreloader();
                         if (resp.data.length > 0){
                             let res = _.find(resp.data, (item)=>{

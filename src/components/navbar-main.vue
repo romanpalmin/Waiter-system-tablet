@@ -30,7 +30,7 @@
                 <f7-nav-left><span @click="showPopup=false"><div class="close-settings images"
                                                                  :style="getStyle('exit')"></div></span></f7-nav-left>
             </f7-navbar>
-            <f7-block-title>Настройки</f7-block-title>
+           <!-- <f7-block-title>Настройки</f7-block-title>
             <f7-block>
                 Настройки 1
             </f7-block>
@@ -39,7 +39,7 @@
             </f7-block>
             <f7-block>
                 Настройки 3
-            </f7-block>
+            </f7-block>-->
         </f7-popup>
     </div>
 </template>

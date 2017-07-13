@@ -46,6 +46,7 @@
         },
         mounted(){
             this.getTablesCurrentWaitress();
+            this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
         },
         methods:{
             getTablesCurrentWaitress(){

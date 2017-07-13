@@ -1,6 +1,6 @@
 <template>
     <div>
-        <f7-link href="/halls/" @click="addNewOrder()"><div class="add-table-button"></div></f7-link>
+        <f7-link href="/hall-tables/" @click="addNewOrder()"><div class="add-table-button"></div></f7-link>
     </div>
 </template>
 <style scoped lang="less">
