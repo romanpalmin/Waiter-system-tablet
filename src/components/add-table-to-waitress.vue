@@ -25,7 +25,7 @@
         },
         props: ["waitressId", "tableId", "position"],
         mounted(){
-            this.$store.commit('SET_ADD_ORDER_PAGE', {addorder: false});
+            //this.$store.commit('SET_ADD_ORDER_PAGE', {addorder: false});
         },
         methods:{
             addNewOrder(){

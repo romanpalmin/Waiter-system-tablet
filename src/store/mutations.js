@@ -4,6 +4,9 @@ export default {
     [m_types.SET_FULL_MENU](state, payload){
         state.FullTree = payload;
     },
+    [m_types.SET_SOURCE_MENU](state, payload){
+        state.SourceMenu = payload;
+    },
     [m_types.SET_WAITER](state, payload){
         state.waiter = payload.waiter;
     },
@@ -91,6 +94,17 @@ export default {
                 payload.callback();
             }
         }
+    },
+
+    /**
+     * Очищает весь текущий заказ
+     * @param state
+     */
+    [m_types.REMOVE_FULL_CURRENT_ORDER](state){
+        state.orders.current = [];
+        state.orders.current = _.map(state.orders.current, (item) => {
+            return item
+        });
     },
 
     [m_types.SET_CURRENT_SUMMARY](state, payload){
@@ -200,35 +214,12 @@ export default {
      */
         [m_types.SET_CURRENT_ORDER_ID](state, payload){
         state.orders.currentOrderId = payload.orderId;
+        state.orders.summary = 0;
     },
 
-    /**
-     * Копирует текущий заказ в структуру хранения текущего заказа по столам
-     * @param state
-     * @param payload
-     */
-        [m_types.COPY_CURRENT_ORDER_TO_BYTABLES_CURRENTED](state, payload){
-        let current = state.orders.current;
-        let byTableItem = {};
-        /*if (current.length > 0) {
-            byTableItem = {
-                tableId: current[0].item.tableId,
-                currentOrderId: state.orders.currentOrderId,
-                currentedSummary: state.orders.summary,
-                currented: current
-            };
-
-        }*/
-
-        //state.orders.byTables.
-    },
-
-    /**
-     * Копирует текущий заказ в структуру хранения отправленного на печать заказа по столам
-     * @param state
-     * @param payload
-     */
-        [m_types.COPY_CURRENT_ORDER_TO_BYTABLES_PRINTED](state, payload){
-
+    [m_types.SET_PRINTED_ORDER](state, payload){
+            state.orders.printed = _.map(payload.printedOrders, (it)=>{return it});
+            console.log('Мутация printed');
+            console.log(state.orders.printed);
     }
 }

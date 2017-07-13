@@ -94,7 +94,7 @@
         methods: {
            back(){
                 this.tableNumber = '';
-                this.$store.commit('SET_ADD_ORDER_PAGE', {addorder: false});
+                this.$store.commit('SET_ADD_ORDER_PAGE', {addorder: true});
                 this.keyPicker.setValue('');
                 this.keyPicker.close();
                 this.$router.back();

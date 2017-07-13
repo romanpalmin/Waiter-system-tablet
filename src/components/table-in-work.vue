@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="table-list">
 
         <table-list :list="currentTables" />
         <add-table-button />
@@ -26,6 +26,9 @@
             width: 100%;
             height: 100%;
         }
+        &-list{
+            overflow-y: scroll;
+        }
     }
 }
 </style>
@@ -46,6 +49,33 @@
         },
         methods:{
             getTablesCurrentWaitress(){
+                this.$f7.showPreloader('Загрузка столов пользователя');
+                let numTablet = '05';
+                let result = [];
+                let options = {
+                    'cmd_garson': 'getTableSt',
+                    numTablet,
+                    'usrID': this.$store.state.usrID,
+                    'uuid': '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7'
+                }
+                this.axios.get(this.$store.state.settings.apiUrl, {params: options})
+                    .then(resp=>{
+                        console.log(resp.data);
+                        if (resp && resp.data){
+                            result = _.filter(resp.data, {'garson': this.$store.state.usrID, 'status': 1});
+                        }
+                        console.log('Столы пользователя');
+                        console.log(result);
+                        this.currentTables = _.map(result, (item)=>{return item});
+                        this.$f7.hidePreloader();
+                    })
+                    .catch((err=>{
+                        console.log(err);
+                        this.$f7.hidePreloader();
+                        this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
+                    }))
+                console.log('Фильтруем столы текушего пользователя с usrID = ' + this.$store.state.usrID);
+                this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
             }
         },
         components:{

@@ -8,10 +8,11 @@ const store = new Vuex.Store({
     state: {
         settings: {
             isDebug: true,
-            apiUrl: 'http://10.100.50.248/planshet_kl/hs/garson'
+            apiUrl: 'http://tab01:01@10.100.50.248/planshet_kl/hs/garson'
         },
         tabletNumber: '13',
         waiter: {},
+        usrID: 241182,
         testMessage: 'Планшет официанта!',
         halls: [],
         login: false,
@@ -28,11 +29,12 @@ const store = new Vuex.Store({
         modsCommon: [],
         modsPosition: [],
         FullTree: [],
+        SourceMenu: {},
         orders: {
             current: [],
             summary: 0,
             currentOrderId: 0,
-            byTables: []
+            printed: []
         },
         currentPayload: {}
     },

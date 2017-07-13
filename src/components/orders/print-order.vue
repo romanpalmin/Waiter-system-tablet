@@ -11,18 +11,9 @@
     export default{
         data(){
             return {
-                name: 'this component',
-                errCount: 0,
-                maxErrCount: 2,
-                timeouts: {
-                    repeatTry: 2000
-                },
-                usrID: '241182',
+                usrID: this.$store.state.usrID,
                 apiUrl: {
-                    'testNewOrder': 'https://yesno.wtf/api/',
-                    'testAddOrder': 'https://httpbin.org/get',
-                    'newOrder': '',
-                    'addOrder': this.$store.state.settings.apiUrl
+                    'url': this.$store.state.settings.apiUrl
                 }
             }
         },
@@ -89,39 +80,79 @@
             },
 
             printOrder(){
-                this.addNewOrder({'order': 'test'});
                 this.$f7.showPreloader('Печать стола №' + this.$store.state.currentTable);
+                this.addNewOrder();
             },
 
-            addNewOrder(params){
-                let options = {
-                    'cmd_garson': 'ADD',
-                    'numTablet': '05',
-                    'usrID': this.usrID,
-                    'table': this.$store.state.currentTable,
-                    'zakNo': this.$store.state.orders.currentOrderId,
-                    'guest': this.$store.state.guestsCount,
-                    'rows': this.populateOrderStrings(this.usrID, this.$store.state.currentTable),
-                    'uuid': '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7'
+            addNewOrder(){
+                let uuid = '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7';
+                let usrID = this.usrID;
+                let table = this.$store.state.currentTable;
+                let zakNo = this.$store.state.orders.currentOrderId;
+                let guests = this.$store.state.guestsCount;
+                let numTablet = '05';
+
+                let optionsAdd = {
+                    'cmd_garson': 'ADD', numTablet, usrID, table, zakNo, guests,
+                    'rows': this.populateOrderStrings(this.usrID, this.$store.state.currentTable), uuid
+                };
+
+                let optionsRec = {
+                    'cmd_garson': 'REC', numTablet, zakNo, usrID, table, guests, uuid
                 }
-                console.log(options);
-                this.$f7.hidePreloader();
-                this.axios.get(this.apiUrl.addOrder, {params: options})
+                //this.$f7.hidePreloader();
+                this.axios.get(this.apiUrl.url, {params: optionsAdd})
                     .then((resp) => {
                         let response = {};
                         if (resp && resp.data && resp.data[0] && resp.data[0].str1 && resp.data[0].str1[0]){
                             response = resp.data[0].str1[0];
-
+                            console.log('Первый THEN');
+                            console.log(response);
+                            return response;
                         } else {
                             console.log(resp.data);
                             throw new Error(resp.data);
+
                         }
-                        this.$f7.hidePreloader();
                     })
+                    .then (response=>{
+                        console.log('Второй THEN');
+                        console.log(response);
+                        console.log('Тип ответа: ' + typeof response);
+                        console.log(this.$store.state.orders.current);
+                        console.log(this.$store.state.orders.current);
+                        this.$f7.hidePreloader();
+                        if (typeof response === 'object') {
+                            this.$router.load({'url':'/tables/', 'reload':true});
+                            this.$store.commit('REMOVE_FULL_CURRENT_ORDER');
+                            this.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
+                        }
+                        //return this.axios.get(this.apiUrl.url, {params: optionsRec});
+                    })
+                    /*.then (rec=>{
+                        console.log('Третий THEN');
+                        console.log(rec.data);
+                        if (rec && rec.data && rec.data[0] && rec.data[0].str1 && rec.data[0].str1[0] && rec.data[0].str1[0] && rec.data[0].str1[0].answCode === '0'){
+                            let currentPrinted = rec.data[0].str2;
+                            console.log(currentPrinted);
+                            this.$f7.hidePreloader();
+                            return currentPrinted;
+                        }
+                        else {
+                            console.log(rec.data);
+                            throw new Error(rec.data);
+                        }
+                    })
+                    .then(currentPrinted=>{
+                        console.log('Четвертый THEN');
+                        console.log(currentPrinted);
+                        this.$router.load({'url':'/tables/', 'reload':true});
+                        this.$store.commit('REMOVE_FULL_CURRENT_ORDER');
+                    })*/
                     .catch((err=>{
                         console.log(err);
                         this.$f7.hidePreloader();
-                        this.$f7.alert(`Ошибка добавления товаров в заказ: ${err}`, 'Ошибка!');
+                        this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
                     }))
             },
 
@@ -129,85 +160,25 @@
                 let orderStrings = '';
                 let currentOrder =this.currentOrderByPosition
                 console.log(currentOrder);
-                currentOrder.forEach((item, index)=>{
-                    if (index > 0){
-                        orderStrings += '*'; // разделитель строк
-                    }
-                    orderStrings += item.el.modsPosition + '|'; // модификатор товара
-                    orderStrings += (item.el.modsCommon).trim() + '|'; // общий модификатор
-                    orderStrings += (item.el.course > 0 ? item.el.course : '') + '|'; // курс
-                    orderStrings += '' + '|'; // вид скидки
-                    orderStrings += '' + '|'; // процент скидки
-                    orderStrings += item.el.item.code + '|'; // код товара
-                    orderStrings += item.count + '|'; // количество товара
-                    orderStrings += '' + '|'; // планшет гостя
-
-                });
-                return orderStrings;
-            },
-
-            successAdding(resp){
-
-            },
-
-            addNewOrderOld(params){
-                let testApi1 = this.apiUrl.testNewOrder;
-                this.axios.get(testApi1)
-                    .then((response) => {
-                        /** генерация тестовой ошибки
-                         throw new Error('Ошибка создания заказа');
-                         */
-                        console.log('Создан заказ');
-                        this.errCount = 0;
-                        return response;
-                    })
-                    .then((data) => {
-                        this.addOrder(data);
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                        if (this.errCount < this.maxErrCount) {
-                            this.errCount++;
-                            setTimeout(() => {
-                                this.addNewOrder(params);
-                            }, this.timeouts.repeatTry);
-                        } else {
-                            console.log('Попытки создания заказа исчерпаны');
-                            this.errCount = 0;
-                            this.$f7.hidePreloader();
-                            return;
+                if (currentOrder){
+                    currentOrder.forEach((item, index)=>{
+                        if (index > 0){
+                            orderStrings += '*'; // разделитель строк
                         }
-                    });
-            },
+                        orderStrings += item.el.modsPosition + '|'; // модификатор товара
+                        orderStrings += (item.el.modsCommon).trim() + '|'; // общий модификатор
+                        orderStrings += (item.el.course > 0 ? item.el.course : '') + '|'; // курс
+                        orderStrings += '' + '|'; // вид скидки
+                        orderStrings += '' + '|'; // процент скидки
+                        orderStrings += item.el.item.code + '|'; // код товара
+                        orderStrings += item.count + '|'; // количество товара
+                        orderStrings += '' + '|'; // планшет гостя
 
-            addOrder(orderNum) {
-                let testApi2 = this.apiUrl.testAddOrder;
-                console.log('Текущий номер заказа:');
-                console.log(orderNum);
-                this.axios.get(testApi2)
-                    .then((resp) => {
-                        /** генерация тестовой ошибки
-                         throw new Error('Ошибка добавления заказа');
-                         */
-                        console.log('Добавлены строки:');
-                        console.log(resp.data);
-                        this.$f7.hidePreloader();
-                        this.errCount = 0;
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                        if (this.errCount < this.maxErrCount) {
-                            this.errCount++;
-                            setTimeout(() => {
-                                this.addOrder(orderNum);
-                            }, this.timeouts.repeatTry);
-                        } else {
-                            console.log('Попытки добавления заказа исчерпаны');
-                            this.errCount = 0;
-                            this.$f7.hidePreloader();
-                            return;
-                        }
                     });
+                    return orderStrings;
+                } else {
+                    return [];
+                }
             },
 
             loadFromLs(){

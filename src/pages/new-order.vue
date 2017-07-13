@@ -40,11 +40,54 @@
         },
         mounted(){
             console.log('Начинаем оформление заказа, загружаем товары');
+            if (!this.$store.state.pages.addorder){
+                this.$f7.showPreloader('Загружаем заказ стола №' + this.$store.state.currentTable);
+                console.log('Загружаем весь заказ');
+                this.getPrinted();
+            }
         },
         components: {
             navbar,
             'orders-list' : orderlist
         },
+        methods:{
+            getPrinted(){
+                let uuid = '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7';
+                let usrID = this.$store.state.usrID;
+                let table = this.$store.state.currentTable;
+                let zakNo = this.$store.state.orders.currentOrderId;
+                let guests = this.$store.state.guestsCount;
+                let numTablet = '05';
+
+               let optionsRec = {
+                    'cmd_garson': 'REC', numTablet, zakNo, usrID, table, guests, uuid
+               }
+               this.axios.get(this.$store.state.settings.apiUrl, {params: optionsRec})
+                    .then(rec=>{
+                        console.log(rec.data);
+                        if (rec && rec.data && rec.data[0] && rec.data[0].str1 && rec.data[0].str1[0] && rec.data[0].str1[0] && rec.data[0].str1[0].answCode === '0'){
+                            let currentPrinted = rec.data[0].str2;
+                            console.log(currentPrinted);
+                            this.$f7.hidePreloader();
+                            return currentPrinted;
+                        }
+                        else {
+                            console.log(rec.data);
+                            throw new Error(rec.data);
+                        }
+                    })
+                    .then(currentPrinted=>{
+                        console.log('SECOND!');
+                        console.log(currentPrinted);
+                        this.$store.commit('SET_PRINTED_ORDER', {'printedOrders': currentPrinted});
+                        this.$f7.hidePreloader();
+                    })
+                    .catch(err=>{
+                        console.log(err);
+                        this.$f7.hidePreloader();
+                    })
+            }
+        }
     }
 
 </script>

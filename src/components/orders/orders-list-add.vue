@@ -1,5 +1,23 @@
 <template>
     <div>
+        <div class="printed-order">
+            Текущий заказ
+            <hr />
+            <f7-grid>
+                <f7-col  width="60">
+                    Наименование
+                </f7-col>
+                <f7-col width="7">Количество</f7-col>
+            </f7-grid>
+            <hr />
+            <f7-grid v-for="order in printed">
+                <f7-col  width="60" class="order-string" :data-id="num_str">
+                    {{order.tovar}} / {{order.name}}
+                    <span v-if="order.kurs > 0"> / курс {{order.kurs}}</span>
+                </f7-col>
+                <f7-col class="order-string" width="7">{{order.count}}</f7-col>
+            </f7-grid>
+        </div>
         <div class="list-of-orders">
             <div class="select-view-type">
                 <f7-buttons color="gray" class="btns-type-list">
@@ -115,6 +133,10 @@
                 display: inline-flex;
             }
         }
+        .printed-order{
+            overflow: scroll;
+            max-height: 200px;
+        }
 
         .order-string {
             text-align: left;
@@ -170,6 +192,20 @@
             getGuestsCount: function () {
                 return this.$store.state.guestsCount;
             },
+            printed: function(){
+                let curOrderItem = {};
+                let printedView  = _.map(this.$store.state.orders.printed, item => {
+                    curOrderItem = _.filter(this.$store.state.SourceMenu.items, {'code': item.tovar});
+                    if (curOrderItem && curOrderItem[0] &&curOrderItem[0].name) {
+                        console.log('CurrentTest');
+                        item.name = curOrderItem[0].name;
+                        return item;
+                    }
+
+                });
+                return printedView;
+            },
+
             currentOrdersAll: function () {
                 let filtered = _.filter(this.$store.state.orders.current, (item) => {
                     return item.tableId === this.$store.state.currentTable
@@ -267,6 +303,8 @@
         mounted(){
             this.openGuest(1);
             this.setHandlers();
+            console.log('Текущее состояние:');
+            console.log(this.$store.state);
         },
         methods: {
             setViewType(type){

@@ -9,7 +9,7 @@
                             <f7-badge>{{table.status}}</f7-badge>
                         </div>
                     </f7-link>
-                    <div class="table-title">Стол №{{table.id}}</div>
+                    <div class="table-title">Стол №{{table.table}}</div>
 
                 </div>
             </div>
@@ -18,6 +18,8 @@
 </template>
 <style scoped lang="less">
     .list-of-tables {
+        max-height: 600px;
+        overflow: scroll;
         .table {
             width: 70px;
             height: 69px;
@@ -52,23 +54,27 @@
             }
         },
         mounted(){
-           this.currentList = this.list;
-           /*if (this.$store.state.pages.addorder){
-                this.nextLink = '/guest-count/'
-           } else {
-                this.nextLink = '/guest-count/'; // edit-page
-           }*/
         },
         props: ['list'],
         methods:{
             selectTable(table){
-                console.log(table);
-                this.$f7.showPreloader('Открытие стола №' + table.id);
-                this.addNewOrder(table);
-                if (table.status && table.status === 1){
-                        //this.$store.commit('SET_CURRENT_TABLE', {'tableId': table.id});
-                        //this.$router.load({'url':'/guest-count/', 'reload':true});
-                    }
+                if (this.$store.state.pages.addorder){
+                    console.log('Создаем новый стол');
+                    console.log(this.$router);
+                    this.$f7.showPreloader('Открытие стола №' + table.table);
+                    this.addNewOrder(table);
+                } else {
+                    console.log('Переходим в редактирование');
+                    this.editOrder(table);
+                }
+
+            },
+
+            editOrder(table){
+                console.log('Переходим к редактированию стола №' + JSON.stringify(table));
+                this.$store.commit('SET_CURRENT_TABLE', {'tableId': table.table});
+                this.$store.commit('SET_CURRENT_ORDER_ID', {'orderId': table.zakNo});
+                this.$router.load({'url':'/add-order/', 'reload':true});
             },
 
             addNewOrder(table){
@@ -76,7 +82,7 @@
                 let url = this.url;
                 let options = {
                     'cmd_garson' : 'NEW',
-                    'table' : table.id,
+                    'table' : table.table,
                     'numTablet' : '05',
                     'usrID' : this.usrID,
                     'guests' : 1,
@@ -99,7 +105,7 @@
                         if (this.$store.state.settings.isDebug){
                             if (table.status && table.status === 1) {
                                 let debugOrderId = 111;
-                                this.nextPage(table.id, debugOrderId);
+                                this.nextPage(table.table, debugOrderId);
                             }
                         } else { // что то пошло не так, проверяем наличие заказа на столе
                             this.checkOrderInTables(table.id);
@@ -117,18 +123,18 @@
                 if (data[0] && resp && resp.answCode){
                     switch (resp.answCode){
                         case '0': // Все ок
-                            this.nextPage(table.id, resp.zakaz);
+                            this.nextPage(table.table, resp.zakaz);
                             break;
                         case '13': // На данном столе уже открыт заказ
                             this.$f7.hidePreloader();
                             this.$f7.alert(`Код ошибки: ${resp.answCode} : ${resp.answText}`, 'Ошибка!');
                             break;
                         default:  // что то пошло не так, проверяем наличие заказа на столе
-                            this.checkOrderInTables(table.id);
+                            this.checkOrderInTables(table.table);
                             break;
                     }
                 } else { // что то пошло не так, проверяем наличие заказа на столе
-                    this.checkOrderInTables(table.id);
+                    this.checkOrderInTables(table.table);
                 }
             },
 
@@ -137,6 +143,7 @@
             */
             nextPage(tableId, orderId){
                 console.log('Новый заказ: ' + orderId);
+                console.log('Стол: ' + tableId);
                 this.$f7.hidePreloader();
                 this.$store.commit('SET_CURRENT_TABLE', {'tableId': tableId});
                 this.$store.commit('SET_CURRENT_ORDER_ID', {'orderId': orderId});

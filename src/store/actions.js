@@ -148,6 +148,7 @@ export default {
                 }
             });
             commit('SET_FULL_MENU', roots);
+            commit('SET_SOURCE_MENU', json);
         }
     },
 

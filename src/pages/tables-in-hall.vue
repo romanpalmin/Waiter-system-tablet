@@ -46,9 +46,10 @@
         },
         methods:{
             getTables(){
+                this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': true});
                 let list = (_.filter(this.$store.state.halls, {id: ''+this.$store.state.selectedHallId}))[0].tables;
                 list = _.map(list, function(item){
-                    return {'id':item, 'status': +1};
+                    return {'table':item, 'status': +1};
                 });
                 return list;
             }
