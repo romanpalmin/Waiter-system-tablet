@@ -1,42 +1,46 @@
 <template>
     <div class="table-list">
 
-        <table-list :list="currentTables" />
-        <add-table-button />
+        <table-list :list="currentTables"/>
+        <add-table-button/>
+        <template v-if="showPanel">
+            <table-actions-panel/>
+        </template>
     </div>
 </template>
 <style scoped lang="less">
-.list-of-tables{
-    .table{
-        width: 70px;
-        height: 69px;
-        float: left;
-        margin: 15px;
-        .table-image{
-            border: 1px solid gray;
-            width: 100%;
-            height: 100%;
-            background-size: cover;
-            background: url(http://10.10.182.11/ept/waiter-tablet/images/table.png);
-            border-radius: 20px;
+    .list-of-tables {
+        .table {
+            width: 70px;
+            height: 69px;
+            float: left;
+            margin: 15px;
+            .table-image {
+                border: 1px solid gray;
+                width: 100%;
+                height: 100%;
+                background-size: cover;
+                background: url(http://10.10.182.11/ept/waiter-tablet/images/table.png);
+                border-radius: 20px;
 
-        }
-        .title{
-            border: 2px solid gray;
-            width: 100%;
-            height: 100%;
-        }
-        &-list{
-            overflow-y: scroll;
+            }
+            .title {
+                border: 2px solid gray;
+                width: 100%;
+                height: 100%;
+            }
+            &-list {
+                overflow-y: scroll;
+            }
         }
     }
-}
 </style>
 <script>
     import tables from '../data/tables';
     import _ from 'lodash';
     import btnAdd from './add-table-to-waitress';
     import listTables from './list-of-tables';
+    import tableActions from './table-actions-panel.vue';
     export default{
         data(){
             return{
@@ -79,8 +83,15 @@
         },
         components:{
             'add-table-button': btnAdd,
-            'table-list' : listTables
+            'table-list' : listTables,
+            'table-actions-panel': tableActions
+        },
+        computed: {
+            showPanel: function() {
+                return this.$store.state.showTableActions;
+            }
         }
     }
+
 
 </script>

@@ -37,7 +37,8 @@ const store = new Vuex.Store({
             currentOrderId: 0,
             printed: []
         },
-        currentPayload: {}
+        currentPayload: {},
+        showTableActions: false
     },
     mutations: mutations,
     actions: actions,

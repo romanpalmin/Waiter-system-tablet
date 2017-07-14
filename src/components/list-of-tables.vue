@@ -5,7 +5,7 @@
                 <div class="table" v-for="table in list">
                     <!--<f7-link :href="nextLink">-->
                     <f7-link>
-                        <div class="table-image" :style="getStyle(table.status)" @click="selectTable(table)">
+                        <div class="table-image" :style="getStyle(table.status)" @click="selectTable(table)" :data-id="table.table">
                             <f7-badge>{{table.status}}</f7-badge>
                         </div>
                     </f7-link>
@@ -32,6 +32,7 @@
                 background-size: cover;
                 background: url(http://10.10.182.11/ept/waiter-tablet/images/table.png);
                 border-radius: 20px;
+
             }
             .title {
                 border: 2px solid gray;
@@ -39,7 +40,13 @@
                 height: 100%;
                 font-size: smaller;
             }
+            .pressed{
+                box-shadow: -5px -5px grey;
+                margin-top: 5px;
+                margin-left: 5px;
+            }
         }
+
     }
 </style>
 <script>
@@ -50,7 +57,25 @@
                 currentList: [],
                 nextLink: '',
                 usrID: this.$store.state.waiter.id,
-                url: this.$store.getters.apiUrl
+                url: this.$store.getters.apiUrl,
+                pressed: {
+                    isPressed: false,
+                    tableId: null
+                }
+            }
+        },
+        watch:{
+            showPanel: function(){
+                if (this.showPanel === false){
+                    this.$$('.pressed').removeClass('pressed');
+                    this.pressed.tableId = null;
+                    this.pressed.isPressed = false;
+                }
+            }
+        },
+        computed:{
+            showPanel: function() {
+                return this.$store.state.showTableActions;
             }
         },
         mounted(){
@@ -58,13 +83,30 @@
         props: ['list'],
         methods:{
             selectTable(table){
-                if (this.$store.state.pages.addorder){
-                    console.log('Создаем новый стол');
-                    this.$f7.showPreloader('Открытие стола №' + table.table);
-                    this.addNewOrder(table);
+                console.log(this.pressed.tableId);
+                console.log(table.table);
+                console.log(this.pressed);
+                if ((this.pressed.isPressed && this.pressed.tableId === table.table) || table.status === 0){
+                    console.log('Второе нажатие на стол');
+                    if (this.$store.state.pages.addorder){
+                        console.log('Создаем новый стол');
+                        this.$f7.showPreloader('Открытие стола №' + table.table);
+                        this.addNewOrder(table);
+                    } else {
+                        console.log('Переходим в редактирование');
+                        this.editOrder(table);
+                    }
                 } else {
-                    console.log('Переходим в редактирование');
-                    this.editOrder(table);
+                    if (table.status === 1 || table.status === 5) {
+                        if (this.pressed.isPressed){
+                            this.$$('[data-id="'+this.pressed.tableId + '"]').removeClass('pressed');
+                        }
+                        this.pressed.tableId = table.table;
+                        this.pressed.isPressed = true;
+                        this.$store.commit('SET_SHOW_TABLE_ACTIONS_PANEL', true);
+                        this.$$('[data-id="'+table.table + '"]').addClass('pressed');
+                        console.log(this.$store.state);
+                    }
                 }
 
             },
@@ -114,8 +156,6 @@
                         /** генерация тестовой ошибки
                          throw new Error('Ошибка добавления заказа');
                          */
-                        console.log('Добавлены строки:');
-                        console.log(resp.data);
 
                         this.checkForAnswerCode(resp.data, table);
                     })

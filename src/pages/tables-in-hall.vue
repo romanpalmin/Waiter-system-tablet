@@ -4,7 +4,7 @@
             <f7-block>
             </f7-block>
             <f7-block class="come-back">
-                <span @click="back()"><f7-navbar :title="getHallNumber" back-link="!Отмена!" sliding @click="back()"></f7-navbar></span>
+                <span @click="back()"><f7-navbar :title="getHallNumber" back-link="Отмена" sliding @click="back()"></f7-navbar></span>
             </f7-block>
             <f7-block>
                 <hall-tables  :list='getList' />

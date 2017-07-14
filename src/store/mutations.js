@@ -248,5 +248,14 @@ export default {
      */
         [m_types.SET_TABLET_NUM](state, payload){
         state.tabletNumber = payload;
+    },
+
+    /**
+     * Устанавливает признак показа панели действий со столом
+     * @param state
+     * @param payload true/false
+     */
+    [m_types.SET_SHOW_TABLE_ACTIONS_PANEL](state, payload){
+            state.showTableActions = payload;
     }
 }

@@ -84,6 +84,7 @@
             },
 
             backToTables(){
+                const self = this;
                 this.$f7.showPreloader('Проверка текущего заказа');
                 if (this.$store.state.orders.printed && this.$store.state.orders.printed.length === 0){
                     let uuid = '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7';
@@ -130,9 +131,12 @@
                                             .catch( err => {
                                                 this.$f7.hidePreloader();
                                                 this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
-                                                /*this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
-                                                this.$router.load({'url':'/tables/', 'reload':true});*/
                                                 success();
+                                                /*this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
+                                                this.$router.load({'url':'/tables/', 'reload':true});
+                                                this.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
+                                                this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
+                                                this.$router.load({'url':'/tables/', 'reload':true});*/
                                             })
 
                                       }
@@ -144,15 +148,21 @@
                             this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
                         }))
                     } else {
-
+                            this.$f7.hidePreloader();
                             console.log('Оставляем');
-                            //console.log(this.$store.state.orders.printed);
                             success();
+                            //console.log(this.$store.state.orders.printed);
+                            /*this.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
+                            this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
+                            this.$router.load({'url':'/tables/', 'reload':true});*/
                         }
                  function success(){
-                    this.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
+                    self.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
+                    self.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
+                    self.$router.load({'url':'/tables/', 'reload':true});
+                    /*this.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
                     this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
-                    this.$router.load({'url':'/tables/', 'reload':true});
+                    this.$router.load({'url':'/tables/', 'reload':true});*/
                  }
             },
 
