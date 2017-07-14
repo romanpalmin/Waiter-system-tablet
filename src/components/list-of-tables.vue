@@ -103,7 +103,7 @@
                 let options = {
                     'cmd_garson' : 'NEW',
                     'table' : table.table,
-                    'numTablet' : '05',
+                    'numTablet' : this.$store.state.tabletNumber,
                     'usrID' : this.usrID,
                     'guests' : 1,
                     'uuid' : '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7',
@@ -177,7 +177,7 @@
                 let url = this.url;
                 let options = {
                     'cmd_garson' : 'getTableSt',
-                    'numTablet' : '05',
+                    'numTablet' : this.$store.state.tabletNumber,
                     'usrID' : this.usrID,
                     'table' : table,
                     'guests' : 1,

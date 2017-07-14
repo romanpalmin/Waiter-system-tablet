@@ -51,7 +51,7 @@
         methods:{
             getTablesCurrentWaitress(){
                 this.$f7.showPreloader('Загрузка столов пользователя');
-                let numTablet = '05';
+                let numTablet = this.$store.state.tabletNumber;
                 let result = [];
                 let options = {
                     'cmd_garson': 'getTableSt',

@@ -91,7 +91,7 @@
                     let table = this.$store.state.currentTable;
                     let zakNo = this.$store.state.orders.currentOrderId;
                     let guests = this.$store.state.guestsCount;
-                    let numTablet = '05';
+                    let numTablet = this.$store.state.tabletNumber;
                     let optionsRec = {
                     'cmd_garson': 'REC', numTablet, zakNo, usrID, table, guests, uuid
                         }
@@ -162,7 +162,7 @@
                 let table = this.$store.state.currentTable;
                 let zakNo = this.$store.state.orders.currentOrderId;
                 let guests = this.$store.state.guestsCount;
-                let numTablet = '05';
+                let numTablet = this.$store.state.tabletNumber;
 
                 let optionsAdd = {
                     'cmd_garson': 'ADD', numTablet, usrID, table, zakNo, guests,

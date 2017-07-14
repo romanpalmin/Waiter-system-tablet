@@ -8,19 +8,12 @@ const store = new Vuex.Store({
     state: {
         settings: {
             isDebug: true,
-            /*apiUrl: 'http://tab01:01@10.100.50.248/planshet_kl/hs/garson',*/
             url: '10.100.50.248/planshet_kl/hs/garson',
             login: 'planshet',
-            pass: 'planshet'/*,
-            getUrl: () => `http://${this.a.state.settings.login}:${this.a.state.settings.pass}@${this.a.state.settings.url}`*/
+            pass: 'planshet'
         },
         tabletNumber: '13',
         waiter: {},
-        //usrID: this.a.state.waiter.id,//() => {console.log(this);},//this.a.state.waiter.id, //241182
-        getUsrID: () => {
-
-            this.a.state.waiter.id ? this.a.state.waiter.id : 0
-        },
         testMessage: 'Планшет официанта!',
         halls: [],
         login: false,
