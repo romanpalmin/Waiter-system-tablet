@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div>PRINT</div>
+        <div></div>
     </div>
 </template>
 <style scoped lang="less">
@@ -77,6 +77,78 @@
                 this.$$('.clear-ls').on('click', () => {
                     this.clearLs()
                 });
+                this.$$('.back-to-tables').on('click', () => {
+                    this.backToTables();
+                });
+            },
+
+            backToTables(){
+                this.$f7.showPreloader('Проверка текущего заказа');
+                if (this.$store.state.orders.printed && this.$store.state.orders.printed.length === 0){
+                    let uuid = '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7';
+                    let usrID = this.usrID;
+                    let table = this.$store.state.currentTable;
+                    let zakNo = this.$store.state.orders.currentOrderId;
+                    let guests = this.$store.state.guestsCount;
+                    let numTablet = '05';
+                    let optionsRec = {
+                    'cmd_garson': 'REC', numTablet, zakNo, usrID, table, guests, uuid
+                        }
+                    this.axios.get(this.apiUrl.url, {params: optionsRec})
+                        .then (rec=>{
+                            if (rec && rec.data && rec.data[0] && rec.data[0].str1 && rec.data[0].str1[0] && rec.data[0].str1[0] && rec.data[0].str1[0].answCode === '0'){
+                                let currentPrinted = rec.data[0].str2;
+                                this.$f7.hidePreloader();
+                                return currentPrinted;
+                            }
+                            else {
+                                throw new Error(rec.data);
+                            }
+                        })
+                        .then(currentPrinted=>{
+                            console.log(currentPrinted);
+                            if (currentPrinted && currentPrinted.length > 0) {
+                                console.log('Оставляем все как есть');
+                                this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
+                                this.$router.load({'url':'/tables/', 'reload':true});
+                            } else {
+                                console.log('Обнуляем заказ');
+                                this.$f7.hidePreloader();
+
+                                this.$f7.confirm('Заказ будет удален', 'Вы уверены?', () =>{
+                                        optionsRec.cmd_garson = 'CAN';
+                                        this.$f7.showPreloader('Удаление текущего заказа');
+                                        this.axios.get(this.apiUrl.url, {params: optionsRec})
+                                            .then( resp =>{
+                                                console.log(resp);
+                                                this.$f7.hidePreloader();
+                                                this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
+                                                this.$router.load({'url':'/tables/', 'reload':true});
+                                            })
+                                            .catch( err => {
+                                                console.log(resp);
+                                                this.$f7.hidePreloader();
+                                                this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
+                                                this.$router.load({'url':'/tables/', 'reload':true});
+                                            })
+
+                                      }
+                                    );
+                            }
+                        })
+                        .catch((err=>{
+                            console.log(err);
+                            this.$f7.hidePreloader();
+                            this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
+                        }))
+                    } else {
+
+                            console.log('Оставляем');
+                            //console.log(this.$store.state.orders.printed);
+                            this.$f7.hidePreloader();
+                            this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
+                            this.$router.load({'url':'/tables/', 'reload':true});
+                        }
             },
 
             printOrder(){
@@ -119,7 +191,6 @@
                         console.log('Второй THEN');
                         console.log(response);
                         console.log('Тип ответа: ' + typeof response);
-                        console.log(this.$store.state.orders.current);
                         console.log(this.$store.state.orders.current);
                         this.$f7.hidePreloader();
                         if (typeof response === 'object') {

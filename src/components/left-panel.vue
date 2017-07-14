@@ -10,7 +10,7 @@
         </f7-block>
         <f7-block-title>Навигация</f7-block-title>
         <f7-block inner>
-            <p><f7-link href="/tables/" close-panel data-ignore-cache="true">Список текущих столов</f7-link></p>
+            <p><f7-link class="back-to-tables" close-panel data-ignore-cache="true">Список текущих столов</f7-link></p>
             <!--<p><f7-link @click="$router.load({url: '/tables/'})" close-panel data-ignore-cache="true" >Выбор стола</f7-link></p>
             <p>Действие 2.2</p>
             <p>Действие 3.3</p>

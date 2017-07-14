@@ -61,21 +61,18 @@
                 }
                 this.axios.get(this.$store.state.settings.apiUrl, {params: options})
                     .then(resp=>{
-                        console.log(resp.data);
                         if (resp && resp.data){
-                            result = _.filter(resp.data, {'garson': this.$store.state.usrID, 'status': 1});
-                        }
-                        console.log('Столы пользователя');
-                        console.log(result);
-                        this.currentTables = _.map(result, (item)=>{return item});
+                            result = _.filter(resp.data, item => {
+                                return item.garson === this.$store.state.usrID && (item.status === 1 || item.status === 5);
+                            })
+                        };
+                        this.currentTables = _.map(result, item => {return item});
                         this.$f7.hidePreloader();
                     })
                     .catch((err=>{
-                        console.log(err);
                         this.$f7.hidePreloader();
                         this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
                     }))
-                console.log('Фильтруем столы текушего пользователя с usrID = ' + this.$store.state.usrID);
                 this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
             }
         },

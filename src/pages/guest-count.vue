@@ -4,7 +4,7 @@
             <f7-block>
             </f7-block>
             <f7-block class="come-back">
-                <f7-navbar :title="pageTitle" back-link="Отмена" sliding ></f7-navbar>
+                <!--<f7-navbar :title="pageTitle" back-link="Отмена" sliding ></f7-navbar>-->
             </f7-block>
 
 

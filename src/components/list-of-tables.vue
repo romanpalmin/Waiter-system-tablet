@@ -5,7 +5,7 @@
                 <div class="table" v-for="table in list">
                     <!--<f7-link :href="nextLink">-->
                     <f7-link>
-                        <div class="table-image" @click="selectTable(table)">
+                        <div class="table-image" :style="getStyle(table.status)" @click="selectTable(table)">
                             <f7-badge>{{table.status}}</f7-badge>
                         </div>
                     </f7-link>
@@ -67,6 +67,29 @@
                     this.editOrder(table);
                 }
 
+            },
+
+            getStyle(status){
+                let res = ';background-color: ';
+                let color = '';
+                switch (status){
+                    case 0:
+                        color = 'green';
+                        break;
+                    case 1:
+                        color = 'blue';
+                        break;
+                    case 2:
+                        color = 'black';
+                        break;
+                    case 5:
+                        color = 'yellow';
+                        break;
+                    default:
+                        break;
+                }
+                res += color + ';';
+                return res;
             },
 
             editOrder(table){

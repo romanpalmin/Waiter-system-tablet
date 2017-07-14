@@ -53,9 +53,14 @@ new Vue({
                     console.log('Общие модификаторы загружены');
                 }
             });
+        },
+        getTablet(){
+
         }
     },
     mounted(){
         this.getNewJsonFullTree();
+        console.log('Start app');
+        console.log(this.$store.state.settings.getUrl());
     }
 });

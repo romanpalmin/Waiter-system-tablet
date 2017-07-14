@@ -32,6 +32,18 @@
                 this.$store.commit('SET_USERS_PAGE', {'users': false});
                 this.$store.commit('SET_PASSWORD_PAGE', {'password': true});
                 this.$router.load({'url':'/password/', 'reload':true});
+            },
+
+            loadUsers(){
+                let options = {
+                    'cmd_garson' : 'NEW',
+                    'table' : table.table,
+                    'numTablet' : '05',
+                    'usrID' : this.usrID,
+                    'guests' : 1,
+                    'uuid' : '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7',
+                    'zakNo' : ''
+                };
             }
         }
     }
