@@ -100,7 +100,7 @@ export default {
      * Очищает весь текущий заказ
      * @param state
      */
-    [m_types.REMOVE_FULL_CURRENT_ORDER](state){
+        [m_types.REMOVE_FULL_CURRENT_ORDER](state){
         state.orders.current = [];
         state.orders.current = _.map(state.orders.current, (item) => {
             return item
@@ -218,8 +218,35 @@ export default {
     },
 
     [m_types.SET_PRINTED_ORDER](state, payload){
-            state.orders.printed = _.map(payload.printedOrders, (it)=>{return it});
-            console.log('Мутация printed');
-            console.log(state.orders.printed);
+        state.orders.printed = _.map(payload.printedOrders, it => {
+            return it;
+        });
+    },
+
+    /**
+     * Установка логина
+     * @param state
+     * @param payload - логин
+     */
+        [m_types.SET_LOGIN](state, payload){
+        state.settings.login = payload;
+    },
+
+    /**
+     * Установка пароля
+     * @param state
+     * @param payload - пароль
+     */
+        [m_types.SET_PASS](state, payload){
+        state.settings.pass = payload;
+    },
+
+    /**
+     * Установка номера планшета
+     * @param state
+     * @param payload - номер планшета
+     */
+        [m_types.SET_TABLET_NUM](state, payload){
+        state.tabletNumber = payload;
     }
 }

@@ -10,8 +10,8 @@ const store = new Vuex.Store({
             isDebug: true,
             apiUrl: 'http://tab01:01@10.100.50.248/planshet_kl/hs/garson',
             url: '10.100.50.248/planshet_kl/hs/garson',
-            login: 'tab01',
-            pass: '01',
+            login: 'planshet',
+            pass: 'planshet',
             getUrl: () => {return `http://${this.a.state.settings.login}:${this.a.state.settings.pass}@${this.a.state.settings.url}`}
         },
         tabletNumber: '13',

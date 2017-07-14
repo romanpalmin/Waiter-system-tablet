@@ -55,12 +55,30 @@ new Vue({
             });
         },
         getTablet(){
-
+            this.$f7.showPreloader('Авторизация планшета');
+            let options = {
+                'uuid' : '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7',
+                'nTab' : 1
+            };
+            let url = this.$store.state.settings.getUrl();
+            this.axios.get(url, {params: options})
+                .then(resp => {
+                    if (resp && resp.data && resp.data.login && resp.data.pass && resp.data.nTab)
+                    this.$store.commit('SET_LOGIN', resp.data.login);
+                    this.$store.commit('SET_PASS', resp.data.pass);
+                    this.$store.commit('SET_TABLET_NUM', resp.data.nTab);
+                    this.$f7.hidePreloader();
+                    console.log('API: ' + this.$store.state.settings.getUrl());
+                })
+                .catch(err => {
+                    this.$f7.alert(`Ошибка: ${err}`, 'Ошибка');
+                    this.$f7.hidePreloader();
+                })
         }
     },
     mounted(){
         this.getNewJsonFullTree();
         console.log('Start app');
-        console.log(this.$store.state.settings.getUrl());
+        this.getTablet();
     }
 });

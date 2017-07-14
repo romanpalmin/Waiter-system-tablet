@@ -99,7 +99,6 @@
             },
 
             addNewOrder(table){
-                console.log(table);
                 let url = this.url;
                 let options = {
                     'cmd_garson' : 'NEW',
