@@ -49,8 +49,8 @@
                 name:'Список столов',
                 currentList: [],
                 nextLink: '',
-                usrID: '241182',
-                url: this.$store.state.settings.apiUrl
+                usrID: this.$store.state.waiter.id,
+                url: this.$store.getters.apiUrl
             }
         },
         mounted(){

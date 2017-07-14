@@ -11,10 +11,11 @@
     export default{
         data(){
             return {
-                usrID: this.$store.state.usrID,
+                usrID: this.$store.state.waiter.id,
                 apiUrl: {
-                    'url': this.$store.state.settings.apiUrl
-                }
+                    'url': this.$store.getters.apiUrl
+                },
+                url : this.$store.getters.apiUrl
             }
         },
         mounted(){
@@ -86,7 +87,7 @@
                 this.$f7.showPreloader('Проверка текущего заказа');
                 if (this.$store.state.orders.printed && this.$store.state.orders.printed.length === 0){
                     let uuid = '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7';
-                    let usrID = this.usrID;
+                    let usrID = this.$store.state.waiter.id;
                     let table = this.$store.state.currentTable;
                     let zakNo = this.$store.state.orders.currentOrderId;
                     let guests = this.$store.state.guestsCount;
@@ -94,7 +95,7 @@
                     let optionsRec = {
                     'cmd_garson': 'REC', numTablet, zakNo, usrID, table, guests, uuid
                         }
-                    this.axios.get(this.apiUrl.url, {params: optionsRec})
+                    this.axios.get(this.$store.getters.apiUrl, {params: optionsRec})
                         .then (rec=>{
                             if (rec && rec.data && rec.data[0] && rec.data[0].str1 && rec.data[0].str1[0] && rec.data[0].str1[0] && rec.data[0].str1[0].answCode === '0'){
                                 let currentPrinted = rec.data[0].str2;
@@ -118,7 +119,7 @@
                                 this.$f7.confirm('Заказ будет удален', 'Вы уверены?', () =>{
                                         optionsRec.cmd_garson = 'CAN';
                                         this.$f7.showPreloader('Удаление текущего заказа');
-                                        this.axios.get(this.apiUrl.url, {params: optionsRec})
+                                        this.axios.get(this.$store.getters.apiUrl, {params: optionsRec})
                                             .then( resp =>{
                                                 console.log(resp);
                                                 this.$f7.hidePreloader();
@@ -126,8 +127,8 @@
                                                 this.$router.load({'url':'/tables/', 'reload':true});
                                             })
                                             .catch( err => {
-                                                console.log(resp);
                                                 this.$f7.hidePreloader();
+                                                this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
                                                 this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
                                                 this.$router.load({'url':'/tables/', 'reload':true});
                                             })
@@ -137,7 +138,6 @@
                             }
                         })
                         .catch((err=>{
-                            console.log(err);
                             this.$f7.hidePreloader();
                             this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
                         }))
@@ -158,7 +158,7 @@
 
             addNewOrder(){
                 let uuid = '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7';
-                let usrID = this.usrID;
+                let usrID = this.$store.state.waiter.id;
                 let table = this.$store.state.currentTable;
                 let zakNo = this.$store.state.orders.currentOrderId;
                 let guests = this.$store.state.guestsCount;
@@ -173,7 +173,7 @@
                     'cmd_garson': 'REC', numTablet, zakNo, usrID, table, guests, uuid
                 }
                 //this.$f7.hidePreloader();
-                this.axios.get(this.apiUrl.url, {params: optionsAdd})
+                this.axios.get(this.$store.getters.apiUrl, {params: optionsAdd})
                     .then((resp) => {
                         let response = {};
                         if (resp && resp.data && resp.data[0] && resp.data[0].str1 && resp.data[0].str1[0]){
@@ -198,28 +198,8 @@
                             this.$store.commit('REMOVE_FULL_CURRENT_ORDER');
                             this.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
                         }
-                        //return this.axios.get(this.apiUrl.url, {params: optionsRec});
                     })
-                    /*.then (rec=>{
-                        console.log('Третий THEN');
-                        console.log(rec.data);
-                        if (rec && rec.data && rec.data[0] && rec.data[0].str1 && rec.data[0].str1[0] && rec.data[0].str1[0] && rec.data[0].str1[0].answCode === '0'){
-                            let currentPrinted = rec.data[0].str2;
-                            console.log(currentPrinted);
-                            this.$f7.hidePreloader();
-                            return currentPrinted;
-                        }
-                        else {
-                            console.log(rec.data);
-                            throw new Error(rec.data);
-                        }
-                    })
-                    .then(currentPrinted=>{
-                        console.log('Четвертый THEN');
-                        console.log(currentPrinted);
-                        this.$router.load({'url':'/tables/', 'reload':true});
-                        this.$store.commit('REMOVE_FULL_CURRENT_ORDER');
-                    })*/
+
                     .catch((err=>{
                         console.log(err);
                         this.$f7.hidePreloader();

@@ -18,16 +18,18 @@
     export default{
         data(){
             return{
-                list: users,
+                list: [],
                 componentName: 'Список пользователей'
             }
         },
         mounted(){
             console.log('Выставляем выбор пользователя');
+            this.loadUsers();
             this.$store.commit('SET_USERS_PAGE', {'users': true});
         },
         methods: {
             getWaiter(item){
+                console.log(item);
                 this.$store.commit('SET_WAITER', {'waiter': item});
                 this.$store.commit('SET_USERS_PAGE', {'users': false});
                 this.$store.commit('SET_PASSWORD_PAGE', {'password': true});
@@ -35,15 +37,48 @@
             },
 
             loadUsers(){
+                let url = this.$store.getters.apiUrl;
                 let options = {
-                    'cmd_garson' : 'NEW',
-                    'table' : table.table,
-                    'numTablet' : '05',
-                    'usrID' : this.usrID,
-                    'guests' : 1,
-                    'uuid' : '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7',
-                    'zakNo' : ''
+                    'garson_list' : 1,
+                    'uuid' : '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7'
                 };
+                this.axios.get(url, {params: options})
+                    .then(resp => {
+                        if (resp && resp.data){
+                            this.list = _.map(resp.data, item => {
+                               item.id =  +item.id_adm;
+                               item.surname =  '';
+                               item.firstName =  '';
+                               item.lastName =  '';
+                               item.shortFullName =  item.name;
+                               item.password =  item.pass;
+                               item.avatar =  "http://10.10.182.11/ept/waiter-tablet/images/default-user.png";
+                               switch (item.codeChar) {
+                                    case '3':
+                                        item.status =  3;
+                                        break;
+                                    case '2':
+                                        item.status =  2;
+                                        break;
+                                    case '1':
+                                        item.status =  1;
+                                        break;
+                                    case '0':
+                                        item.status =  3;
+                                        break;
+                                    default:
+                                        item.status =  3;
+                                        break;
+                               };
+                               item.statusName =  item.character;
+                               return item;
+                            });
+                        }
+                    })
+                    .catch(err => {
+                        this.$f7.hidePreloader();
+                        this.$f7.alert(`Ошибка: ${err}`, 'Ошибка');
+                    })
             }
         }
     }

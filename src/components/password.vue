@@ -89,7 +89,6 @@
         mixins:[logout],
         mounted(){
             this.initArray();
-            console.log(this.$router);
             this.bindKeyPress();
         },
         watch:{

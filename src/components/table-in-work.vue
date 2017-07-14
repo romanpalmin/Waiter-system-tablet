@@ -56,14 +56,15 @@
                 let options = {
                     'cmd_garson': 'getTableSt',
                     numTablet,
-                    'usrID': this.$store.state.usrID,
+                    'usrID': this.$store.state.waiter.id,
                     'uuid': '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7'
                 }
-                this.axios.get(this.$store.state.settings.apiUrl, {params: options})
+                console.log();
+                this.axios.get(this.$store.getters.apiUrl, {params: options})
                     .then(resp=>{
                         if (resp && resp.data){
                             result = _.filter(resp.data, item => {
-                                return item.garson === this.$store.state.usrID && (item.status === 1 || item.status === 5);
+                                return item.garson === this.$store.state.waiter.id && (item.status === 1 || item.status === 5);
                             })
                         };
                         this.currentTables = _.map(result, item => {return item});

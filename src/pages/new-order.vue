@@ -53,7 +53,7 @@
         methods:{
             getPrinted(){
                 let uuid = '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7';
-                let usrID = this.$store.state.usrID;
+                let usrID = this.$store.state.waiter.id;
                 let table = this.$store.state.currentTable;
                 let zakNo = this.$store.state.orders.currentOrderId;
                 let guests = this.$store.state.guestsCount;
@@ -62,7 +62,7 @@
                let optionsRec = {
                     'cmd_garson': 'REC', numTablet, zakNo, usrID, table, guests, uuid
                }
-               this.axios.get(this.$store.state.settings.apiUrl, {params: optionsRec})
+               this.axios.get(this.$store.getters.apiUrl, {params: optionsRec})
                     .then(rec=>{
                         console.log(rec.data);
                         if (rec && rec.data && rec.data[0] && rec.data[0].str1 && rec.data[0].str1[0] && rec.data[0].str1[0] && rec.data[0].str1[0].answCode === '0'){

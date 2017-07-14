@@ -27,7 +27,7 @@
         data(){
             return{
                 name:'Tables in hall',
-                url: this.$store.state.settings.apiUrl,
+                url: this.$store.getters.apiUrl,
                 currentList: []
             }
         },
@@ -65,7 +65,7 @@
                 this.$f7.showPreloader('Загрузка столов');
                 let cmd_garson = 'getTableSt';
                 let numTablet = '05';
-                let usrID = '241182';
+                let usrID = this.$store.state.waiter.id;
                 let uuid = '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7';
                 let options = {
                         cmd_garson,

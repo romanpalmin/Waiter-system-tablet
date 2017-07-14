@@ -60,7 +60,8 @@ new Vue({
                 'uuid' : '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7',
                 'nTab' : 1
             };
-            let url = this.$store.state.settings.getUrl();
+            let url = this.$store.getters.apiUrl;
+
             this.axios.get(url, {params: options})
                 .then(resp => {
                     if (resp && resp.data && resp.data.login && resp.data.pass && resp.data.nTab)
@@ -68,11 +69,11 @@ new Vue({
                     this.$store.commit('SET_PASS', resp.data.pass);
                     this.$store.commit('SET_TABLET_NUM', resp.data.nTab);
                     this.$f7.hidePreloader();
-                    console.log('API: ' + this.$store.state.settings.getUrl());
+                    console.log('API: ' + this.$store.getters.apiUrl);
                 })
                 .catch(err => {
-                    this.$f7.alert(`Ошибка: ${err}`, 'Ошибка');
                     this.$f7.hidePreloader();
+                    this.$f7.alert(`Ошибка: ${err}`, 'Ошибка');
                 })
         }
     },
