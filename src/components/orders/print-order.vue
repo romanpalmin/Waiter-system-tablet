@@ -110,8 +110,9 @@
                             console.log(currentPrinted);
                             if (currentPrinted && currentPrinted.length > 0) {
                                 console.log('Оставляем все как есть');
-                                this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
-                                this.$router.load({'url':'/tables/', 'reload':true});
+                                /*this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
+                                this.$router.load({'url':'/tables/', 'reload':true});*/
+                                success();
                             } else {
                                 console.log('Обнуляем заказ');
                                 this.$f7.hidePreloader();
@@ -129,8 +130,9 @@
                                             .catch( err => {
                                                 this.$f7.hidePreloader();
                                                 this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
-                                                this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
-                                                this.$router.load({'url':'/tables/', 'reload':true});
+                                                /*this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
+                                                this.$router.load({'url':'/tables/', 'reload':true});*/
+                                                success();
                                             })
 
                                       }
@@ -145,10 +147,13 @@
 
                             console.log('Оставляем');
                             //console.log(this.$store.state.orders.printed);
-                            this.$f7.hidePreloader();
-                            this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
-                            this.$router.load({'url':'/tables/', 'reload':true});
+                            success();
                         }
+                 function success(){
+                    this.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
+                    this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
+                    this.$router.load({'url':'/tables/', 'reload':true});
+                 }
             },
 
             printOrder(){
@@ -188,10 +193,6 @@
                         }
                     })
                     .then (response=>{
-                        console.log('Второй THEN');
-                        console.log(response);
-                        console.log('Тип ответа: ' + typeof response);
-                        console.log(this.$store.state.orders.current);
                         this.$f7.hidePreloader();
                         if (typeof response === 'object') {
                             this.$router.load({'url':'/tables/', 'reload':true});
