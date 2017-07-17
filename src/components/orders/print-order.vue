@@ -95,7 +95,7 @@
                     let numTablet = this.$store.state.tabletNumber;
                     let optionsRec = {
                     'cmd_garson': 'REC', numTablet, zakNo, usrID, table, guests, uuid
-                        }
+                        };
                     this.axios.get(this.$store.getters.apiUrl, {params: optionsRec})
                         .then (rec=>{
                             if (rec && rec.data && rec.data[0] && rec.data[0].str1 && rec.data[0].str1[0] && rec.data[0].str1[0] && rec.data[0].str1[0].answCode === '0'){
@@ -171,6 +171,34 @@
                 this.addNewOrder();
             },
 
+            deleteOrder(optionsCan){
+                this.$f7.confirm('Заказ будет удален', 'Вы уверены?', () =>{
+                        this.$f7.showPreloader('Удаление текущего заказа');
+                        this.axios.get(this.$store.getters.apiUrl, {params: optionsCan})
+                            .then( resp =>{
+                                console.log(resp);
+                                this.$f7.hidePreloader();
+                                this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
+                                setTimeout(() => {
+                                    console.log('Выждем какое-то время');
+                                    this.$router.load({'url':'/tables/', 'reload':true});
+                                }, 0);
+                            })
+                            .catch( err => {
+                                this.$f7.hidePreloader();
+                                this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
+                                this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
+                                this.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
+                                setTimeout(() => {
+                                     console.log('Выждем какое-то время');
+                                     this.$router.load({'url':'/tables/', 'reload':true});
+                                }, 0);
+                            })
+
+                    }
+                );
+            },
+
             addNewOrder(){
                 let uuid = '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7';
                 let usrID = this.$store.state.waiter.id;
@@ -178,22 +206,42 @@
                 let zakNo = this.$store.state.orders.currentOrderId;
                 let guests = this.$store.state.guestsCount;
                 let numTablet = this.$store.state.tabletNumber;
+                let rows = this.populateOrderStrings(this.usrID, this.$store.state.currentTable);
+                console.log('Текущая строка');
+                console.log(rows);
+                if (rows && rows.length === 0){
+                    console.log('Check for empty');
+                    console.log('Отправленный на печать заказ');
+                    console.log(this.$store.state.orders.printed);
+                    console.log('Размер: ' + this.$store.state.orders.printed.length);
+                    let optionsCan = {
+                        'cmd_garson': 'CAN', numTablet, zakNo, usrID, table, guests, uuid
+                    };
+                    this.$f7.hidePreloader();
+                    if (this.$store.state.orders.printed && this.$store.state.orders.printed.length === 0){
+                        this.deleteOrder(optionsCan);
+                    } else {
+                        this.$router.load({'url':'/tables/', 'reload':true});
+                        this.$store.commit('REMOVE_FULL_CURRENT_ORDER');
+                        this.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
+                    }
+                    return;
+                }
 
                 let optionsAdd = {
                     'cmd_garson': 'ADD', numTablet, usrID, table, zakNo, guests,
-                    'rows': this.populateOrderStrings(this.usrID, this.$store.state.currentTable), uuid
+                    'rows': rows, uuid
                 };
 
                 let optionsRec = {
                     'cmd_garson': 'REC', numTablet, zakNo, usrID, table, guests, uuid
-                }
+                };
                 //this.$f7.hidePreloader();
                 this.axios.get(this.$store.getters.apiUrl, {params: optionsAdd})
                     .then((resp) => {
                         let response = {};
                         if (resp && resp.data && resp.data[0] && resp.data[0].str1 && resp.data[0].str1[0]){
                             response = resp.data[0].str1[0];
-                            console.log('Первый THEN');
                             console.log(response);
                             return response;
                         } else {
@@ -220,8 +268,7 @@
 
             populateOrderStrings(userId, tableId){
                 let orderStrings = '';
-                let currentOrder =this.currentOrderByPosition
-                console.log(currentOrder);
+                let currentOrder =this.currentOrderByPosition;
                 if (currentOrder){
                     currentOrder.forEach((item, index)=>{
                         if (index > 0){
@@ -253,7 +300,7 @@
                 let data = {
                     'key': 'test',
                     'value': 'testValue'
-                }
+                };
                 ls.lsPut(data);
             },
             removeFromLs(){
