@@ -16,7 +16,7 @@
             <div class="menu-wrapper">
                 <template v-if="!showPositions">
                     <f7-list v-for="item in currentMenuList" :key="item.code">
-                        <f7-list-item :title="item.name" :data-id="item.code" link="#"
+                        <f7-list-item :title="item.name" :data-id="item.code" link="#" class="menu-list-item"
                                       @click="selectNextSubMenu(item)"/>
                     </f7-list>
                 </template>
@@ -58,7 +58,12 @@
         height: 83%;
         overflow: scroll;
         padding-top: 44px;
-
+        .menu-list-item{
+            font-size: 19pt;
+            height: 70px;
+            line-height: 60px;
+            font-weight: 900;
+        }
     }
 
     .picker-modal {
@@ -183,6 +188,8 @@
                 /*let countOfStrings = this.startLevel.length + 1; // количество строк + навигационная панель
                  let height = countOfStrings * this.stringHeight;
                  return `height: ${height}px`;*/
+                let height = 450;
+                return `height: ${height}px`;
             },
 
             openPositions(){

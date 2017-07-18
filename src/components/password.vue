@@ -7,6 +7,12 @@
                     </template>
             </f7-grid>
         </f7-block>
+        <f7-block inner no-hairlines>
+            <f7-buttons>
+                <f7-button @click="enterPassword()" big raised round center>Ввод</f7-button>
+                <f7-button @click="erasePassword()" big raised round center>Очистить</f7-button>
+            </f7-buttons>
+        </f7-block>
         <f7-block inner>
             <table class="phone-table">
                 <tr>
@@ -114,6 +120,22 @@
                 }
             },
 
+            /**
+             * Проверка пароля по нажатию кнопки
+             */
+           enterPassword(){
+               this.checkUserPassword();
+           },
+
+            /**
+             * Очищает текущее поле ввода пароля
+             */
+            erasePassword(){
+               this.currentPassword = '';
+               this.currentClick = 0;
+               this.initArray();
+           },
+
            bindKeyPress(){
                 window.addEventListener('keyup', this.pressNumberFromKeyboard);
            },
@@ -139,6 +161,7 @@
                     this.currentClick = 0;
                     this.currentPassword = '';
                     this.togglePopup();
+                    console.log('test');
                 }
            },
            initArray(){

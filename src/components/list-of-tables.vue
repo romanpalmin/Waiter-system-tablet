@@ -9,7 +9,7 @@
                             <f7-badge>{{table.status}}</f7-badge>
                         </div>
                     </f7-link>
-                    <div class="table-title">Стол №{{table.table}}</div>
+                    <div class="table-title">№{{table.table}}</div>
 
                 </div>
             </div>
@@ -27,8 +27,8 @@
             margin: 15px;
             .table-image {
                 border: 1px solid gray;
-                width: 60px;
-                height: 60px;
+                width: 55px;
+                height: 54px;
                 background-size: cover;
                 background: url(http://10.10.182.11/ept/waiter-tablet/images/table.png);
                 border-radius: 20px;
