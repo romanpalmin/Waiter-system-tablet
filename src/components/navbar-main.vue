@@ -16,8 +16,8 @@
             <f7-nav-center v-if="this.$store.state.pages.password"> {{this.$store.state.waiter.shortFullName}}
             </f7-nav-center>
             <f7-nav-right>
-                <span @click="exit()" v-if="!this.$store.state.pages.main"><div class="avatar images"
-                                                                                :style="getStyle('exit')"></div></span>
+                <span @click="print()" v-if="!this.$store.state.pages.main && !this.$store.state.pages.password && !this.$store.state.pages.users"><div class="avatar images"
+                                                                                :style="getStyle('printer')"></div></span>
             </f7-nav-right>
         </f7-navbar>
 
@@ -105,6 +105,9 @@
                     case 'exit':
                          str = `background-image: url("http://10.10.182.11/ept/waiter-tablet/images/exit.png");background-size: cover; background-color: transparent;`;
                          break;
+                    case 'printer':
+                        str = `background-image: url("http://10.10.182.11/ept/waiter-tablet/images/printer-new.png");background-size: cover; background-color: transparent;`;
+                        break;
                     default :
                          str = '';
                          break;
@@ -114,6 +117,10 @@
             exit(){
                 this.openLeft = false;
                 this.logout();
+            },
+            print(){
+                this.openLeft = false;
+                console.log(this.$store.state);
             }
         },
         components:{

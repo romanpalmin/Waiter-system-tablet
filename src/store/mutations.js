@@ -25,6 +25,9 @@ export default {
     [m_types.SET_ADD_ORDER_PAGE](state, payload){
         state.pages.addorder = payload.addorder;
     },
+    [m_types.SET_EDIT_ORDER_PAGE](state, payload){
+        state.pages.editorder = payload.editorder;
+    },
     [m_types.SET_USERS_PAGE](state, payload){
         state.pages.users = payload.users;
     },
@@ -111,7 +114,8 @@ export default {
         state.orders.summary = payload;
     },
     [m_types.SET_CURRENT_COURSE](state, payload){
-        state.orders.current[payload.index].course = payload.course;
+        console.log(payload);
+        //state.orders.current[payload.index].course = payload.course;
     },
     [m_types.SET_ORDER_FROM_GUEST_TABLET](state, payload){
         state.orders.current = state.orders.current.concat(payload.order);
@@ -196,6 +200,30 @@ export default {
             }
             return item;
         });
+    },
+
+    /**
+     * Обновляет курс для выбранной строки
+     * @param state
+     * @param payload параметры строки, новое значение
+     */
+        [m_types.UPDATE_STRING_COURSE](state, payload){
+        let params = payload.params;
+        state.orders.current = _.map(state.orders.current, (item) => {
+            if (
+                item.item.code === params.item.code &&
+                item.course === params.course &&
+                item.waiterId === params.waiterId &&
+                item.tableId === params.tableId &&
+                item.guestId === params.guestId &&
+                item.modsPosition === params.modsPosition &&
+                item.modsCommon === params.modsCommon
+            ) {
+                item.course = payload.newValue;
+            }
+            return item;
+        });
+        console.log(state.orders.current);
     },
 
     /**

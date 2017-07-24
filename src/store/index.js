@@ -25,7 +25,8 @@ const store = new Vuex.Store({
             main: true,
             password: false,
             users: false,
-            addorder: false
+            addorder: false,
+            editorder: false
         },
         modsCommon: [],
         modsPosition: [],

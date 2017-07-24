@@ -180,6 +180,9 @@
                     verticalButtons: true,
                     buttons
                 })
+            },
+            alertComplects(id){
+                console.log('test');
             }
         },
         mounted(){

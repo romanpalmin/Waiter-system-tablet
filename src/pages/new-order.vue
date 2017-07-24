@@ -17,7 +17,7 @@
 </template>
 <style scoped lang="less">
     .content-block-title.title-table {
-        padding-top: 40px;
+        /*padding-top: 40px;*/
         overflow: hidden;
     }
     .current-padding{

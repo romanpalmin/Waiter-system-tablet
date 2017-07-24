@@ -11,6 +11,7 @@
         <f7-block-title>Навигация</f7-block-title>
         <f7-block inner>
             <p><f7-link class="back-to-tables" close-panel data-ignore-cache="true">Список текущих столов</f7-link></p>
+            <p><f7-link class="exit" close-panel data-ignore-cache="true" @click="exit()">Выход</f7-link></p>
             <!--<p><f7-link @click="$router.load({url: '/tables/'})" close-panel data-ignore-cache="true" >Выбор стола</f7-link></p>
             <p>Действие 2.2</p>
             <p>Действие 3.3</p>
@@ -39,12 +40,15 @@
 <script>
     import selectTablet from './select-tablet.vue';
     import printOrder from './orders/print-order.vue';
+    import logout from './mixins/logout.js'
     export default{
         data(){
             return{
                 name:'this component'
             }
         },
+        mixins:
+            [logout],
         mounted(){
         },
         computed:{
@@ -55,6 +59,11 @@
         components:{
             'select-tablet': selectTablet,
             'print-order': printOrder
+        },
+        methods:{
+            exit(){
+                this.logout();
+            }
         }
     }
 </script>

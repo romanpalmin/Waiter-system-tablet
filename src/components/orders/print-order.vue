@@ -159,6 +159,7 @@
                  function success(){
                     self.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
                     self.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
+                    self.$store.commit('SET_EDIT_ORDER_PAGE', {'editorder': false});
                     self.$router.load({'url':'/tables/', 'reload':true});
                     /*this.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
                     this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});

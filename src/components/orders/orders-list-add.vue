@@ -1,39 +1,39 @@
 <template>
     <div>
-        <div class="printed-order">
+        <div class="printed-order"  @click="setView('printed order')">
             Текущий заказ
             <hr />
-            <f7-grid>
+            <!--<f7-grid>
                 <f7-col  width="60">
                     Наименование
                 </f7-col>
                 <f7-col width="7">Количество</f7-col>
             </f7-grid>
-            <hr />
+            <hr />-->
             <f7-grid v-for="order in printed">
                 <f7-col  width="60" class="order-string" :data-id="num_str">
-                    {{order.tovar}} / {{order.name}}
+                    <!--{{order.tovar}} / -->{{order.name}}
                     <span v-if="order.kurs > 0"> / курс {{order.kurs}}</span>
                 </f7-col>
                 <f7-col class="order-string" width="7">{{order.count}}</f7-col>
             </f7-grid>
         </div>
-        <div class="list-of-orders">
-            <div class="select-view-type">
+        <div class="list-of-orders"  @click="setView('current order')">
+            <!--<div class="select-view-type">
                 <f7-buttons color="gray" class="btns-type-list">
                     <f7-button @click="setViewType('all')">Все</f7-button>
                     <f7-button @click="setViewType('byGuests')">По гостям</f7-button>
                 </f7-buttons>
-            </div>
+            </div>-->
             <div v-if="showType === 'all'">
                 <f7-accordion>
                     <template v-for="items in currentOrderByPosition">
 
-                        <f7-accordion-item :key="items.el.code" class="order-string-item">
+                        <f7-accordion-item :key="items.el.code" class="order-string-item swipeout"  >
                             <div @click="setCurrentPayload(items.el)">
                                 <f7-accordion-toggle :data-id="items.el.item.code">
                                     <f7-grid>
-                                        <f7-col width="60" class="order-string" :data-id="items.el.item.code">
+                                        <f7-col width="80" class="order-string" :data-id="items.el.item.code">
                                         <span>
                                             {{items.el.item.name}}
                                             <template
@@ -45,9 +45,10 @@
                                             </template>
                                         </span>
                                         </f7-col>
-                                        <f7-col class="order-string" width="7">{{items.count}}</f7-col>
-                                        <f7-col class="order-string" width="4">X</f7-col>
-                                        <f7-col class="order-string" width="12">{{items.el.item.price}} руб.</f7-col>
+                                        <!--<f7-col class="order-string" width="3">{{items.count}}</f7-col>
+                                        <f7-col class="order-string" width="3">X</f7-col>
+                                        <f7-col class="order-string" width="14">{{items.el.item.price}}&#8381;</f7-col>-->
+                                        <f7-col class="order-string nowrap" width="20">{{items.count}} x {{items.el.item.price}}&#8381;</f7-col>
                                     </f7-grid>
                                 </f7-accordion-toggle>
                             </div>
@@ -144,6 +145,11 @@
             padding-bottom: 15px;
             padding-left: 15px;
             padding-right: 15px;
+            font-size: 14pt;
+            color: black;
+        }
+        .nowrap {
+            white-space: nowrap;
         }
         .guest-number-string {
             //background-color: #5ac8fa;
@@ -307,6 +313,12 @@
             console.log(this.$store.state);
         },
         methods: {
+            setView(currentType){
+                console.log(currentType);
+                //this.showBottomMenu = false;
+                this.$f7.closeModal('.current-picker');
+            },
+
             setViewType(type){
                 this.showType = type;
                 const self = this;
@@ -335,6 +347,19 @@
                         self.openGuest(1);
                     }
                 });
+                this.$$('.swipeout').on('opened', function(){
+                    //self.$f7.alert('Item opened');
+                    console.log(1);
+                });
+                this.$$('.swipeout').on('open', function(){
+                    //self.$f7.alert('Item opened');
+                    console.log(2);
+                });
+                this.$$('.swipeout').on('swipeout', function(){
+                    //self.$f7.alert('Item opened');
+                    console.log(3);
+                });
+
             },
             openGuest(guestId){
                 let el = this.$$('.accordion-item[data-main-id="' + guestId + '"]');

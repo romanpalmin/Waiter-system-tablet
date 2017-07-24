@@ -136,6 +136,7 @@
 
             editOrder(table){
                 this.$store.commit('SET_CURRENT_TABLE', {'tableId': table.table});
+                this.$store.commit('SET_EDIT_ORDER_PAGE', {'editorder': true});
                 this.$store.commit('SET_CURRENT_ORDER_ID', {'orderId': table.zakNo});
                 this.$store.commit('SET_SHOW_TABLE_ACTIONS_PANEL', false);
                 this.$router.load({'url':'/add-order/', 'reload':true});

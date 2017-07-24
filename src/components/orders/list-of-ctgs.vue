@@ -55,14 +55,15 @@
     }
 
     .menu-wrapper {
-        height: 83%;
+        height: 90%;
         overflow: scroll;
         padding-top: 44px;
         .menu-list-item{
             font-size: 19pt;
             height: 70px;
             line-height: 60px;
-            font-weight: 900;
+            /*font-weight: 900;*/
+            color: #007aff;
         }
     }
 

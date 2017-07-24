@@ -7,35 +7,35 @@
                     </template>
             </f7-grid>
         </f7-block>
-        <f7-block inner no-hairlines>
+       <!-- <f7-block inner no-hairlines>
             <f7-buttons>
                 <f7-button @click="enterPassword()" big raised round center>Ввод</f7-button>
                 <f7-button @click="erasePassword()" big raised round center>Очистить</f7-button>
             </f7-buttons>
-        </f7-block>
+        </f7-block>-->
         <f7-block inner>
             <table class="phone-table">
                 <tr>
                     <td v-for="n in 3">
-                        <f7-button big raised round @click="pressNumber(n)">{{n}}</f7-button>
+                        <f7-button big raised  @click="pressNumber(n)">{{n}}</f7-button>
                     </td>
                 </tr>
                 <tr>
                     <td v-for="n in 3">
-                        <f7-button big raised round @click="pressNumber(n+3)">{{n+3}}</f7-button>
+                        <f7-button big raised  @click="pressNumber(n+3)">{{n+3}}</f7-button>
                     </td>
                 </tr>
                 <tr>
                     <td v-for="n in 3">
-                        <f7-button big raised round @click="pressNumber(n+6)">{{n+6}}</f7-button>
+                        <f7-button big raised  @click="pressNumber(n+6)">{{n+6}}</f7-button>
                     </td>
                 </tr>
                 <tr>
-                    <td></td>
+                    <td><f7-button big raised  @click="erasePassword()"><</f7-button></td>
                     <td>
-                        <f7-button big raised round @click="pressNumber(0)">0</f7-button>
+                        <f7-button big raised  @click="pressNumber(0)">0</f7-button>
                     </td>
-                    <td></td>
+                    <td><f7-button big raised  @click="enterPassword()">OK</f7-button></td>
                 </tr>
             </table>
             <f7-popup :opened=showPopup>
@@ -55,6 +55,14 @@
 </template>
 <style scoped lang="less">
     .component-table {
+        .button.button-big {
+            font-size: 37px;
+            height: 80px;
+            line-height: 80px;
+            width: 80px;
+            border-radius: 50%;
+        }
+
         text-align: center;
         .password-stars {
             width: 40%;
