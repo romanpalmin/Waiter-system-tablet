@@ -83,17 +83,14 @@
         props: ['list'],
         methods:{
             selectTable(table){
-                console.log(this.pressed.tableId);
-                console.log(table.table);
-                console.log(this.pressed);
                 if ((this.pressed.isPressed && this.pressed.tableId === table.table) || table.status === 0){
-                    console.log('Второе нажатие на стол');
+                    //console.log('Второе нажатие на стол');
                     if (this.$store.state.pages.addorder){
-                        console.log('Создаем новый стол');
+                        //console.log('Создаем новый стол');
                         this.$f7.showPreloader('Открытие стола №' + table.table);
                         this.addNewOrder(table);
                     } else {
-                        console.log('Переходим в редактирование, если статус 1');
+                        //console.log('Переходим в редактирование, если статус 1');
                         if (table.status === 1) {
                             this.editOrder(table);
                         }
@@ -110,7 +107,7 @@
                         this.pressed.isPressed = true;
                         this.$store.commit('SET_SHOW_TABLE_ACTIONS_PANEL', true);
                         this.$$('[data-id="'+table.table + '"]').addClass('pressed');
-                        console.log(this.$store.state);
+                        //console.log(this.$store.state);
                     }
                 }
 
@@ -168,7 +165,7 @@
                     })
                     .catch((err) => {
                         this.$f7.hidePreloader();
-                        console.log('Ошибка создания заказа: ' + err);
+                        //console.log('Ошибка создания заказа: ' + err);
                         if (this.$store.state.settings.isDebug){
                             if (table.status && table.status === 1) {
                                 let debugOrderId = 111;
@@ -184,9 +181,8 @@
                 Проверяем код ответа, в зависимости от кода ответа выбираем действие
             */
             checkForAnswerCode(data, table){
-                console.log(data);
+                //console.log(data);
                 const resp = data[0].str1[0];
-                console.log(resp);
                 if (data[0] && resp && resp.answCode){
                     switch (resp.answCode){
                         case '0': // Все ок
@@ -209,8 +205,8 @@
                 В случае успеха сохраняем номер заказа, номер  стола, скрываем прелоадер переходим на следующую страницу
             */
             nextPage(tableId, orderId){
-                console.log('Новый заказ: ' + orderId);
-                console.log('Стол: ' + tableId);
+                //console.log('Новый заказ: ' + orderId);
+                //console.log('Стол: ' + tableId);
                 this.$f7.hidePreloader();
                 this.$store.commit('SET_CURRENT_TABLE', {'tableId': tableId});
                 this.$store.commit('SET_CURRENT_ORDER_ID', {'orderId': orderId});
@@ -238,7 +234,7 @@
                             let res = _.find(resp.data, (item)=>{
                                 return (item.table === +table && item.garson === +this.usrID)
                             });
-                            console.log(res);
+                            //console.log(res);
                             // если найден заказ по заданным столу и официанту, считаем, что все ок, переходим на следующую страницу
                             if (res && res.zakNo && res.zakNo > 0){
                                 this.nextPage(table, res.zakNo);
