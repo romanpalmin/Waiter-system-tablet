@@ -8,7 +8,7 @@
             <div v-if="!showList"> <!-- иконками -->
                 <f7-block v-for="item in currentList" class="position-item" @click="addPositionToOrder(item)"
                           :key="item.code">
-                    <div @click="addPositionToOrder(item)">
+                    <div @click="addPositionToOrder(item)"  class="no-fastclick">
                         <f7-card class="card">
                             <f7-card-content class="img-wrapper" :inner="false" :style="getStyle(item)">
                                 <!--<span class="price-wrapper">{{item.price}} руб.</span>-->
@@ -25,7 +25,8 @@
                                   :key="item.code"
                                   :title="item.name"
                                   :data-id="item.code"
-                                  @click="addPositionToOrder(item)">
+                                  @click="addPositionToOrder(item)"
+                                  class="no-fastclick">
                         {{item.price}} руб.
 
                     </f7-list-item>
