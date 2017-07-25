@@ -16,13 +16,15 @@
             <f7-nav-center v-if="this.$store.state.pages.password"> {{this.$store.state.waiter.shortFullName}}
             </f7-nav-center>
             <f7-nav-right>
-                <span @click="print()" v-if="!this.$store.state.pages.main && !this.$store.state.pages.password && !this.$store.state.pages.users"><div class="avatar images"
-                                                                                :style="getStyle('printer')"></div></span>
+                <span @click="print()" class="print-order-or-table"
+                      v-if="!this.$store.state.pages.main && !this.$store.state.pages.password && !this.$store.state.pages.users"><div
+                        class="avatar images print-order-or-table"
+                        :style="getStyle('printer')"></div></span>
             </f7-nav-right>
         </f7-navbar>
 
         <f7-panel left layout="dark" :opened="openLeft">
-            <left-panel />
+            <left-panel/>
         </f7-panel>
 
         <f7-popup :opened=showPopup>
@@ -30,23 +32,23 @@
                 <f7-nav-left><span @click="showPopup=false"><div class="close-settings images"
                                                                  :style="getStyle('exit')"></div></span></f7-nav-left>
             </f7-navbar>
-           <!-- <f7-block-title>Настройки</f7-block-title>
-            <f7-block>
-                Настройки 1
-            </f7-block>
-            <f7-block>
-                Настройки 2
-            </f7-block>
-            <f7-block>
-                Настройки 3
-            </f7-block>-->
+            <!-- <f7-block-title>Настройки</f7-block-title>
+             <f7-block>
+                 Настройки 1
+             </f7-block>
+             <f7-block>
+                 Настройки 2
+             </f7-block>
+             <f7-block>
+                 Настройки 3
+             </f7-block>-->
         </f7-popup>
     </div>
 </template>
 <style scoped lang="less">
     .main-nav-bar {
         height: 120px;
-        .navbar-style{
+        .navbar-style {
             height: 100px;
         }
         .navbar .center {
@@ -80,37 +82,36 @@
     import leftPanel from './left-panel.vue'
     export default{
         data(){
-            return{
+            return {
                 openLeft: false,
                 showPopup: false
             }
         },
-        mixins:
-            [logout],
-        computed:{
+        mixins: [logout],
+        computed: {
             tabletNumber(){
                 return this.$store.state.tabletNumber;
             }
         },
-        methods:{
+        methods: {
             getStyle(type){
                 let str = '';
-                switch (type){
+                switch (type) {
                     case 'avatar':
-                         str = `background-image: url("${this.$store.state.waiter.avatar}");background-size: cover;`;
-                         break;
+                        str = `background-image: url("${this.$store.state.waiter.avatar}");background-size: cover;`;
+                        break;
                     case 'settings':
-                         str = `background-image: url("http://10.10.182.11/ept/waiter-tablet/images/settings.png");background-size: cover; background-color: transparent;`;
-                         break;
+                        str = `background-image: url("http://10.10.182.11/ept/waiter-tablet/images/settings.png");background-size: cover; background-color: transparent;`;
+                        break;
                     case 'exit':
-                         str = `background-image: url("http://10.10.182.11/ept/waiter-tablet/images/exit.png");background-size: cover; background-color: transparent;`;
-                         break;
+                        str = `background-image: url("http://10.10.182.11/ept/waiter-tablet/images/exit.png");background-size: cover; background-color: transparent;`;
+                        break;
                     case 'printer':
                         str = `background-image: url("http://10.10.182.11/ept/waiter-tablet/images/printer-new.png");background-size: cover; background-color: transparent;`;
                         break;
                     default :
-                         str = '';
-                         break;
+                        str = '';
+                        break;
                 }
                 return str;
             },
@@ -123,7 +124,7 @@
                 console.log(this.$store.state);
             }
         },
-        components:{
+        components: {
             'left-panel': leftPanel
         }
     }

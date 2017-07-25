@@ -29,7 +29,7 @@
                 <f7-accordion>
                     <template v-for="items in currentOrderByPosition">
 
-                        <f7-accordion-item :key="items.el.code" class="order-string-item swipeout"  >
+                        <f7-accordion-item :key="items.el.code" class="order-string-item">
                             <div @click="setCurrentPayload(items.el)">
                                 <f7-accordion-toggle :data-id="items.el.item.code">
                                     <f7-grid>
@@ -347,19 +347,6 @@
                         self.openGuest(1);
                     }
                 });
-                this.$$('.swipeout').on('opened', function(){
-                    //self.$f7.alert('Item opened');
-                    console.log(1);
-                });
-                this.$$('.swipeout').on('open', function(){
-                    //self.$f7.alert('Item opened');
-                    console.log(2);
-                });
-                this.$$('.swipeout').on('swipeout', function(){
-                    //self.$f7.alert('Item opened');
-                    console.log(3);
-                });
-
             },
             openGuest(guestId){
                 let el = this.$$('.accordion-item[data-main-id="' + guestId + '"]');
