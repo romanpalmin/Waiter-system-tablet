@@ -1,8 +1,9 @@
 import * as a_types from './actions-types'
-//import axios from 'axios';
+import axios from 'axios';
 import fullMenu from '../components/data/full.js';
 import modsPosition from '../components/data/modsPosition';
 import modsCommon from '../components/data/modsCommon';
+import store from '../store';
 export default {
     /**
      * Добавояет товар в текущий заказ
@@ -92,15 +93,32 @@ export default {
      */
         [a_types.GET_MENU]({commit})
     {
-        /*let cb = {};
-         const self = this;
-         ajax.exec({name: 'getDataNew'}, function (resp) {
-         formNewData(resp.data);
-         console.log(resp.data);
-         });*/
-        formNewData(fullMenu);
+        console.log('Загружаем меню');
+        let url = store.getters.apiUrlModel;
+        let options = {
+            'groups': '',
+            'category':'',
+            'data': 1,
+            'uuid': store.state.settings.uuid
+        };
+        axios.get(url, {params: options})
+            .then(resp=>{
+                console.log('Ответ');
+                console.log(resp.data);
+                formNewData(resp.data);
+            })
+            .catch(err=>{
+               console.log(err);
+            });
+
+        //formNewData(fullMenu);
 
         function formNewData(json) {
+            console.log('json');
+            console.log(json);
+            if (json.groups && json.groups.length === 0){
+                return;
+            }
             let roots = _.filter(json.groups, function (item) {
                 if (item.parrent_code === '') {
                     // заполняем первый уровень
