@@ -38,10 +38,13 @@
                                             {{items.el.item.name}}
                                             <template
                                                     v-if="items.el.modsPosition !== '' && items.el.modsPosition !== ' '">
-                                                       / {{getModsPositionName(items.el.modsPosition)}}
+                                                       / <!--{{getModsPositionName(items.el.modsPosition)}}-->M1
                                             </template>
                                             <template v-if="items.el.modsCommon !== '' && items.el.modsCommon !== ' '">
-                                                       / {{getModsCommonName(items.el.modsCommon)}}
+                                                       / <!--{{getModsCommonName(items.el.modsCommon)}}-->MO
+                                            </template>
+                                             <template v-if="items.el.course !== 0 && items.el.course !== ' ' && items.el.course !== ''">
+                                                       / <!--{{getModsCommonName(items.el.modsCommon)}}-->К.{{items.el.course}}
                                             </template>
                                         </span>
                                         </f7-col>

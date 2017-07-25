@@ -93,8 +93,13 @@
                         this.$f7.showPreloader('Открытие стола №' + table.table);
                         this.addNewOrder(table);
                     } else {
-                        console.log('Переходим в редактирование');
-                        this.editOrder(table);
+                        console.log('Переходим в редактирование, если статус 1');
+                        if (table.status === 1) {
+                            this.editOrder(table);
+                        }
+                        else {
+                            this.$store.commit('SET_SHOW_TABLE_ACTIONS_PANEL', false);
+                        }
                     }
                 } else {
                     if (table.status === 1 || table.status === 5) {

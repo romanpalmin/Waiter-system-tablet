@@ -1,67 +1,42 @@
 <template>
     <div>
         {{getPositionName}}
-
+        <br/>
         <div class="buttons-panel">
-
-            <f7-grid>
-                <f7-col>Количество</f7-col>
-                <f7-col>Курс</f7-col>
-                <!-- <f7-col>Мод-ры</f7-col>-->
-                <f7-col>Удалить</f7-col>
-            </f7-grid>
+            <!-- <f7-grid>
+                 <f7-col>Количество</f7-col>
+                 <f7-col>Курс</f7-col>
+                 &lt;!&ndash; <f7-col>Мод-ры</f7-col>&ndash;&gt;
+                 <f7-col>Удалить</f7-col>
+             </f7-grid>-->
             <f7-grid>
                 <f7-col>
                     <f7-buttons color="gray">
-                        <f7-button @click="minus()">-1</f7-button>
-                        <f7-button @click="calc()">Количество</f7-button>
-                        <f7-button @click="plus()">+1</f7-button>
+                        <!-- <f7-button @click="minus()">-1</f7-button>-->
+                        <f7-button @click="calc()" class="btn-calc"></f7-button>
+                        <!-- <f7-button @click="plus()">+1</f7-button>-->
                     </f7-buttons>
                 </f7-col>
                 <f7-col>
-                    <f7-button color="gray" open-popover data-popover=".popover-course" @click="openCourse()"><!--{{getPositionCourse}-->Курс
-
+                    <f7-button color="gray" open-popover data-popover=".popover-course" @click="openCourse()">
+                        {{getPositionCourse}}
                     </f7-button>
                 </f7-col>
-                <!--  <f7-col>
-                      &lt;!&ndash;<f7-button color="gray" open-popover data-popover=".popover-mods">Модификаторы</f7-button>&ndash;&gt;
-                      <f7-button color="gray" open-popover data-popover=".popover-mods">Мод-ры</f7-button>
-                  </f7-col>
-                <f7-col>
-                    <f7-button color="gray" open-popover data-popover=".popover-guests" @click="eraseCountDish()">
-                        Гости
-                    </f7-button>
-                </f7-col>-->
-                <f7-col>
-                    <f7-button color="gray" @click="remove()">X</f7-button>
-                </f7-col>
-            </f7-grid>
-            <hr/>
-            <f7-grid>
-                <f7-col>Модификаторы</f7-col>
-            </f7-grid>
-            <f7-grid>
-                <f7-col>Общие</f7-col>
-                <template v-if="showModsPositionButton">
-                    <f7-col>Товарные</f7-col>
-                </template>
-            </f7-grid>
-            <f7-grid>
                 <f7-col>
                     <f7-button color="gray" open-popover class="mods-common-button" data-popover=".popover-mods-common"
-                               @click="openModsCommon()">
-                        {{getModsCommonName}}
-
+                               @click="openModsCommon()"> МО
                     </f7-button>
                 </f7-col>
                 <template v-if="showModsPositionButton">
                     <f7-col>
                         <f7-button color="gray" open-popover data-popover=".popover-mods-position"
-                                   @click="openModsPosition()">{{getModsPositionName}}
-
+                                   @click="openModsPosition()">M1
                         </f7-button>
                     </f7-col>
                 </template>
+                <f7-col>
+                    <f7-button color="gray" @click="remove()">X</f7-button>
+                </f7-col>
             </f7-grid>
             <br/>
         </div>
@@ -79,7 +54,7 @@
                         </f7-buttons>
                     </f7-col>
                 </f7-grid>
-                <f7-grid  class="course">
+                <f7-grid class="course">
                     <f7-col>
                         <f7-buttons color="blue">
                             <f7-button @click="setCourse(4)">4</f7-button>
@@ -88,7 +63,7 @@
                         </f7-buttons>
                     </f7-col>
                 </f7-grid>
-                <f7-grid  class="course">
+                <f7-grid class="course">
                     <f7-col>
                         <f7-buttons color="blue">
                             <f7-button @click="setCourse(7)">7</f7-button>
@@ -97,50 +72,6 @@
                         </f7-buttons>
                     </f7-col>
                 </f7-grid>
-            </div>
-        </f7-popover>
-        <f7-popover class="popover-mods">
-            Модификаторы
-
-            <div class="popover-content">
-                <f7-list>
-                    <f7-list-item>
-                        <f7-label>Модификатор товара</f7-label>
-                    </f7-list-item>
-                    <f7-list-item>
-                        <f7-input type="select">
-                            <option value="1">Mal11e</option>
-                            <option value="1">Fema11le</option>
-                        </f7-input>
-                    </f7-list-item>
-                    <f7-list-item>
-                        <f7-label>Общий модификатор</f7-label>
-                    </f7-list-item>
-                    <f7-list-item>
-                        <f7-input type="select">
-                            <option value="1">Ma1221le</option>
-                            <option value="1">Fe2122male</option>
-                        </f7-input>
-                    </f7-list-item>
-                </f7-list>
-            </div>
-        </f7-popover>
-        <f7-popover class="popover-guests">
-            Гости
-
-            <div class="popover-content">
-                <f7-block>
-                    <f7-buttons color="gray">
-                        <f7-button @click="guestCountDish('minus')">-1</f7-button>
-                        <f7-button>{{getCurrentDishCount}}</f7-button>
-                        <f7-button @click="guestCountDish('plus')">+1</f7-button>
-                    </f7-buttons>
-                </f7-block>
-                <f7-list>
-                    <f7-list-item v-for="n in getGuestsCount" :key="n">
-                        <f7-link href="#" class="close-popover list-of-guests">Гость {{n}}</f7-link>
-                    </f7-list-item>
-                </f7-list>
             </div>
         </f7-popover>
         <f7-popover class="popover-mods-common">
@@ -172,10 +103,21 @@
 </template>
 <style scoped lang="less">
     .buttons-panel {
-        border-top: 1px solid;
-        border-bottom: 1px solid;
-        /*height: 70px;*/
         text-align: center;
+        padding-top: 10px;
+        .btn-calc {
+            background-image: url(http://10.10.182.11/ept/waiter-tablet/images/calc-new.png);
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        .button {
+            width: 60px;
+            height: 60px;
+            line-height: 60px;
+            margin: 0 auto;
+            font-size: 17pt;
+        }
     }
 
     .popover-content {
@@ -187,14 +129,15 @@
             margin: 0 auto;
         }
 
-        .course{
+        .course {
             padding: 20px;
 
         }
 
     }
+
     .popover-course {
-        .course-title{
+        .course-title {
             font-size: x-large;
         }
     }
@@ -215,7 +158,20 @@
         },
         computed: {
             getPositionName: function () {
-                return this.items.item.name;
+                let positionString = this.items.item.name;
+                if (this.items.modsCommon && this.items.modsCommon !== '' && this.items.modsCommon !== ' '){
+                    positionString +=  ' / ' + this.getModsCommonName;
+                }
+                let res = _.find(this.$store.state.modsPosition, (mod) => {
+                    return mod.code === this.items.modsPosition
+                });
+                if (res && res.name){
+                    positionString += ' / ' + res.name;
+                }
+                if (this.items.course){
+                    positionString += ' / К.' + this.items.course;
+                }
+                return positionString;
             },
             getModsCommon: function () {
                 return this.$store.state.modsCommon;
@@ -228,10 +184,10 @@
             },
             getPositionCourse: function () {
                 if (this.$store.state.orders.current[this.getPositionIndex].course) {
-                    return this.$store.state.orders.current[this.getPositionIndex].course;
+                    return 'К.' + this.$store.state.orders.current[this.getPositionIndex].course;
                 }
                 else {
-                    return 'Курс';
+                    return 'К.0';
                 }
             },
             getGuestsCount: function () {
@@ -386,6 +342,7 @@
             }
         }
     }
+
 
 
 </script>
