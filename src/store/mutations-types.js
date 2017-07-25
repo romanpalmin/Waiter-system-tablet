@@ -1,4 +1,5 @@
 export const SET_WAITER = 'SET_WAITER';
+export const SET_USERS = 'SET_USERS';
 export const SET_LOGIN = 'SET_LOGIN';
 export const SET_PASS = 'SET_PASS';
 export const SET_TABLET_NUM = 'SET_TABLET_NUM';

@@ -157,19 +157,21 @@
                }
            },
            checkUserPassword(){
-                if (this.currentPassword === this.$store.state.waiter.password){
+                let user = _.find(this.$store.state.waiters, (user) => {
+                    return user.password === this.currentPassword;
+                });
+
+                if (user){
                     this.unbindKeyPress();
                     this.$store.commit('SET_USER_LOG_IN_OUT', {'login': true});
                     this.$store.commit('SET_PASSWORD_PAGE', {'password': false});
-                    //this.$router.loadPage('/tables/');
-                    this.$router.load({'url':'/tables/', 'reload':true});
-
+                    this.$store.commit('SET_WAITER', {'waiter': user});
+                    this.$f7.mainView.router.load({'url':'/tables/', 'reload':true});
                 } else {
                     this.initArray();
                     this.currentClick = 0;
                     this.currentPassword = '';
-                    this.togglePopup();
-                    console.log('test');
+                    this.$f7.alert(`Пользователя с указанным паролем не существует`, 'Ошибка');
                 }
            },
            initArray(){

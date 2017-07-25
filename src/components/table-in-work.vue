@@ -61,10 +61,11 @@
                     'cmd_garson': 'getTableSt',
                     numTablet,
                     'usrID': this.$store.state.waiter.id,
-                    'uuid': '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7'
+                    'uuid': this.$store.state.settings.uuid
                 }
                 console.log();
-                this.axios.get(this.$store.getters.apiUrl, {params: options})
+                setTimeout(()=> {
+                    this.axios.get(this.$store.getters.apiUrl, {params: options})
                     .then(resp=>{
                         if (resp && resp.data){
                             result = _.filter(resp.data, item => {
@@ -78,7 +79,8 @@
                         this.$f7.hidePreloader();
                         this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
                     }))
-                this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
+                    this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
+                }, 2000);
             }
         },
         components:{

@@ -1,6 +1,11 @@
 import * as m_types from './mutations-types';
 import _ from 'lodash';
 export default {
+    [m_types.SET_USERS](state, payload){
+        state.waiters = payload;
+        console.log('Пользователи загружены');
+    },
+
     [m_types.SET_FULL_MENU](state, payload){
         state.FullTree = payload;
     },
@@ -283,7 +288,7 @@ export default {
      * @param state
      * @param payload true/false
      */
-    [m_types.SET_SHOW_TABLE_ACTIONS_PANEL](state, payload){
-            state.showTableActions = payload;
+        [m_types.SET_SHOW_TABLE_ACTIONS_PANEL](state, payload){
+        state.showTableActions = payload;
     }
 }

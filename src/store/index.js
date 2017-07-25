@@ -10,10 +10,12 @@ const store = new Vuex.Store({
             isDebug: true,
             url: '10.100.50.248/planshet_kl/hs/garson',
             login: 'planshet',
-            pass: 'planshet'
+            pass: 'planshet',
+            uuid: '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7'
         },
         tabletNumber: '13',
         waiter: {},
+        waiters: [],
         testMessage: 'Планшет официанта!',
         halls: [],
         login: false,

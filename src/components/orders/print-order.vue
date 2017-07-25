@@ -69,15 +69,7 @@
                 this.$$('.load-to-ls').on('click', () => {
                     this.loadToLs()
                 });
-                this.$$('.load-from-ls').on('click', () => {
-                    this.loadFromLs()
-                });
-                this.$$('.remove-from-ls').on('click', () => {
-                    this.removeFromLs()
-                });
-                this.$$('.clear-ls').on('click', () => {
-                    this.clearLs()
-                });
+
                 this.$$('.back-to-tables').on('click', () => {
                     this.backToTables();
                 });
@@ -136,7 +128,9 @@
                                                 console.log(resp);
                                                 this.$f7.hidePreloader();
                                                 this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
-                                                this.$router.load({'url': '/tables/', 'reload': true});
+                                                setTimeout(() => {
+                                                    this.$router.load({'url': '/tables/', 'reload': true});
+                                                }, 0);
                                             })
                                             .catch(err => {
                                                 this.$f7.hidePreloader();
@@ -167,13 +161,15 @@
                      this.$router.load({'url':'/tables/', 'reload':true});*/
                 }
                 function success() {
-                    self.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
-                    self.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
-                    self.$store.commit('SET_EDIT_ORDER_PAGE', {'editorder': false});
-                    self.$router.load({'url': '/tables/', 'reload': true});
-                    /*this.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
-                     this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
-                     this.$router.load({'url':'/tables/', 'reload':true});*/
+                    setTimeout(()=>{
+                        self.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
+                        self.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
+                        self.$store.commit('SET_EDIT_ORDER_PAGE', {'editorder': false});
+                        self.$router.load({'url': '/tables/', 'reload': true});
+                        /*this.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
+                         this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
+                         this.$router.load({'url':'/tables/', 'reload':true});*/
+                     }, 0)
                 }
             },
 
@@ -273,7 +269,11 @@
                     .catch((err => {
                         console.log(err);
                         this.$f7.hidePreloader();
-                        this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
+                        if (err && err.reqest){
+                            this.$f7.alert(`Ошибка ${err.reqest}: ${err.text}`, 'Ошибка!');
+                        } else {
+                            this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
+                        }
                     }))
             },
 
@@ -299,27 +299,8 @@
                 } else {
                     return [];
                 }
-            },
-
-            loadFromLs(){
-                let res = '';
-                res = ls.lsGet('test');
-                console.log(res);
-            },
-
-            loadToLs(){
-                let data = {
-                    'key': 'test',
-                    'value': 'testValue'
-                };
-                ls.lsPut(data);
-            },
-            removeFromLs(){
-                ls.lsRemove('test');
-            },
-            clearLs(){
-                ls.lsClear();
             }
         }
     }
+
 </script>

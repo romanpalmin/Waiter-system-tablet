@@ -57,19 +57,66 @@ new Vue({
         getTablet(){
             this.$f7.showPreloader('Авторизация планшета');
             let options = {
-                'uuid' : '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7',
-                'nTab' : 1
+                'uuid': this.$store.state.settings.uuid,
+                'nTab': 1
             };
             let url = this.$store.getters.apiUrl;
+            let usersOptions = {
+                'garson_list': 1,
+                'uuid': this.$store.state.settings.uuid
+            };
 
             this.axios.get(url, {params: options})
                 .then(resp => {
                     if (resp && resp.data && resp.data.login && resp.data.pass && resp.data.nTab)
-                    this.$store.commit('SET_LOGIN', resp.data.login);
+                        this.$store.commit('SET_LOGIN', resp.data.login);
                     this.$store.commit('SET_PASS', resp.data.pass);
                     this.$store.commit('SET_TABLET_NUM', resp.data.nTab);
-                    this.$f7.hidePreloader();
+
                     console.log('API: ' + this.$store.getters.apiUrl);
+                    return this.axios.get(url, {params: usersOptions});
+                })
+                .then(users => {
+                    let usersList = [];
+                    console.log('Список пользователей');
+                    console.log(users);
+                    if (users && users.data) {
+                        usersList = _.map(users.data, item => {
+                            item.id = +item.id_adm;
+                            item.surname = '';
+                            item.firstName = '';
+                            item.lastName = '';
+                            item.shortFullName = item.name;
+                            item.password = item.pass;
+                            item.avatar = "http://10.10.182.11/ept/waiter-tablet/images/default-user.png";
+                            switch (item.codeChar) {
+                                case '3':
+                                    item.status = 3;
+                                    break;
+                                case '2':
+                                    item.status = 2;
+                                    break;
+                                case '1':
+                                    item.status = 1;
+                                    break;
+                                case '0':
+                                    item.status = 3;
+                                    break;
+                                default:
+                                    item.status = 3;
+                                    break;
+                            }
+                            item.statusName = item.character;
+                            return item;
+                        });
+                        return usersList;
+                    }
+                })
+                .then(usersList => {
+                    console.log('Список пользователей2');
+                    console.log(usersList);
+                    this.$store.commit('SET_USERS', usersList);
+                    this.$f7.hidePreloader();
                 })
                 .catch(err => {
                     this.$f7.hidePreloader();
@@ -80,6 +127,7 @@ new Vue({
     mounted(){
         this.getNewJsonFullTree();
         console.log('Start app');
+        console.log(this);
         this.getTablet();
     }
 });
