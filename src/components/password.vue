@@ -152,7 +152,6 @@
            },
 
            pressNumberFromKeyboard(evt){
-               console.log(evt);
                if (evt.key === 'Enter'){
                     this.checkUserPassword();
                }
