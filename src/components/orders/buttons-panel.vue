@@ -296,7 +296,8 @@
                     tableId: this.items.tableId,
                     guestId: this.items.guestId,
                     modsPosition: this.items.modsPosition,
-                    modsCommon: this.items.modsCommon
+                    modsCommon: this.items.modsCommon,
+                    currentCount: this.items.currentCount
                 };
             },
             plus(){
@@ -411,6 +412,7 @@
                             item.waiterId === payload.waiterId &&
                             item.tableId === payload.tableId &&
                             item.modsCommon === payload.modsCommon &&
+                            item.currentCount === payload.currentCount &&
                             item.modsPosition === payload.modsPosition &&
                             item.guestId === payload.guestId
                     )

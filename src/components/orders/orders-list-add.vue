@@ -280,7 +280,7 @@
                                 break;
                             } else {
                                 if (innerIdx === groupByProps.length - 1) {
-                                    groupByProps.push({el: filtered[idx], count: 1});
+                                    groupByProps.push({el: filtered[idx], count: filtered[idx].currentCount});
                                     break;
                                 }
                             }

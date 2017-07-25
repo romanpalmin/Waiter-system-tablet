@@ -228,6 +228,7 @@ export default {
                 item.tableId === params.tableId &&
                 item.guestId === params.guestId &&
                 item.modsPosition === params.modsPosition &&
+                item.currentCount === params.currentCount &&
                 item.modsCommon === params.modsCommon
             ) {
                 item.course = payload.newValue;

@@ -59,6 +59,7 @@ export default {
                 item.tableId === payload.tableId &&
                 item.waiterId === payload.waiterId &&
                 item.guestId === payload.guestId &&
+                item.currentCount === payload.currentCount &&
                 item.modsPosition === payload.modsPosition) {
                 indexArr.push(index);
             }
