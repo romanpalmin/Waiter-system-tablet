@@ -63,6 +63,10 @@ export default {
      * @param payload
      */
         [m_types.ADD_NEW_ORDER_STRING](state, payload){
+        if (!payload.currentCount) {
+            payload.currentCount = 1;
+        }
+        console.log('Текущее значение: ' + payload.currentCount);
         state.orders.current.push(payload);
         if (payload.callback && typeof(payload.callback) === "function") {
             payload.callback();
@@ -176,6 +180,7 @@ export default {
                 item.tableId === params.tableId &&
                 item.guestId === params.guestId &&
                 item.modsPosition === params.modsPosition &&
+                item.currentCount === params.currentCount &&
                 item.modsCommon === params.modsCommon
             ) {
                 item.modsCommon = payload.newValue;
@@ -199,6 +204,7 @@ export default {
                 item.tableId === params.tableId &&
                 item.guestId === params.guestId &&
                 item.modsPosition === params.modsPosition &&
+                item.currentCount === params.currentCount &&
                 item.modsCommon === params.modsCommon
             ) {
                 item.modsPosition = payload.newValue;

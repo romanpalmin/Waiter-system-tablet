@@ -13,7 +13,9 @@
                 <f7-col>
                     <f7-buttons color="gray">
                         <!-- <f7-button @click="minus()">-1</f7-button>-->
-                        <f7-button @click="calc()" class="btn-calc"></f7-button>
+                        <!--<f7-button @click="calc()" class="btn-calc"></f7-button>-->
+                        <f7-button class="btn-calc" open-popover data-popover=".popover-count"
+                                   @click="openCount()"></f7-button>
                         <!-- <f7-button @click="plus()">+1</f7-button>-->
                     </f7-buttons>
                 </f7-col>
@@ -43,7 +45,6 @@
 
         <f7-popover class="popover-course">
             <span class="course-title">Выберите курс</span>
-
             <div class="popover-content">
                 <f7-grid class="course">
                     <f7-col>
@@ -99,6 +100,34 @@
             </div>
         </f7-popover>
 
+        <f7-popover class="popover-count">
+            <span class="course-title">Выберите количество</span>
+            <div class="popover-content">
+                <f7-grid class="count">
+                    <f7-col>
+                        <f7-buttons color="blue">
+                            <f7-button @click="setCount(n)" v-for="n in 5">{{n}}</f7-button>
+                        </f7-buttons>
+                    </f7-col>
+                </f7-grid>
+                <f7-grid class="count">
+                    <f7-col>
+                        <f7-buttons color="blue">
+                            <f7-button @click="setCount(n+5)" v-for="n in 5">{{n+5}}</f7-button>
+                        </f7-buttons>
+                    </f7-col>
+                </f7-grid>
+                <f7-grid class="count">
+                    <f7-col>
+                        <f7-buttons color="blue">
+                            <f7-button @click="setCount(0.25)">0.25</f7-button>
+                            <f7-button @click="setCount(0.5)">0.5</f7-button>
+                            <f7-button @click="setCount(0.75)">0.75</f7-button>
+                        </f7-buttons>
+                    </f7-col>
+                </f7-grid>
+            </div>
+        </f7-popover>
     </div>
 </template>
 <style scoped lang="less">
@@ -130,16 +159,28 @@
         }
 
         .course {
-            padding: 20px;
-
+            padding: 1px;
+            .button{
+                height: 60px;
+                line-height: 60px;
+                font-size: 17pt;
+            }
+        }
+        .count {
+            .button {
+                height: 60px;
+                line-height: 60px;
+                font-size: 17pt;
+                padding: 1px;
+            }
         }
 
     }
-
-    .popover-course {
-        .course-title {
-            font-size: x-large;
-        }
+    .course-title {
+        font-size: x-large;
+        height: 100px;
+        display: block;
+        line-height: 100px;
     }
 
     .mods-common-button {
@@ -326,6 +367,9 @@
                 console.log(this.getPayload());
                 this.$store.commit('SET_CURRENT_PAYLOAD', this.getPayload());
             },
+            openCount(){
+                this.$store.commit('SET_CURRENT_PAYLOAD', this.getPayload());
+            },
             updateModsCommon(newValue){
                 const payload = {
                     params: this.$store.state.currentPayload,
@@ -339,9 +383,48 @@
                     newValue: newValue
                 };
                 this.$store.commit('UPDATE_POSITIONS_MODS', payload)
+            },
+            setCount(newCount){
+                let payload = this.$store.state.currentPayload;
+                let currentCount = this.getCurrentCount();
+                let difference = currentCount - newCount;
+                if (newCount > 0 && newCount < 1){
+                    console.log('Добавляем строку с неполным блюдом');
+                    payload.currentCount = newCount;
+                    this.$store.commit('ADD_NEW_ORDER_STRING', payload);
+                }
+                else if (difference > 0){
+                    console.log(`Удаляем ${difference} строк`);
+                }
+                else if (difference < 0) {
+                    console.log(`Добавляем ${-difference} строк`);
+                }
+                this.$f7.closeModal('.popover-count');
+            },
+
+            getCurrentCount(callback){
+                let payload = this.$store.state.currentPayload;
+                console.log(this.$store.state.orders.current);
+                let currentOrdersString = _.filter(this.$store.state.orders.current, (item) => {
+                    return (item.course === payload.course &&
+                            item.item.code === payload.item.code &&
+                            item.waiterId === payload.waiterId &&
+                            item.tableId === payload.tableId &&
+                            item.modsCommon === payload.modsCommon &&
+                            item.modsPosition === payload.modsPosition &&
+                            item.guestId === payload.guestId
+                    )
+                });
+                console.log(currentOrdersString);
+                console.log('Текущее количество: ' + currentOrdersString.length);
+                return currentOrdersString.length;
+                /*if (callback && typeof(callback) === "function") {
+                    callback();
+                }*/
             }
         }
     }
+
 
 
 

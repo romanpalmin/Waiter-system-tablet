@@ -80,6 +80,8 @@
                         this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
                     }))
                     this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
+                    this.$store.commit('REMOVE_FULL_CURRENT_ORDER');
+
                 }, 2000);
             }
         },

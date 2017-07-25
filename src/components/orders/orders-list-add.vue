@@ -222,7 +222,7 @@
                 if (filtered.length === 0) return;
                 if (filtered.length > 1) {
                     let groupByProps = [];
-                    groupByProps.push({el: filtered[0], count: 1});
+                    groupByProps.push({el: filtered[0], count: filtered[0].currentCount});
                     for (let idx = 1; idx < filtered.length; idx++) {
                         for (let innerIdx = 0; innerIdx < groupByProps.length; innerIdx++) {
                             if (
@@ -232,9 +232,10 @@
                                 filtered[idx].tableId === groupByProps[innerIdx].el.tableId &&
                                 filtered[idx].waiterId === groupByProps[innerIdx].el.waiterId &&
                                 filtered[idx].modsPosition === groupByProps[innerIdx].el.modsPosition &&
+                                filtered[idx].currentCount === groupByProps[innerIdx].el.currentCount&&
                                 filtered[idx].modsCommon === groupByProps[innerIdx].el.modsCommon
                             ) {
-                                groupByProps[innerIdx].count++;
+                                groupByProps[innerIdx].count += groupByProps[innerIdx].el.currentCount;
                                 break;
                             } else {
                                 if (innerIdx === groupByProps.length - 1) {
@@ -249,17 +250,20 @@
                     }
                 }
                 else {
-                    return [{el: filtered[0], count: 1}];
+                    console.log(filtered[0]);
+                    return [{el: filtered[0], count: filtered[0].currentCount}];
                 }
             },
             currentOrderByPosition(){
+                console.log('Пересчет');
                 let filtered = _.filter(this.$store.state.orders.current, (item) => {
                     return item.tableId === this.$store.state.currentTable
                 });
+                console.log(filtered);
                 if (filtered.length === 0) return;
                 if (filtered.length > 1) {
                     let groupByProps = [];
-                    groupByProps.push({el: filtered[0], count: 1});
+                    groupByProps.push({el: filtered[0], count: filtered[0].currentCount});
                     for (let idx = 1; idx < filtered.length; idx++) {
                         for (let innerIdx = 0; innerIdx < groupByProps.length; innerIdx++) {
                             if (
@@ -269,9 +273,10 @@
                                 filtered[idx].tableId === groupByProps[innerIdx].el.tableId &&
                                 filtered[idx].waiterId === groupByProps[innerIdx].el.waiterId &&
                                 filtered[idx].modsPosition === groupByProps[innerIdx].el.modsPosition&&
+                                filtered[idx].currentCount === groupByProps[innerIdx].el.currentCount&&
                                 filtered[idx].modsCommon === groupByProps[innerIdx].el.modsCommon
                             ) {
-                                groupByProps[innerIdx].count++;
+                                groupByProps[innerIdx].count += groupByProps[innerIdx].el.currentCount;
                                 break;
                             } else {
                                 if (innerIdx === groupByProps.length - 1) {
@@ -286,7 +291,9 @@
                     }
                 }
                 else {
-                    return [{el: filtered[0], count: 1}];
+                    console.log(filtered[0]);
+                    console.log('testetstet');
+                    return [{el: filtered[0], count: filtered[0].currentCount}];
                 }
             },
             currentOrderForCurrentGuest: function () {
@@ -319,7 +326,7 @@
             setView(currentType){
                 console.log(currentType);
                 //this.showBottomMenu = false;
-                this.$f7.closeModal('.current-picker');
+                //this.$f7.closeModal('.current-picker');
             },
 
             setViewType(type){
