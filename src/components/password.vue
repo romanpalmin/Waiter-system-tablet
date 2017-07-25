@@ -152,7 +152,7 @@
            },
 
            pressNumberFromKeyboard(evt){
-               if (evt.key > 0 && evt.key <9){
+               if (evt.key >= 0 && evt.key < 9){
                     this.pressNumber(evt.key);
                }
            },
