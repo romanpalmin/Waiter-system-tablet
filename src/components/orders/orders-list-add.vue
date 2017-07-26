@@ -206,7 +206,6 @@
                 let printedView  = _.map(this.$store.state.orders.printed, item => {
                     curOrderItem = _.filter(this.$store.state.SourceMenu.items, {'code': item.tovar});
                     if (curOrderItem && curOrderItem[0] &&curOrderItem[0].name) {
-                        console.log('CurrentTest');
                         item.name = curOrderItem[0].name;
                         return item;
                     }
@@ -255,11 +254,9 @@
                 }
             },
             currentOrderByPosition(){
-                console.log('Пересчет');
                 let filtered = _.filter(this.$store.state.orders.current, (item) => {
                     return item.tableId === this.$store.state.currentTable
                 });
-                console.log(filtered);
                 if (filtered.length === 0) return;
                 if (filtered.length > 1) {
                     let groupByProps = [];
@@ -291,8 +288,6 @@
                     }
                 }
                 else {
-                    console.log(filtered[0]);
-                    console.log('testetstet');
                     return [{el: filtered[0], count: filtered[0].currentCount}];
                 }
             },

@@ -22,7 +22,6 @@ export default {
      * @param payload - параметры (item, table, course ...)
      */
         [a_types.REMOVE_POSITION_FROM_ORDER]({state, commit, dispatch}, payload){
-        //console.log('Удаление позиции из заказа');
         let index = _.findLastIndex(state.orders.current, function (items) {
             return (
             items.item.code === payload.item.code &&
@@ -30,6 +29,7 @@ export default {
             items.tableId === payload.tableId &&
             items.waiterId === payload.waiterId &&
             items.guestId === payload.guestId &&
+            items.currentCount === payload.currentCount &&
             items.modsPosition === payload.modsPosition)
         });
         let comitPayload = {
@@ -105,13 +105,13 @@ export default {
             .then(resp=>{
                 console.log('Ответ');
                 console.log(resp.data);
-                formNewData(resp.data);
+                //formNewData(resp.data);
             })
             .catch(err=>{
                console.log(err);
             });
 
-        //formNewData(fullMenu);
+        formNewData(fullMenu);
 
         function formNewData(json) {
             console.log('json');

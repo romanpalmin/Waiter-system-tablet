@@ -160,7 +160,7 @@
 
         .course {
             padding: 1px;
-            .button{
+            .button {
                 height: 60px;
                 line-height: 60px;
                 font-size: 17pt;
@@ -176,6 +176,7 @@
         }
 
     }
+
     .course-title {
         font-size: x-large;
         height: 100px;
@@ -320,9 +321,6 @@
                 this.$store.dispatch('REMOVE_POSITION_STRING_FROM_ORDER', payload);
             },
             setCourse(course){
-                //let payload = this.getPayload();
-                console.log('Устанавливаем курс = ' + course + ' для');
-                console.log(this.$store.state.currentPayload);
                 const payload = {
                     params: this.$store.state.currentPayload,
                     newValue: course
@@ -396,12 +394,37 @@
                 }
                 else if (difference > 0){
                     console.log(`Удаляем ${difference} строк`);
+                    this.deleteStrings(difference, payload);
                 }
                 else if (difference < 0) {
                     console.log(`Добавляем ${-difference} строк`);
+                    this.addStrings(-difference, payload);
                 }
                 this.$f7.closeModal('.popover-count');
             },
+
+            /**
+                Удаление и добавление заданного количества строк из заказа с текущими выбранными параметрами
+            */
+            deleteStrings(count, payload){
+                console.log(`Удаление ${count} строк`);
+                console.log(payload);
+                for (let i = 0; i < count; i++){
+                    this.$store.dispatch('REMOVE_POSITION_FROM_ORDER', payload);
+                }
+            },
+
+            addStrings(count, payload){
+                console.log('Количество: ' + count);
+                console.log(payload);
+                for (let i = 0; i < count; i++){
+                    this.$store.commit('ADD_NEW_ORDER_STRING', payload);
+                    this.$store.dispatch('CALCULATE_ORDER_SUMMARY', payload.tableId);
+                }
+            },
+            /************************************************
+
+            */
 
             getCurrentCount(callback){
                 let payload = this.$store.state.currentPayload;
@@ -426,6 +449,7 @@
             }
         }
     }
+
 
 
 

@@ -66,7 +66,6 @@ export default {
         if (!payload.currentCount) {
             payload.currentCount = 1;
         }
-        console.log('Текущее значение: ' + payload.currentCount);
         state.orders.current.push(payload);
         if (payload.callback && typeof(payload.callback) === "function") {
             payload.callback();
