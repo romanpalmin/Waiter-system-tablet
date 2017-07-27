@@ -8,7 +8,7 @@
             <div v-if="!showList"> <!-- иконками -->
                 <f7-block v-for="item in currentList" class="position-item" @click="addPositionToOrder(item)"
                           :key="item.code">
-                    <div @click="addPositionToOrder(item)"  class="no-fastclick">
+                    <div @click="addPositionToOrder(item)" class="no-fastclick">
                         <f7-card class="card">
                             <f7-card-content class="img-wrapper" :inner="false" :style="getStyle(item)">
                                 <!--<span class="price-wrapper">{{item.price}} руб.</span>-->
@@ -33,9 +33,43 @@
                 </f7-list>
             </div>
         </div>
+
+        <div class="popup popup-complect">
+            <div class="content-block">
+                <f7-block-title>Формирование комплексного заказа</f7-block-title>
+
+                <div class="list-of-positions">
+                    <f7-list>
+                        <template v-for="(item, index) in complected">
+                            <template v-if="item.items.length===1">
+                                <f7-list-item :title="item.name">{{item.selected.name_RU}}</f7-list-item>
+                            </template>
+                            <template v-if="item.length > 1">
+                                <f7-list-item :title="item.name" @click="openSubmenu(item.name)">
+                                    <f7-link v-if="!item.selected">Выбрать</f7-link>
+                                    <f7-link v-if="item.selected">{{item.selected.name_RU}}</f7-link>
+                                </f7-list-item>
+                            </template>
+                        </template>
+                    </f7-list>
+                </div>
+                <p class="buttons-row bottom-buttons">
+                    <a href="#" class="button  button-big  button-raised close-popup">Отменить</a>
+                    <a href="#" class="button button-big  button-raised  close-popup" :disabled="!isEnabledComplectAcceptButton" @click="submitComplectPosition">Подтвердить</a>
+                </p>
+            </div>
+
+        </div>
     </div>
+
 </template>
 <style scoped lang="less">
+    .bottom-buttons {
+        position: absolute;
+        bottom: 50px;
+        width: 95%;
+    }
+
     .show-type-block {
         .btn {
             width: 30px;
@@ -89,25 +123,60 @@
             display: block;
             color: #000;
         }
+
+    }
+
+    .modal.modal-in {
+        width: 370px;
+        margin-left: -185px;
+    }
+
+    .row-consist {
+        width: 100%;
+        padding: 5px;
+        font-weight: bolder;
+        border-bottom: 1px solid;
+    }
+
+    .button-consist {
+        width: 100%;
     }
 
 </style>
 <script>
+/*<script lang="javascript">*/
     export default{
         data(){
             return {
                 currentList: [],
                 name: 'this component',
-                showList: true
+                showList: true,
+                complect: [],
+                currentSelect: [],
+                sourceComplect: []
             }
         },
         props: ['CurrentPositionsList'],
-        watch:{
-
+        watch: {},
+        computed: {
+            complected: function () {
+                return this.complect;
+            },
+            isEnabledComplectAcceptButton: function() {
+                let res = true;
+                for (let i = 0; i < this.complect.length; i++){
+                    if (this.complect[i].selected === false) {
+                            res = false;
+                            return res;
+                        }
+                    if (i === this.complect.length - 1){
+                        return res;
+                    }
+                }
+            }
         },
         methods: {
             getShowViewStyle(){
-                console.log('changeStyle');
                 let style = 'margin-top: ';
                 style += this.showList ? '-35px' : '0px';
                 return style;
@@ -146,7 +215,8 @@
                         guestId: this.$store.state.currentGuest,
                         modsPosition: '',
                         modsCommon: ' ',
-                        ts: Date.now()
+                        ts: Date.now(),
+                        isHeader: true
                     };
                     if (item.mod !== null) {
                         this.alertMods(item.mod, (res) => {
@@ -154,8 +224,15 @@
                             this.$store.dispatch('ADD_POSITION_TO_ORDER', payload);
                         });
                     } else {
-                        this.$store.dispatch('ADD_POSITION_TO_ORDER', payload);
+                        if (item.complect && item.complect[0] && item.complect[0].code2 !== null) {
+                            this.alertComplects(item);
+                        } else {
+                            this.$store.dispatch('ADD_POSITION_TO_ORDER', payload);
+                        }
                     }
+                    ;
+
+
                 }
             },
             alertMods(id, callback){
@@ -182,13 +259,111 @@
                     buttons
                 })
             },
-            alertComplects(id){
-                console.log('test');
+
+            alertComplectsSubmenu(index, callback){
+                let buttons = [];
+                let res = _.find(this.complect, (item)=>{
+                    return item.name === index;
+                });
+                buttons = _.map(res.items, item => {
+                    var button = {};
+                    button.text = item.name_RU;
+                    button.onClick = () => {
+                        if (callback && typeof(callback) === "function") {
+                            callback(item);
+                        }
+                        return item;
+                    };
+                    return button;
+                });
+
+                this.$f7.modal({
+                    title: 'Выберите товар',
+                    text: 'Выберите товар',
+                    verticalButtons: true,
+                    buttons
+                })
+            },
+
+            alertComplects(item){
+                console.log(item);
+                console.log(item.complect);
+                this.sourceComplect = item;
+                let groupped = _.groupBy(item.complect, 'groupName');
+                console.log(groupped);
+
+                this.complect = _.map(groupped, (item, index, arr) =>{
+                    if (item.length === 1) {
+                        item.selected = item[0];
+                    } else {
+                        item.selected = false;
+                    }
+                    item.name = index;
+                    item.items = arr[index];
+                    return item;
+                });
+                console.log(this.complect);
+                this.$f7.popup('.popup-complect');
+
+            },
+            openSubmenu(index){
+                let res = _.find(this.complect, (item)=>{
+                    return item.name === index;
+                });
+                this.alertComplectsSubmenu(index, (result) => {
+                    this.complect = _.map(this.complect, item => {
+                        if (item.name === index){
+                            item.selected = result;
+                        }
+                        return item;
+                    });
+                })
+                console.log(this.complect);
+                console.log(this.isEnabledComplectAcceptButton);
+
+            },
+
+            submitComplectPosition(){
+                if (this.isEnabledComplectAcceptButton){
+                    var payload = {
+                        item: this.sourceComplect,
+                        course: 0,
+                        waiterId: this.$store.state.waiter.id,
+                        tableId: this.$store.state.currentTable,
+                        guestId: this.$store.state.currentGuest,
+                        modsPosition: '',
+                        modsCommon: ' ',
+                        ts: Date.now(),
+                        isHeader: true
+                    };
+                    this.$store.dispatch('ADD_POSITION_TO_ORDER', payload);
+
+                    _.forEach(this.complect, (item, index, arr) => {
+                        var payload = {
+                            item: item.selected,
+                            course: 0,
+                            waiterId: this.$store.state.waiter.id,
+                            tableId: this.$store.state.currentTable,
+                            guestId: this.$store.state.currentGuest,
+                            modsPosition: '',
+                            modsCommon: ' ',
+                            ts: Date.now(),
+                            isHeader: false
+                        };
+                        /*payload.isHeader = false;
+                        payload.item = item.selected;*/
+                        console.log(payload.item);
+                        this.$store.dispatch('ADD_POSITION_TO_ORDER', payload);
+                    })
+                    console.log(this.$store.state.orders.current);
+                }
             }
         },
         mounted(){
             this.currentList = this.CurrentPositionsList;
         }
     }
+
+
 
 </script>

@@ -79,6 +79,7 @@ export default {
         // отфильтровываем строки для текущего стола
         let currentTableOrder = _.filter(state.orders.current, (item) => {
             return item.tableId === tableId
+                && item.isHeader === true
         });
         // суммируем все строки заказа стола
         let result = _.reduce(currentTableOrder, (sum, curItem) => {
@@ -103,15 +104,15 @@ export default {
         };
         axios.get(url, {params: options})
             .then(resp=>{
-                console.log('Ответ');
+                console.log('Меню:');
                 console.log(resp.data);
-                //formNewData(resp.data);
+                formNewData(resp.data);
             })
             .catch(err=>{
                console.log(err);
             });
 
-        formNewData(fullMenu);
+        //formNewData(fullMenu);
 
         function formNewData(json) {
             console.log('json');

@@ -216,7 +216,7 @@
 
             currentOrdersAll: function () {
                 let filtered = _.filter(this.$store.state.orders.current, (item) => {
-                    return item.tableId === this.$store.state.currentTable
+                    return item.tableId === this.$store.state.currentTable && item.isHeader === true;
                 });
                 if (filtered.length === 0) return;
                 if (filtered.length > 1) {
@@ -232,6 +232,7 @@
                                 filtered[idx].waiterId === groupByProps[innerIdx].el.waiterId &&
                                 filtered[idx].modsPosition === groupByProps[innerIdx].el.modsPosition &&
                                 filtered[idx].currentCount === groupByProps[innerIdx].el.currentCount&&
+                                filtered[idx].isHeader === true &&
                                 filtered[idx].modsCommon === groupByProps[innerIdx].el.modsCommon
                             ) {
                                 groupByProps[innerIdx].count += groupByProps[innerIdx].el.currentCount;
@@ -255,7 +256,7 @@
             },
             currentOrderByPosition(){
                 let filtered = _.filter(this.$store.state.orders.current, (item) => {
-                    return item.tableId === this.$store.state.currentTable
+                    return item.tableId === this.$store.state.currentTable && item.isHeader === true;
                 });
                 if (filtered.length === 0) return;
                 if (filtered.length > 1) {
@@ -269,8 +270,9 @@
                                 //filtered[idx].guestId === groupByProps[innerIdx].el.guestId &&
                                 filtered[idx].tableId === groupByProps[innerIdx].el.tableId &&
                                 filtered[idx].waiterId === groupByProps[innerIdx].el.waiterId &&
-                                filtered[idx].modsPosition === groupByProps[innerIdx].el.modsPosition&&
-                                filtered[idx].currentCount === groupByProps[innerIdx].el.currentCount&&
+                                filtered[idx].modsPosition === groupByProps[innerIdx].el.modsPosition &&
+                                filtered[idx].currentCount === groupByProps[innerIdx].el.currentCount &&
+                                filtered[idx].isHeader === true &&
                                 filtered[idx].modsCommon === groupByProps[innerIdx].el.modsCommon
                             ) {
                                 groupByProps[innerIdx].count += groupByProps[innerIdx].el.currentCount;

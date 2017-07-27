@@ -78,8 +78,6 @@ new Vue({
                 })
                 .then(users => {
                     let usersList = [];
-                    console.log('Список пользователей');
-                    console.log(users);
                     if (users && users.data) {
                         usersList = _.map(users.data, item => {
                             item.id = +item.id_adm;
@@ -113,8 +111,6 @@ new Vue({
                     }
                 })
                 .then(usersList => {
-                    console.log('Список пользователей2');
-                    console.log(usersList);
                     this.$store.commit('SET_USERS', usersList);
                     this.$f7.hidePreloader();
                 })
@@ -127,7 +123,6 @@ new Vue({
     mounted(){
         this.getNewJsonFullTree();
         console.log('Start app');
-        console.log(this);
         this.getTablet();
     }
 });

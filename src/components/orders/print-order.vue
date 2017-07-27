@@ -24,6 +24,8 @@
 
         computed: {
             currentOrderByPosition(){
+                console.log('Текущее состояние заказа');
+                console.log(this.$store.state.orders.current);
                 let filtered = _.filter(this.$store.state.orders.current, (item) => {
                     return item.tableId === this.$store.state.currentTable
                 });
@@ -35,6 +37,7 @@
                         for (let innerIdx = 0; innerIdx < groupByProps.length; innerIdx++) {
                             if (
                                 filtered[idx].item.code === groupByProps[innerIdx].el.item.code &&
+                                filtered[idx].item.code2 === groupByProps[innerIdx].el.item.code2 &&
                                 filtered[idx].course === groupByProps[innerIdx].el.course &&
                                 //filtered[idx].guestId === groupByProps[innerIdx].el.guestId &&
                                 filtered[idx].tableId === groupByProps[innerIdx].el.tableId &&
@@ -73,7 +76,6 @@
                 this.$$('.back-to-tables').on('click', () => {
                     this.backToTables();
                 });
-                console.log(this.$$('.print-order-or-table'));
                 this.$$('.print-order-or-table').on('click', () => {
                     console.log(12345);
                     this.printOrderOrTable();
@@ -252,8 +254,8 @@
                             console.log(response);
                             return response;
                         } else {
-                            console.log(resp.data);
-                            throw new Error(resp.data);
+                            console.log('Бросаем ошибку');
+                            throw new Error(resp.data[0].text);
 
                         }
                     })
@@ -267,12 +269,13 @@
                     })
 
                     .catch((err => {
+
                         console.log(err);
                         this.$f7.hidePreloader();
-                        if (err && err.reqest){
-                            this.$f7.alert(`Ошибка ${err.reqest}: ${err.text}`, 'Ошибка!');
+                        if (err){
+                            this.$f7.alert(`Ошибка ${err}`, 'Ошибка!');
                         } else {
-                            this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
+                            this.$f7.alert(`Неизвестная ошибка`, 'Ошибка!');
                         }
                     }))
             },
@@ -281,6 +284,7 @@
                 let orderStrings = '';
                 let currentOrder = this.currentOrderByPosition;
                 if (currentOrder) {
+                    console.log(currentOrder);
                     currentOrder.forEach((item, index) => {
                         if (index > 0) {
                             orderStrings += '*'; // разделитель строк
@@ -290,8 +294,19 @@
                         orderStrings += (item.el.course > 0 ? item.el.course : '') + '|'; // курс
                         orderStrings += '' + '|'; // вид скидки
                         orderStrings += '' + '|'; // процент скидки
-                        orderStrings += item.el.item.code + '|'; // код товара
+                        orderStrings += ((item.el.isHeader) ? item.el.item.code : item.el.item.code2) + '|'; // код товара
                         orderStrings += item.count + '|'; // количество товара
+                        orderStrings += '' + '|'; // планшет гостя
+
+                        orderStrings += '' + '|'; // тип строки
+                        if (item.el.isHeader){
+                            orderStrings += 'k;+' + '|'; // головная строка
+                        } else {
+                            orderStrings += 'k;-'  + '|';
+                        }
+
+                        orderStrings += '' + '|'; // планшет гостя
+                        orderStrings += '' + '|'; // планшет гостя
                         orderStrings += '' + '|'; // планшет гостя
 
                     });

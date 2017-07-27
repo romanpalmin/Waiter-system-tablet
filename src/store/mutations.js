@@ -3,7 +3,6 @@ import _ from 'lodash';
 export default {
     [m_types.SET_USERS](state, payload){
         state.waiters = payload;
-        console.log('Пользователи загружены');
     },
 
     [m_types.SET_FULL_MENU](state, payload){
