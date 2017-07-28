@@ -213,8 +213,11 @@
                 let usrID = this.$store.state.waiter.id;
                 let table = this.$store.state.currentTable;
                 let zakNo = this.$store.state.orders.currentOrderId;
-                let guests = this.$store.state.guestsCount;
-                let numTablet = this.$store.state.tabletNumber;
+                let guests = this.$store.state.guestsCount === 0
+                                ? 1 : this.$store.state.guestsCount;
+                let numTablet = this.$store.state.tabletNumber.length === 1
+                                    ? '0' + this.$store.state.tabletNumber
+                                    : this.$store.state.tabletNumber;
                 let rows = this.populateOrderStrings(this.usrID, this.$store.state.currentTable);
                 console.log('Текущая строка');
                 console.log(rows);
