@@ -70,11 +70,11 @@ new Vue({
                 .then(resp => {
                     if (resp && resp.data && resp.data.login && resp.data.pass && resp.data.nTab)
                         this.$store.commit('SET_LOGIN', resp.data.login);
-                    this.$store.commit('SET_PASS', resp.data.pass);
-                    this.$store.commit('SET_TABLET_NUM', resp.data.nTab);
+                        this.$store.commit('SET_PASS', resp.data.pass);
+                        this.$store.commit('SET_TABLET_NUM', resp.data.nTab);
 
-                    console.log('API: ' + this.$store.getters.apiUrl);
-                    return this.axios.get(url, {params: usersOptions});
+                        console.log('API: ' + this.$store.getters.apiUrl);
+                        return this.axios.get(url, {params: usersOptions});
                 })
                 .then(users => {
                     let usersList = [];
