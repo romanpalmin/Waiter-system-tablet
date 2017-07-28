@@ -8,6 +8,7 @@
 </style>
 <script>
     import ls from '../helpers/local-storage.js';
+
     export default{
         data(){
             return {
@@ -18,6 +19,7 @@
                 url: this.$store.getters.apiUrl
             }
         },
+
         mounted(){
             this.handlers();
         },
@@ -67,10 +69,10 @@
         methods: {
             handlers(){
                 this.$$('.print-order').on('click', () => {
-                    this.printOrder()
+                    this.printOrder();
                 });
                 this.$$('.load-to-ls').on('click', () => {
-                    this.loadToLs()
+                    this.loadToLs();
                 });
 
                 this.$$('.back-to-tables').on('click', () => {
@@ -80,6 +82,10 @@
                     console.log(12345);
                     this.printOrderOrTable();
                 });
+
+                this.$$('.print-order-button').on('click', () => {
+                    console.log('PRINT FROM ORDER');
+                })
             },
 
             printOrderOrTable(){
@@ -157,20 +163,14 @@
                     this.$f7.hidePreloader();
                     console.log('Оставляем');
                     success();
-                    //console.log(this.$store.state.orders.printed);
-                    /*this.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
-                     this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
-                     this.$router.load({'url':'/tables/', 'reload':true});*/
                 }
                 function success() {
                     setTimeout(()=>{
                         self.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
                         self.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
                         self.$store.commit('SET_EDIT_ORDER_PAGE', {'editorder': false});
+                        self.$store.commit('SET_ACTIVE_ORDER_PANEL', {'status': 'current'});
                         self.$router.load({'url': '/tables/', 'reload': true});
-                        /*this.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
-                         this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
-                         this.$router.load({'url':'/tables/', 'reload':true});*/
                      }, 0)
                 }
             },

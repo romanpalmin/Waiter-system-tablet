@@ -298,6 +298,16 @@ export default {
     },
 
     /**
+     * Устанавливает признак показа панели кнопки принтера
+     * @param state
+     * @param payload true/false
+     */
+        [m_types.SET_SHOW_PRINTER_BTN](state, payload){
+        state.showPrinterBtn = payload;
+    },
+
+
+    /**
      * Устанавливает состояния панелей на экране добавления заказа
      * @param state
      * @param payload status=['current' || 'printed' || 'menu']

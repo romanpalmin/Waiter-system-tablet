@@ -16,10 +16,17 @@
             <f7-nav-center v-if="this.$store.state.pages.password"> {{this.$store.state.waiter.shortFullName}}
             </f7-nav-center>
             <f7-nav-right>
-                <span @click="print()" class="print-order-or-table"
+                <!--<span @click="print()" class="print-order-or-table"
                       v-if="!this.$store.state.pages.main && !this.$store.state.pages.password && !this.$store.state.pages.users"><div
                         class="avatar images print-order-or-table"
-                        :style="getStyle('printer')"></div></span>
+                        :style="getStyle('printer')"></div></span>-->
+                <span @click="print()" class="print-order-or-table"
+                      v-if="this.$store.state.showPrinterBtn">
+                    <div class="avatar images print-order-or-table"
+                         :style="getStyle('printer')">
+                    </div>
+                </span>
+
             </f7-nav-right>
         </f7-navbar>
 
@@ -120,14 +127,38 @@
                 this.logout();
             },
             print(){
-                this.openLeft = false;
-                console.log(this.$store.state);
+                this.$f7.showPreloader('Печать счета');
+                //this.openLeft = false;
+                //console.log(this.$store.state);
+                let uuid = '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7';
+                let usrID = this.$store.state.waiter.id;
+                let table = this.$store.state.currentTable;
+                let zakNo = this.$store.state.orders.currentOrderId;
+                this.$store.commit('SET_SHOW_PRINTER_BTN', false);
+                this.$store.commit('SET_SHOW_TABLE_ACTIONS_PANEL', false);
+                let options = {'cmd_garson': 'CHT',zakNo, usrID, table, uuid}
+                console.log(options);
+                this.axios.get(this.$store.getters.apiUrl, {params: options})
+                        .then(result => {
+                            console.log(result);
+                            setTimeout(()=>{
+                                this.$f7.hidePreloader();
+                            this.$router.refreshPage();
+                            }, 2000);
+
+                        })
+                        .catch(err => {
+                            this.$f7.hidePreloader();
+                            this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
+                        })
             }
         },
         components: {
             'left-panel': leftPanel
         }
     }
+
+
 
 
 </script>

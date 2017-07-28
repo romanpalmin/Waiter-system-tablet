@@ -1,8 +1,9 @@
 <template>
     <div>
-        <div class="printed-order printed-panel"  @click="setView('printed')">
-            Текущий заказ
-            <hr />
+        <div class="printed-order printed-panel passiv-printed-panel" @click="setView('printed')"
+             v-if="printed.length > 0">
+            Отправленный на печать заказ
+            <hr/>
             <!--<f7-grid>
                 <f7-col  width="60">
                     Наименование
@@ -11,14 +12,16 @@
             </f7-grid>
             <hr />-->
             <f7-grid v-for="order in printed">
-                <f7-col  width="60" class="order-string" :data-id="num_str">
+                <f7-col width="60" class="order-string" :data-id="num_str">
                     <!--{{order.tovar}} / -->{{order.name}}
                     <span v-if="order.kurs > 0"> / курс {{order.kurs}}</span>
                 </f7-col>
                 <f7-col class="order-string" width="7">{{order.count}}</f7-col>
             </f7-grid>
         </div>
-        <div class="list-of-orders"  @click="setView('current')">
+        <div class="list-of-orders current-panel passiv-current-panel" @click="setView('current')">
+            Текущий заказ
+            <hr/>
             <!--<div class="select-view-type">
                 <f7-buttons color="gray" class="btns-type-list">
                     <f7-button @click="setViewType('all')">Все</f7-button>
@@ -43,7 +46,8 @@
                                             <template v-if="items.el.modsCommon !== '' && items.el.modsCommon !== ' '">
                                                        / <!--{{getModsCommonName(items.el.modsCommon)}}-->MO
                                             </template>
-                                             <template v-if="items.el.course !== 0 && items.el.course !== ' ' && items.el.course !== ''">
+                                             <template
+                                                     v-if="items.el.course !== 0 && items.el.course !== ' ' && items.el.course !== ''">
                                                        / <!--{{getModsCommonName(items.el.modsCommon)}}-->К.{{items.el.course}}
                                             </template>
                                         </span>
@@ -51,7 +55,8 @@
                                         <!--<f7-col class="order-string" width="3">{{items.count}}</f7-col>
                                         <f7-col class="order-string" width="3">X</f7-col>
                                         <f7-col class="order-string" width="14">{{items.el.item.price}}&#8381;</f7-col>-->
-                                        <f7-col class="order-string nowrap" width="20">{{items.count}} x {{items.el.item.price}}&#8381;</f7-col>
+                                        <f7-col class="order-string nowrap" width="20">{{items.count}} x
+                                            {{items.el.item.price}}&#8381;</f7-col>
                                     </f7-grid>
                                 </f7-accordion-toggle>
                             </div>
@@ -85,7 +90,8 @@
                                                                v-if="items.el.modsPosition !== '' && items.el.modsPosition !== ' '">
                                                                    / {{getModsPositionName(items.el.modsPosition)}}
                                                         </template>
-                                                        <template v-if="items.el.modsCommon !== '' && items.el.modsCommon !== ' '">
+                                                        <template
+                                                                v-if="items.el.modsCommon !== '' && items.el.modsCommon !== ' '">
                                                                    / {{getModsCommonName(items.el.modsCommon)}}
                                                         </template>
                                                     </span>
@@ -108,26 +114,38 @@
                     </f7-accordion-item>
                 </f7-accordion>
             </div>
+
         </div>
 
 
         <f7-block class="summary">
             Сумма: {{getSumAmount}} руб.
         </f7-block>
+        <!--<f7-block class="summary">
+            <p class="buttons-row bottom-buttons">
+                <a href="#" class="button  button-raised ">Отменить</a>
+                <a href="#" class="button button-raised" @click="print()">Отправить на печать</a>
+            </p>
+        </f7-block>
+        <p>
+            <f7-link href="#" class="print-order-btn">Отправить на печать</f7-link>
+        </p>-->
+
         <f7-block>
             <category/>
         </f7-block>
     </div>
-
+    <print-order/>
 
 </template>
 <style scoped lang="less">
     .list-of-orders {
         background-color: #fafafa;
         width: 100%;
-        min-height: 200px;
+        min-height: 180px;
         max-height: 500px;
         overflow-y: scroll;
+        font-size: 14pt;
         .select-view-type {
             width: 100%;
             text-align: right;
@@ -137,30 +155,26 @@
                 display: inline-flex;
             }
         }
-        .printed-order{
+        .printed-order {
             overflow: scroll;
-            max-height: 200px;
+            /*max-height: 180px;*/
+            color: black;
+            font-size: 12pt;
         }
 
         .order-string {
             text-align: left;
-            padding-top: 15px;
-            padding-bottom: 15px;
-            padding-left: 15px;
-            padding-right: 15px;
-            font-size: 14pt;
+            padding: 15px;
             color: black;
         }
         .nowrap {
             white-space: nowrap;
         }
         .guest-number-string {
-            //background-color: #5ac8fa;
             border-top: 1px solid gray;
         }
         .guest-order-string {
             width: 100%;
-            //min-height:20px;
             background-color: #ffffff;
             overflow: scroll;
 
@@ -172,11 +186,34 @@
             line-height: 40px;
         }
 
+        .active-printed-panel {
+            background-color: #DCDFEB;
+            height: 450px;
+        }
+
+        .passiv-printed-panel {
+            background-color: #DCDFEB;
+            font-size: 12pt;
+            height: 80px;
+        }
+
+        .active-current-panel {
+            background-color: #fafafa;
+            height: 450px;
+
+        }
+
+        .passiv-current-panel {
+            background-color: #fafafa;
+            height: 180px;
+
+        }
     }
 
     .summary {
         width: 100%;
         text-align: left;
+        margin: 10px 0;
     }
 
 
@@ -196,7 +233,12 @@
         },
         watch:{
             activePanel: function(val){
-                console.log('Изменилась панель. Текущий статус = ' + val);
+                this.setActivePanelSize(val);
+            },
+            currentOrdersAll: function(val){
+                console.log('Прокручиваем скролл вниз');
+                this.scrollToBottom();
+
             }
         },
         computed: {
@@ -324,15 +366,21 @@
         mounted(){
             this.openGuest(1);
             this.setHandlers();
-            console.log('Текущее состояние:');
-            console.log(this.$store.state);
+            this.$store.commit('SET_ACTIVE_ORDER_PANEL', {'status': 'menu'});
         },
         methods: {
+            scrollToBottom(){
+                let currentPanel = this.$$('.current-panel')[0];
+                currentPanel.scrollTop = currentPanel.scrollHeight+40;
+            },
+            /*print(){
+                console.log(this.$$('a.print-order.close-panel.link')[0]);
+                this.$$('a.print-order.close-panel.link')[0].click();
+            },*/
+
             setView(currentType){
                 this.$store.commit('SET_ACTIVE_ORDER_PANEL', {'status': currentType});
                 console.log(currentType);
-                //this.showBottomMenu = false;
-                //this.$f7.closeModal('.current-picker');
             },
 
             setViewType(type){
@@ -400,6 +448,33 @@
             },
             setCurrentPayload(item){
                 this.$store.commit('SET_CURRENT_PAYLOAD', item);
+            },
+
+            setActivePanelSize(type){
+                let currentPanel = this.$$('.current-panel');
+                let printedPanel = this.$$('.printed-panel');
+
+
+                // Выбрана текущая панель
+                if (this.$store.state.openedPanel.current){
+                    currentPanel.removeClass('passiv-current-panel').addClass('active-current-panel');
+                    printedPanel.removeClass('active-printed-panel').addClass('passiv-printed-panel');
+                    //console.log('Выбрана текущая панель');
+                }
+                //Выбрана панель напечатанного заказа
+                else if (this.$store.state.openedPanel.printed){
+                    currentPanel.removeClass('active-current-panel').addClass('passiv-current-panel');
+                    printedPanel.removeClass('passiv-printed-panel').addClass('active-printed-panel');
+                    //console.log('Выбрана панель напечатанного заказа');
+                    this.scrollToBottom();
+                }
+                // Выбрана панель меню
+                else if (this.$store.state.openedPanel.menu){
+                    currentPanel.removeClass('active-current-panel').addClass('passiv-current-panel');
+                    printedPanel.removeClass('active-printed-panel').addClass('passiv-printed-panel');
+                    this.scrollToBottom();
+                }
+
             }
         },
         components: {
@@ -407,9 +482,6 @@
             'buttons-panel': panel
         }
     }
-
-
-
 
 
 </script>

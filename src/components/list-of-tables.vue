@@ -85,6 +85,7 @@
             selectTable(table){
                 if ((this.pressed.isPressed && this.pressed.tableId === table.table) || table.status === 0){
                     //console.log('Второе нажатие на стол');
+                    this.$store.commit('SET_SHOW_PRINTER_BTN', false);
                     if (this.$store.state.pages.addorder){
                         //console.log('Создаем новый стол');
                         this.$f7.showPreloader('Открытие стола №' + table.table);
@@ -106,6 +107,12 @@
                         this.pressed.tableId = table.table;
                         this.pressed.isPressed = true;
                         this.$store.commit('SET_SHOW_TABLE_ACTIONS_PANEL', true);
+                        this.$store.commit('SET_CURRENT_TABLE', {'tableId': table.table});
+                        this.$store.commit('SET_CURRENT_ORDER_ID', {'orderId': table.zakNo});
+                        if (table.status === 1){
+                            this.$store.commit('SET_SHOW_PRINTER_BTN', true);
+                        }
+
                         this.$$('[data-id="'+table.table + '"]').addClass('pressed');
                         //console.log(this.$store.state);
                     }

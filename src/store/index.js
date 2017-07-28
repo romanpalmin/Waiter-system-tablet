@@ -43,8 +43,9 @@ const store = new Vuex.Store({
         },
         currentPayload: {},
         showTableActions: false,
+        showPrinterBtn: false,
         openedPanel: {
-            status: '',
+            status: 'menu',
             printed: false,
             menu: true,
             current: false
