@@ -295,5 +295,18 @@ export default {
      */
         [m_types.SET_SHOW_TABLE_ACTIONS_PANEL](state, payload){
         state.showTableActions = payload;
+    },
+
+    /**
+     * Устанавливает состояния панелей на экране добавления заказа
+     * @param state
+     * @param payload status=['current' || 'printed' || 'menu']
+     */
+    [m_types.SET_ACTIVE_ORDER_PANEL](state, payload){
+            const status = payload.status;
+            state.openedPanel.status = status;
+            state.openedPanel.current = status === 'current';
+            state.openedPanel.printed = status === 'printed';
+            state.openedPanel.menu = status === 'menu';
     }
 }

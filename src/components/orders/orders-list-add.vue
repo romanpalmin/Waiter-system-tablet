@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="printed-order"  @click="setView('printed order')">
+        <div class="printed-order printed-panel"  @click="setView('printed')">
             Текущий заказ
             <hr />
             <!--<f7-grid>
@@ -18,7 +18,7 @@
                 <f7-col class="order-string" width="7">{{order.count}}</f7-col>
             </f7-grid>
         </div>
-        <div class="list-of-orders"  @click="setView('current order')">
+        <div class="list-of-orders"  @click="setView('current')">
             <!--<div class="select-view-type">
                 <f7-buttons color="gray" class="btns-type-list">
                     <f7-button @click="setViewType('all')">Все</f7-button>
@@ -194,7 +194,15 @@
                 firstTime: false
             }
         },
+        watch:{
+            activePanel: function(val){
+                console.log('Изменилась панель. Текущий статус = ' + val);
+            }
+        },
         computed: {
+            activePanel: function(){
+                return this.$store.state.openedPanel.status;
+            },
             getSumAmount: function () {
                 return this.$store.state.orders.summary;
             },
@@ -321,6 +329,7 @@
         },
         methods: {
             setView(currentType){
+                this.$store.commit('SET_ACTIVE_ORDER_PANEL', {'status': currentType});
                 console.log(currentType);
                 //this.showBottomMenu = false;
                 //this.$f7.closeModal('.current-picker');

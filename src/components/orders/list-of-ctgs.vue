@@ -98,7 +98,17 @@
             this.populateMenuList();
         },
 
-        computed: {},
+        computed: {
+            activePanel: function(){
+                return this.$store.state.openedPanel.status;
+            }
+        },
+
+        watch: {
+            activePanel: function(val){
+                this.showBottomMenu = this.$store.state.openedPanel.menu;
+            }
+        },
 
         methods: {
             getImages(imgName){
@@ -115,7 +125,11 @@
             },
 
             togglePicker(){
-                this.showBottomMenu = !this.showBottomMenu;
+                if (this.$store.state.openedPanel.menu){
+                    this.$store.commit('SET_ACTIVE_ORDER_PANEL', {'status': 'current'});
+                } else {
+                    this.$store.commit('SET_ACTIVE_ORDER_PANEL', {'status': 'menu'});
+                }
             },
             populateMenuList(){
                 this.currentMenuList = _.map(this.$store.state.FullTree, (item) => {

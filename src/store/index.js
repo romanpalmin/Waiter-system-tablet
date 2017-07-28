@@ -42,7 +42,13 @@ const store = new Vuex.Store({
             printed: []
         },
         currentPayload: {},
-        showTableActions: false
+        showTableActions: false,
+        openedPanel: {
+            status: '',
+            printed: false,
+            menu: true,
+            current: false
+        }
     },
     mutations: mutations,
     actions: actions,

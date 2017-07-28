@@ -301,16 +301,17 @@
                         orderStrings += item.count + '|'; // количество товара
                         orderStrings += '' + '|'; // планшет гостя
 
-                        orderStrings += '' + '|'; // тип строки
+                        orderStrings += 'k'; // тип строки
                         if (item.el.isHeader){
-                            orderStrings += 'k;+' + '|'; // головная строка
+                            orderStrings += '|+|'; // головная строка
                         } else {
-                            orderStrings += 'k;-'  + '|';
+                            orderStrings += '|-|';
                         }
 
-                        orderStrings += '' + '|'; // планшет гостя
-                        orderStrings += '' + '|'; // планшет гостя
-                        orderStrings += '' + '|'; // планшет гостя
+                        orderStrings += '' + '|'; // номер комплекта внутри заказа
+                        orderStrings += '' + '|'; // цена
+                        orderStrings += '' + '|'; // Recno строки
+                        orderStrings += '' + '|'; // Номер гостя в заказе
 
                     });
                     return orderStrings;
