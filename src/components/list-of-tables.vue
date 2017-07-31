@@ -61,8 +61,7 @@
                 pressed: {
                     isPressed: false,
                     tableId: null
-                },
-                preloadPrinted: []
+                }
             }
         },
         watch:{
@@ -113,6 +112,8 @@
                     if (table.status === 1 /*|| table.status === 5*/) {
                         if (this.pressed.isPressed){
                             this.$$('[data-id="'+this.pressed.tableId + '"]').removeClass('pressed');
+                            this.$store.commit('SET_PRELOADED_ORDER', {'preloaded': []});
+                            this.$store.commit('SET_SHOW_PRINTER_BTN', false);
                         }
                         this.pressed.tableId = table.table;
                         this.pressed.isPressed = true;
@@ -121,22 +122,18 @@
                         this.$store.commit('SET_CURRENT_ORDER_ID', {'orderId': table.zakNo});
                         if (table.status === 1){
                             this.$store.commit('SET_SHOW_PRINTER_BTN', true);
-                            this.preloadPrinted();
+                            this.preloadPrinted(table.table, table.zakNo);
                         }
 
                         this.$$('[data-id="'+table.table + '"]').addClass('pressed');
-                        //console.log(this.$store.state);
                     }
                 }
             },
 
             preloadPrinted(tableId, zakNo){
-                console.log('Table: ' + tableId);
-                console.log('ZakNo: ' + zakNo);
                 let uuid = '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7';
                 let usrID = this.$store.state.waiter.id;
                 let table = tableId;
-                let zakNo = zakNo;
                 let guests = this.$store.state.guestsCount;
                 let numTablet = this.$store.state.tabletNumber;
                 let optionsRec = {
@@ -144,9 +141,6 @@
                     };
                     this.axios.get(this.$store.getters.apiUrl, {params: optionsRec})
                         .then(rec => {
-                            console.log('Предзагруженный заказ: ');
-                            console.log(rec);
-                            this.$store.commit('SET_PRELOADED_ORDER', {'preloaded': rec});
                             if (rec && rec.data && rec.data[0] && rec.data[0].str1 && rec.data[0].str1[0] && rec.data[0].str1[0] && rec.data[0].str1[0].answCode === '0') {
                                 let currentPrinted = rec.data[0].str2;
                                 this.$store.commit('SET_PRELOADED_ORDER', {'preloaded': currentPrinted});

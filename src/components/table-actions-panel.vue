@@ -3,15 +3,16 @@
         <f7-block-title>Управление столом</f7-block-title>
         <f7-block>
             <f7-buttons>
-                <f7-button>Печать</f7-button>
                 <f7-button @click="closePanel()">Закрыть</f7-button>
             </f7-buttons>
         </f7-block>
         <f7-block-title>Текущий заказ</f7-block-title>
-        <f7-grid v-for="order in preloaded">
-            <f7-col width="75" class="order-string" :data-id="num_str"> {{order.name}}</f7-col>
-            <f7-col class="order-string" width="25">{{order.count}} x {{order.price}}&#8381;</f7-col>
-        </f7-grid>
+        <f7-block class="preloaded">
+            <f7-grid v-for="order in preloaded">
+                <f7-col width="75" class="order-string" :data-id="num_str"> {{order.name}}</f7-col>
+                <f7-col class="order-string" width="25">{{order.count}} x {{order.price}}&#8381;</f7-col>
+            </f7-grid>
+        </f7-block>
     </div>
 </template>
 <style scoped lang="less">
@@ -20,9 +21,15 @@
         bottom: 60px;
         left: 10px;
         width: 400px;
-        height: 100px;
+        /*height: 100px;*/
         border-radius: 7px;
         background-color: #b8b9b8;
+        .preloaded{
+            background-color: #ffff;
+            max-height: 90px;
+            overflow: scroll;
+            text-align: left;
+        }
     }
 
 </style>
@@ -35,7 +42,21 @@
         },
         computed:{
             preloaded: function(){
-                return this.$store.state.orders.preloaded;
+                //return this.$store.state.orders.preloaded;
+                let curOrderItem = {};
+                let printedView  = _.map(this.$store.state.orders.preloaded, item => {
+                    curOrderItem = _.filter(this.$store.state.SourceMenu.items, {'code': item.tovar});
+                   if (curOrderItem.length > 0){
+                        if (curOrderItem && curOrderItem[0] && curOrderItem[0].name) {
+                            item.name = curOrderItem[0].name;
+                            return item;
+                        }
+                    }
+                });
+                printedView = _.filter(printedView, item => {
+                    return (typeof item === 'object')
+                });
+                return printedView;
             }
         },
         mounted(){
@@ -43,9 +64,11 @@
         methods:{
             closePanel(){
                 this.$store.commit('SET_SHOW_TABLE_ACTIONS_PANEL', false);
+                this.$store.commit('SET_SHOW_PRINTER_BTN', false);
             }
         }
     }
+
 
 
 </script>
