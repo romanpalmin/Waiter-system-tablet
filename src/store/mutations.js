@@ -318,5 +318,10 @@ export default {
             state.openedPanel.current = status === 'current';
             state.openedPanel.printed = status === 'printed';
             state.openedPanel.menu = status === 'menu';
+    },
+
+    [m_types.SET_PRELOADED_ORDER] (state, payload){
+        state.orders.preloaded = payload.preloaded;
+        state.orders.preloaded = _.map(state.orders.preloaded, (item) => {return item});
     }
 }

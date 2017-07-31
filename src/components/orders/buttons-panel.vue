@@ -298,7 +298,8 @@
                     guestId: this.items.guestId,
                     modsPosition: this.items.modsPosition,
                     modsCommon: this.items.modsCommon,
-                    currentCount: this.items.currentCount
+                    currentCount: this.items.currentCount,
+                    isHeader: this.items.isHeader
                 };
             },
             plus(){

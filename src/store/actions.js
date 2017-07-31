@@ -22,6 +22,8 @@ export default {
      * @param payload - параметры (item, table, course ...)
      */
         [a_types.REMOVE_POSITION_FROM_ORDER]({state, commit, dispatch}, payload){
+        console.log(state.orders.current);
+        console.log(payload);
         let index = _.findLastIndex(state.orders.current, function (items) {
             return (
             items.item.code === payload.item.code &&
@@ -29,6 +31,7 @@ export default {
             items.tableId === payload.tableId &&
             items.waiterId === payload.waiterId &&
             items.guestId === payload.guestId &&
+            items.isHeader === payload.isHeader &&
             items.currentCount === payload.currentCount &&
             items.modsPosition === payload.modsPosition)
         });

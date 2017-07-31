@@ -12,11 +12,12 @@
             </f7-grid>
             <hr />-->
             <f7-grid v-for="order in printed">
-                <f7-col width="60" class="order-string" :data-id="num_str">
+                <f7-col width="80" class="order-string" :data-id="num_str">
                     <!--{{order.tovar}} / -->{{order.name}}
-                    <span v-if="order.kurs > 0"> / курс {{order.kurs}}</span>
+                    <span v-if="order.kurs > 0"> </span>
                 </f7-col>
-                <f7-col class="order-string" width="7">{{order.count}}</f7-col>
+                <f7-col class="order-string" width="20">{{order.count}}x
+                    {{order.price}}&#8381;</f7-col>
             </f7-grid>
         </div>
         <div class="list-of-orders current-panel passiv-current-panel" @click="setView('current')">
@@ -36,9 +37,9 @@
                             <div @click="setCurrentPayload(items.el)">
                                 <f7-accordion-toggle :data-id="items.el.item.code">
                                     <f7-grid>
-                                        <f7-col width="80" class="order-string" :data-id="items.el.item.code">
+                                        <f7-col width="75" class="order-string" :data-id="items.el.item.code">
                                         <span>
-                                            {{items.el.item.name}}
+                                           {{getShortName(items.el.item.name)}}
                                             <template
                                                     v-if="items.el.modsPosition !== '' && items.el.modsPosition !== ' '">
                                                        / <!--{{getModsPositionName(items.el.modsPosition)}}-->M1
@@ -55,7 +56,7 @@
                                         <!--<f7-col class="order-string" width="3">{{items.count}}</f7-col>
                                         <f7-col class="order-string" width="3">X</f7-col>
                                         <f7-col class="order-string" width="14">{{items.el.item.price}}&#8381;</f7-col>-->
-                                        <f7-col class="order-string nowrap" width="20">{{items.count}} x
+                                        <f7-col class="order-string nowrap" width="25">{{items.count}} x
                                             {{items.el.item.price}}&#8381;</f7-col>
                                     </f7-grid>
                                 </f7-accordion-toggle>
@@ -252,14 +253,20 @@
                 return this.$store.state.guestsCount;
             },
             printed: function(){
+                console.log('PRINTED');
+                console.log(this.$store.state.orders.printed);
                 let curOrderItem = {};
                 let printedView  = _.map(this.$store.state.orders.printed, item => {
                     curOrderItem = _.filter(this.$store.state.SourceMenu.items, {'code': item.tovar});
-                    if (curOrderItem && curOrderItem[0] &&curOrderItem[0].name) {
-                        item.name = curOrderItem[0].name;
-                        return item;
+                   if (curOrderItem.length > 0){
+                        if (curOrderItem && curOrderItem[0] && curOrderItem[0].name) {
+                            item.name = curOrderItem[0].name;
+                            return item;
+                        }
                     }
-
+                });
+                printedView = _.filter(printedView, item => {
+                    return (typeof item === 'object')
                 });
                 return printedView;
             },
@@ -445,6 +452,16 @@
                 });
 
                 return res ? res.name : '';
+            },
+
+            getShortName(name){
+                let res = '';
+                if (name.length > 30){
+                    res = name.substring(0, 30) + '...';
+                } else {
+                    res = name;
+                }
+                return res;
             },
             setCurrentPayload(item){
                 this.$store.commit('SET_CURRENT_PAYLOAD', item);

@@ -1,8 +1,8 @@
 <template>
     <div>
         <f7-block>
-            <div class="list-of-tables">
-                <div class="table" v-for="table in list">
+            <div class="list-of-tables"  @click="selectTable(0)">
+                <div class="table" v-for="table in list" >
                     <!--<f7-link :href="nextLink">-->
                     <f7-link>
                         <div class="table-image" :style="getStyle(table.status)" @click="selectTable(table)" :data-id="table.table">
@@ -61,7 +61,8 @@
                 pressed: {
                     isPressed: false,
                     tableId: null
-                }
+                },
+                preloadPrinted: []
             }
         },
         watch:{
@@ -83,6 +84,15 @@
         props: ['list'],
         methods:{
             selectTable(table){
+                /*if (table === 0){
+                    console.log('Снимаем выделение со стола');
+                    this.$store.commit('SET_SHOW_PRINTER_BTN', false);
+                    this.$store.commit('SET_SHOW_TABLE_ACTIONS_PANEL', false);
+                    if (this.pressed.isPressed){
+                            this.$$('[data-id="'+this.pressed.tableId + '"]').removeClass('pressed');
+                        }
+
+                }*/
                 if ((this.pressed.isPressed && this.pressed.tableId === table.table) || table.status === 0){
                     //console.log('Второе нажатие на стол');
                     this.$store.commit('SET_SHOW_PRINTER_BTN', false);
@@ -100,7 +110,7 @@
                         }
                     }
                 } else {
-                    if (table.status === 1 || table.status === 5) {
+                    if (table.status === 1 /*|| table.status === 5*/) {
                         if (this.pressed.isPressed){
                             this.$$('[data-id="'+this.pressed.tableId + '"]').removeClass('pressed');
                         }
@@ -111,13 +121,43 @@
                         this.$store.commit('SET_CURRENT_ORDER_ID', {'orderId': table.zakNo});
                         if (table.status === 1){
                             this.$store.commit('SET_SHOW_PRINTER_BTN', true);
+                            this.preloadPrinted();
                         }
 
                         this.$$('[data-id="'+table.table + '"]').addClass('pressed');
                         //console.log(this.$store.state);
                     }
                 }
+            },
 
+            preloadPrinted(tableId, zakNo){
+                console.log('Table: ' + tableId);
+                console.log('ZakNo: ' + zakNo);
+                let uuid = '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7';
+                let usrID = this.$store.state.waiter.id;
+                let table = tableId;
+                let zakNo = zakNo;
+                let guests = this.$store.state.guestsCount;
+                let numTablet = this.$store.state.tabletNumber;
+                let optionsRec = {
+                        'cmd_garson': 'REC', numTablet, zakNo, usrID, table, guests, uuid
+                    };
+                    this.axios.get(this.$store.getters.apiUrl, {params: optionsRec})
+                        .then(rec => {
+                            console.log('Предзагруженный заказ: ');
+                            console.log(rec);
+                            this.$store.commit('SET_PRELOADED_ORDER', {'preloaded': rec});
+                            if (rec && rec.data && rec.data[0] && rec.data[0].str1 && rec.data[0].str1[0] && rec.data[0].str1[0] && rec.data[0].str1[0].answCode === '0') {
+                                let currentPrinted = rec.data[0].str2;
+                                this.$store.commit('SET_PRELOADED_ORDER', {'preloaded': currentPrinted});
+                            }
+                            else {
+                                throw new Error(rec.data);
+                            }
+                        })
+                        .catch((err => {
+                            this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
+                        }))
             },
 
             getStyle(status){

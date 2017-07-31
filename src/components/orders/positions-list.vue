@@ -303,6 +303,7 @@
                     return item;
                 });
                 console.log(this.complect);
+                this.$store.commit('SET_ACTIVE_ORDER_PANEL', {'status': 'current'});
                 this.$f7.popup('.popup-complect');
 
             },

@@ -7,6 +7,11 @@
                 <f7-button @click="closePanel()">Закрыть</f7-button>
             </f7-buttons>
         </f7-block>
+        <f7-block-title>Текущий заказ</f7-block-title>
+        <f7-grid v-for="order in preloaded">
+            <f7-col width="75" class="order-string" :data-id="num_str"> {{order.name}}</f7-col>
+            <f7-col class="order-string" width="25">{{order.count}} x {{order.price}}&#8381;</f7-col>
+        </f7-grid>
     </div>
 </template>
 <style scoped lang="less">
@@ -26,6 +31,11 @@
         data(){
             return{
                 name:'this component'
+            }
+        },
+        computed:{
+            preloaded: function(){
+                return this.$store.state.orders.preloaded;
             }
         },
         mounted(){

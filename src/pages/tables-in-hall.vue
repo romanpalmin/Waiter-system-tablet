@@ -80,7 +80,7 @@
                     .then(response => {
                         if (response && response.length > 0) {
                             let filteredTables = _.filter(response, item => {
-                                return (item.status === 0 || item.status === 2 || item.status === 5);
+                                return (item.status === 0 && +item.table > 0 && +item.table < 100);// || item.status === 2 || item.status === 5);
                             });
                             this.$f7.hidePreloader();
                             list = _.map(filteredTables, item => {return item});
