@@ -1,6 +1,6 @@
 <template>
     <div class="table-actions-panel">
-        <f7-block-title>Управление столом</f7-block-title>
+        <f7-block-title>Управление столом <span v-if="table !==''">№{{table}}</span></f7-block-title>
         <f7-block>
             <f7-buttons>
                 <f7-button @click="closePanel()">Закрыть</f7-button>
@@ -24,7 +24,7 @@
         /*height: 100px;*/
         border-radius: 7px;
         background-color: #b8b9b8;
-        .preloaded{
+        .preloaded {
             background-color: #ffff;
             max-height: 90px;
             overflow: scroll;
@@ -34,19 +34,25 @@
 
 </style>
 <script>
-    export default{
-        data(){
-            return{
-                name:'this component'
+    export default {
+        data() {
+            return {
+                name: 'this component',
+                table: ''
             }
         },
-        computed:{
-            preloaded: function(){
+        computed: {
+            getTable: function () {
+                return this.table;
+            },
+            preloaded: function () {
                 //return this.$store.state.orders.preloaded;
                 let curOrderItem = {};
-                let printedView  = _.map(this.$store.state.orders.preloaded, item => {
+                this.table = this.$store.state.currentTable;
+                let printedView = _.map(this.$store.state.orders.preloaded, item => {
                     curOrderItem = _.filter(this.$store.state.SourceMenu.items, {'code': item.tovar});
-                   if (curOrderItem.length > 0){
+                    this.table = this.$store.state.currentTable;//item.table;
+                    if (curOrderItem.length > 0) {
                         if (curOrderItem && curOrderItem[0] && curOrderItem[0].name) {
                             item.name = curOrderItem[0].name;
                             return item;
@@ -59,16 +65,15 @@
                 return printedView;
             }
         },
-        mounted(){
+        mounted() {
         },
-        methods:{
-            closePanel(){
+        methods: {
+            closePanel() {
                 this.$store.commit('SET_SHOW_TABLE_ACTIONS_PANEL', false);
                 this.$store.commit('SET_SHOW_PRINTER_BTN', false);
             }
         }
     }
-
 
 
 </script>

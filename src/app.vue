@@ -6,14 +6,14 @@
                 <f7-pages>
                     <navbar/>
                     <f7-page class="padding-top">
-                         <div class="center">
+                        <div class="center">
                             <!-- <f7-button big round fill center title="Войти" color="darkgray" @click="goToUsersList()">
                                  Войти
                              </f7-button>-->
 
-                         </div>
-                        <password />
-                     </f7-page>
+                        </div>
+                        <password/>
+                    </f7-page>
 
                 </f7-pages>
             </f7-view>
@@ -27,56 +27,51 @@
         width: 100%;
         text-align: center;
         .padding-top {
-/*            padding: 100px;*/
+            /*            padding: 100px;*/
         }
         .center {
             height: 100px;
             margin: 0 auto;
-/*            padding-top: 250px;*/
+            /*            padding-top: 250px;*/
             width: 50%;
             color: white;
         }
     }
 </style>
 <script>
-import navbar from './components/navbar-main';
-import password from './components/password';
-import ctgs from './data/ctgs.js';
-export default {
+    import navbar from './components/navbar-main';
+    import password from './components/password';
+    import ctgs from './data/ctgs.js';
 
-    components:{
-        navbar,
-        password
-    },
-    methods:{
-        goToUsersList(){
-            this.$f7.views[0].router.load({'url':'/users/', 'reload':true});
+    export default {
+
+        components: {
+            navbar,
+            password
         },
-        loadPositions(){
-            //const payload = {};
-            //payload.ctgs = ctgs;
-            //this.$store.dispatch('SET_POSITIONS_TO_CATEGORY', payload);
-        }
+        methods: {
+            goToUsersList() {
+                this.$f7.views[0].router.load({'url': '/users/', 'reload': true});
+            },
+            loadPositions() {
+                //const payload = {};
+                //payload.ctgs = ctgs;
+                //this.$store.dispatch('SET_POSITIONS_TO_CATEGORY', payload);
+            }
 
-    },
-    mounted(){
-        console.log('Выставляем главную');
-        /*this.$store.commit('SET_MAIN_PAGE', {'main': true});
-        //console.log('Заполняем товары');
-        this.loadPositions();
+        },
+        mounted() {
+            console.log('Выставляем главную');
+            /*this.$store.commit('SET_MAIN_PAGE', {'main': true});
+            //console.log('Заполняем товары');
+            this.loadPositions();
 
-        this.$store.commit('SET_MAIN_PAGE', {'main': false});
-        this.$router.load({'url':'/password/', 'reload':true});*/
-    },
-
-
-}
-
-
-
+            this.$store.commit('SET_MAIN_PAGE', {'main': false});
+            this.$router.load({'url':'/password/', 'reload':true});*/
+        },
 
 
-
+    }
 
 
 </script>

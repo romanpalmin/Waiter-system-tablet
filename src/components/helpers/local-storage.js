@@ -2,7 +2,7 @@ export default {
     /** Загрузка данных в локалсторадж
      * @param data: {key, value}
      */
-    lsPut: (data)=>{
+    lsPut: (data) => {
         console.log(`Добавление данных ${data.key} : ${data.value} в локалсторадж`);
         localStorage.setItem(data.key, data.value);
     },
@@ -11,7 +11,7 @@ export default {
      * Получение данных из локалстораджа
      * @param key: string
      */
-    lsGet: (key)=>{
+    lsGet: (key) => {
         let result = '';
         console.log(`Добавление данных по ключу ${key} из локалстораджа`);
         result = localStorage.getItem(key);
@@ -22,14 +22,14 @@ export default {
      * Удаление данных из локалстораджа по ключу
      * @param key
      */
-    lsRemove:  (key)=>{
+    lsRemove: (key) => {
         localStorage.removeItem(key);
     },
 
     /**
      * Очистка всего хранения
      */
-    lsClear: ()=>{
+    lsClear: () => {
         localStorage.clear();
     }
 }

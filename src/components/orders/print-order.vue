@@ -9,8 +9,8 @@
 <script>
     import ls from '../helpers/local-storage.js';
 
-    export default{
-        data(){
+    export default {
+        data() {
             return {
                 usrID: this.$store.state.waiter.id,
                 apiUrl: {
@@ -20,12 +20,12 @@
             }
         },
 
-        mounted(){
+        mounted() {
             this.handlers();
         },
 
         computed: {
-            currentOrderByPosition(){
+            currentOrderByPosition() {
                 console.log('Текущее состояние заказа');
                 console.log(this.$store.state.orders.current);
                 let filtered = _.filter(this.$store.state.orders.current, (item) => {
@@ -67,7 +67,7 @@
             }
         },
         methods: {
-            handlers(){
+            handlers() {
                 this.$$('.print-order').on('click', () => {
                     this.printOrder();
                 });
@@ -88,12 +88,12 @@
                 })
             },
 
-            printOrderOrTable(){
+            printOrderOrTable() {
                 console.log('PRINT SMTH...');
                 console.log(this.$store.state.pages);
             },
 
-            backToTables(){
+            backToTables() {
                 const self = this;
                 this.$f7.showPreloader('Проверка текущего заказа');
                 if (this.$store.state.orders.printed && this.$store.state.orders.printed.length === 0) {
@@ -164,23 +164,24 @@
                     console.log('Оставляем');
                     success();
                 }
+
                 function success() {
-                    setTimeout(()=>{
+                    setTimeout(() => {
                         self.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
                         self.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
                         self.$store.commit('SET_EDIT_ORDER_PAGE', {'editorder': false});
                         self.$store.commit('SET_ACTIVE_ORDER_PANEL', {'status': 'current'});
                         self.$router.load({'url': '/tables/', 'reload': true});
-                     }, 0)
+                    }, 0)
                 }
             },
 
-            printOrder(){
+            printOrder() {
                 this.$f7.showPreloader('Печать стола №' + this.$store.state.currentTable);
                 this.addNewOrder();
             },
 
-            deleteOrder(optionsCan){
+            deleteOrder(optionsCan) {
                 this.$f7.confirm('Заказ будет удален', 'Вы уверены?', () => {
                         this.$f7.showPreloader('Удаление текущего заказа');
                         this.axios.get(this.$store.getters.apiUrl, {params: optionsCan})
@@ -208,16 +209,16 @@
                 );
             },
 
-            addNewOrder(){
+            addNewOrder() {
                 let uuid = '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7';
                 let usrID = this.$store.state.waiter.id;
                 let table = this.$store.state.currentTable;
                 let zakNo = this.$store.state.orders.currentOrderId;
                 let guests = this.$store.state.guestsCount === 0
-                                ? 1 : this.$store.state.guestsCount;
+                    ? 1 : this.$store.state.guestsCount;
                 let numTablet = this.$store.state.tabletNumber.length === 1
-                                    ? '0' + this.$store.state.tabletNumber
-                                    : this.$store.state.tabletNumber;
+                    ? '0' + this.$store.state.tabletNumber
+                    : this.$store.state.tabletNumber;
                 let rows = this.populateOrderStrings(this.usrID, this.$store.state.currentTable);
                 console.log('Текущая строка');
                 console.log(rows);
@@ -275,7 +276,7 @@
 
                         console.log(err);
                         this.$f7.hidePreloader();
-                        if (err){
+                        if (err) {
                             this.$f7.alert(`Ошибка ${err}`, 'Ошибка!');
                         } else {
                             this.$f7.alert(`Неизвестная ошибка`, 'Ошибка!');
@@ -283,7 +284,7 @@
                     }))
             },
 
-            populateOrderStrings(userId, tableId){
+            populateOrderStrings(userId, tableId) {
                 let orderStrings = '';
                 let currentOrder = this.currentOrderByPosition;
                 if (currentOrder) {
@@ -302,7 +303,7 @@
                         orderStrings += '' + '|'; // планшет гостя
 
                         orderStrings += 'k'; // тип строки
-                        if (item.el.isHeader){
+                        if (item.el.isHeader) {
                             orderStrings += '|+|'; // головная строка
                         } else {
                             orderStrings += '|-|';

@@ -4,12 +4,13 @@ import fullMenu from '../components/data/full.js';
 import modsPosition from '../components/data/modsPosition';
 import modsCommon from '../components/data/modsCommon';
 import store from '../store';
+
 export default {
     /**
      * Добавояет товар в текущий заказ
      * @param payload - параметры (item, table, course, waiterId...)
      */
-        [a_types.ADD_POSITION_TO_ORDER]({commit, dispatch}, payload){
+    [a_types.ADD_POSITION_TO_ORDER]({commit, dispatch}, payload) {
         payload.callback = () => {
             dispatch('CALCULATE_ORDER_SUMMARY', payload.tableId);
         };
@@ -21,19 +22,19 @@ export default {
      * Удаляет товар из массива заказов текущего пользователя
      * @param payload - параметры (item, table, course ...)
      */
-        [a_types.REMOVE_POSITION_FROM_ORDER]({state, commit, dispatch}, payload){
+    [a_types.REMOVE_POSITION_FROM_ORDER]({state, commit, dispatch}, payload) {
         console.log(state.orders.current);
         console.log(payload);
         let index = _.findLastIndex(state.orders.current, function (items) {
             return (
-            items.item.code === payload.item.code &&
-            items.course === payload.course &&
-            items.tableId === payload.tableId &&
-            items.waiterId === payload.waiterId &&
-            items.guestId === payload.guestId &&
-            items.isHeader === payload.isHeader &&
-            items.currentCount === payload.currentCount &&
-            items.modsPosition === payload.modsPosition)
+                items.item.code === payload.item.code &&
+                items.course === payload.course &&
+                items.tableId === payload.tableId &&
+                items.waiterId === payload.waiterId &&
+                items.guestId === payload.guestId &&
+                items.isHeader === payload.isHeader &&
+                items.currentCount === payload.currentCount &&
+                items.modsPosition === payload.modsPosition)
         });
         let comitPayload = {
             'index': index,
@@ -48,7 +49,7 @@ export default {
      * Удаляет строку заказа из массива заказов текущего пользователя
      * @param payload - параметры (item, table, course ...)
      */
-        [a_types.REMOVE_POSITION_STRING_FROM_ORDER]({state, commit, dispatch}, payload){
+    [a_types.REMOVE_POSITION_STRING_FROM_ORDER]({state, commit, dispatch}, payload) {
         let indexArr = [];
         let cursor = 0;
         let comitPayload = {
@@ -78,7 +79,7 @@ export default {
      * Подсчитывает ткущую сумму заказа
      * @param tableId - id стола
      */
-        [a_types.CALCULATE_ORDER_SUMMARY]({state, commit}, tableId){
+    [a_types.CALCULATE_ORDER_SUMMARY]({state, commit}, tableId) {
         // отфильтровываем строки для текущего стола
         let currentTableOrder = _.filter(state.orders.current, (item) => {
             return item.tableId === tableId
@@ -95,24 +96,23 @@ export default {
     /**
      * Получение полного меню
      */
-        [a_types.GET_MENU]({commit})
-    {
+    [a_types.GET_MENU]({commit}) {
         console.log('Загружаем меню');
         let url = store.getters.apiUrlModel;
         let options = {
             'groups': '',
-            'category':'',
+            'category': '',
             'data': 1,
             'uuid': store.state.settings.uuid
         };
         axios.get(url, {params: options})
-            .then(resp=>{
+            .then(resp => {
                 console.log('Меню:');
                 console.log(resp.data);
                 formNewData(resp.data);
             })
-            .catch(err=>{
-               console.log(err);
+            .catch(err => {
+                console.log(err);
             });
 
         //formNewData(fullMenu);
@@ -120,7 +120,7 @@ export default {
         function formNewData(json) {
             console.log('json');
             console.log(json);
-            if (json.groups && json.groups.length === 0){
+            if (json.groups && json.groups.length === 0) {
                 return;
             }
             let roots = _.filter(json.groups, function (item) {
@@ -176,12 +176,12 @@ export default {
     },
 
 
-    [a_types.LOAD_ORDER_FROM_GUEST_TABLET]({state, commit}, payload){
+    [a_types.LOAD_ORDER_FROM_GUEST_TABLET]({state, commit}, payload) {
         // payload = {tabletId, tableId, callback}
 
     },
 
-    [a_types.LOAD_GUEST_TABLETS](){
+    [a_types.LOAD_GUEST_TABLETS]() {
 
     },
 
@@ -190,7 +190,7 @@ export default {
      * @param commit
      * @param payload пераметры ( URL или JSON, callback )
      */
-        [a_types.LOAD_COMMON_MODS]({commit}, payload){
+    [a_types.LOAD_COMMON_MODS]({commit}, payload) {
         let result = modsCommon;
         let commitPayload = {};
 
@@ -206,8 +206,10 @@ export default {
      * @param commit
      * @param payload пераметры ( URL или JSON, callback  )
      */
-        [a_types.LOAD_POSITIONS_MODS]({commit}, payload){
-        let result = _.filter(modsPosition, (item)=>{return item.code.length > 2;});
+    [a_types.LOAD_POSITIONS_MODS]({commit}, payload) {
+        let result = _.filter(modsPosition, (item) => {
+            return item.code.length > 2;
+        });
         let commitPayload = {};
 
         if (payload.callback) {

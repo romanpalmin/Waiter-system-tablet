@@ -50,7 +50,8 @@
         font-size: 17px;
         padding-top: 50px;
     }
-    .current-padding{
+
+    .current-padding {
         padding-top: 20px;
     }
 
@@ -58,41 +59,42 @@
 <script>
     import halls from '../components/halls.vue';
     import navbar from '../components/navbar-main.vue';
-    export default{
-        data(){
+
+    export default {
+        data() {
             return {
                 name: 'this component',
                 openPicker: false,
                 tableNumber: '',
                 notHidePicker: false,
-                keyPicker:  {}
+                keyPicker: {}
             }
         },
-        mounted(){
+        mounted() {
             const self = this;
             this.keyPicker = this.$f7.keypad({
-                    toolbarCloseText: 'Готово',
-                    convertToPopover: false,
-                    closeByOutsideClick: false,
-                    scrollToInput:true,
-                    input: '.input-sub',
-                    dotButton: false,
-                    valueMaxLength: 3,
-                    inputReadOnly: true,
-                    onChange: function(p, value){
-                            this.tableNumber = +value;
-                        },
-                     onClose: function(e){
-                        console.log('Проверяем наличие стола с заданным значением ' + e.value);
-                     }
-                });
+                toolbarCloseText: 'Готово',
+                convertToPopover: false,
+                closeByOutsideClick: false,
+                scrollToInput: true,
+                input: '.input-sub',
+                dotButton: false,
+                valueMaxLength: 3,
+                inputReadOnly: true,
+                onChange: function (p, value) {
+                    this.tableNumber = +value;
+                },
+                onClose: function (e) {
+                    console.log('Проверяем наличие стола с заданным значением ' + e.value);
+                }
+            });
         },
         components: {
             halls,
             navbar
         },
         methods: {
-           back(){
+            back() {
                 this.tableNumber = '';
                 this.$store.commit('SET_ADD_ORDER_PAGE', {addorder: true});
                 this.keyPicker.setValue('');
@@ -101,8 +103,6 @@
             }
         }
     }
-
-
 
 
 </script>

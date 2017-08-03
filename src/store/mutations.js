@@ -1,50 +1,51 @@
 import * as m_types from './mutations-types';
 import _ from 'lodash';
+
 export default {
-    [m_types.SET_USERS](state, payload){
+    [m_types.SET_USERS](state, payload) {
         state.waiters = payload;
     },
 
-    [m_types.SET_FULL_MENU](state, payload){
+    [m_types.SET_FULL_MENU](state, payload) {
         state.FullTree = payload;
     },
-    [m_types.SET_SOURCE_MENU](state, payload){
+    [m_types.SET_SOURCE_MENU](state, payload) {
         state.SourceMenu = payload;
     },
-    [m_types.SET_WAITER](state, payload){
+    [m_types.SET_WAITER](state, payload) {
         state.waiter = payload.waiter;
     },
-    [m_types.SET_HALLS](state, payload){
+    [m_types.SET_HALLS](state, payload) {
         state.halls = payload.halls;
     },
-    [m_types.SET_USER_LOG_IN_OUT](state, payload){
+    [m_types.SET_USER_LOG_IN_OUT](state, payload) {
         state.login = payload.login;
     },
-    [m_types.SET_MAIN_PAGE](state, payload){
+    [m_types.SET_MAIN_PAGE](state, payload) {
         state.pages.main = payload.main;
     },
-    [m_types.SET_PASSWORD_PAGE](state, payload){
+    [m_types.SET_PASSWORD_PAGE](state, payload) {
         state.pages.password = payload.password;
     },
-    [m_types.SET_ADD_ORDER_PAGE](state, payload){
+    [m_types.SET_ADD_ORDER_PAGE](state, payload) {
         state.pages.addorder = payload.addorder;
     },
-    [m_types.SET_EDIT_ORDER_PAGE](state, payload){
+    [m_types.SET_EDIT_ORDER_PAGE](state, payload) {
         state.pages.editorder = payload.editorder;
     },
-    [m_types.SET_USERS_PAGE](state, payload){
+    [m_types.SET_USERS_PAGE](state, payload) {
         state.pages.users = payload.users;
     },
-    [m_types.SET_SELECTED_HALL](state, payload){
+    [m_types.SET_SELECTED_HALL](state, payload) {
         state.selectedHallId = payload.hallId;
     },
-    [m_types.SET_CURRENT_TABLE](state, payload){
+    [m_types.SET_CURRENT_TABLE](state, payload) {
         state.currentTable = payload.tableId;
     },
-    [m_types.SET_CURRENT_GUESTS](state, payload){
+    [m_types.SET_CURRENT_GUESTS](state, payload) {
         state.guestsCount = +payload.guestsCount;
     },
-    [m_types.SET_CURRENT_GUEST](state, payload){
+    [m_types.SET_CURRENT_GUEST](state, payload) {
         state.currentGuest = +payload.currentGuest;
         if (payload.callback && typeof(payload.callback) === "function") {
             payload.callback();
@@ -61,7 +62,7 @@ export default {
      * @param state
      * @param payload
      */
-        [m_types.ADD_NEW_ORDER_STRING](state, payload){
+    [m_types.ADD_NEW_ORDER_STRING](state, payload) {
         if (!payload.currentCount) {
             payload.currentCount = 1;
         }
@@ -76,7 +77,7 @@ export default {
      * @param state
      * @param payload index, callback
      */
-        [m_types.REMOVE_STRING_FROM_ORDER](state, payload){
+    [m_types.REMOVE_STRING_FROM_ORDER](state, payload) {
         if (payload.index >= 0) {
             _.pullAt(state.orders.current, [payload.index]);
             if (payload.callback && typeof(payload.callback) === "function") {
@@ -93,7 +94,7 @@ export default {
      * @param state
      * @param payload
      */
-        [m_types.REMOVE_ALL_STRINGS_FROM_ORDER](state, payload){
+    [m_types.REMOVE_ALL_STRINGS_FROM_ORDER](state, payload) {
 
         if (payload.indexes.length >= 0) {
             _.pullAt(state.orders.current, payload.indexes);
@@ -110,21 +111,21 @@ export default {
      * Очищает весь текущий заказ
      * @param state
      */
-        [m_types.REMOVE_FULL_CURRENT_ORDER](state){
+    [m_types.REMOVE_FULL_CURRENT_ORDER](state) {
         state.orders.current = [];
         state.orders.current = _.map(state.orders.current, (item) => {
             return item
         });
     },
 
-    [m_types.SET_CURRENT_SUMMARY](state, payload){
+    [m_types.SET_CURRENT_SUMMARY](state, payload) {
         state.orders.summary = payload;
     },
-    [m_types.SET_CURRENT_COURSE](state, payload){
+    [m_types.SET_CURRENT_COURSE](state, payload) {
         console.log(payload);
         //state.orders.current[payload.index].course = payload.course;
     },
-    [m_types.SET_ORDER_FROM_GUEST_TABLET](state, payload){
+    [m_types.SET_ORDER_FROM_GUEST_TABLET](state, payload) {
         state.orders.current = state.orders.current.concat(payload.order);
         if (payload.callback && typeof(payload.callback) === "function") {
             state.orders.current = _.map(state.orders.current, (item) => {
@@ -134,7 +135,7 @@ export default {
         }
     },
 
-    [m_types.SET_GUEST_TABLET](state, payload){
+    [m_types.SET_GUEST_TABLET](state, payload) {
 
     },
 
@@ -143,7 +144,7 @@ export default {
      * @param state состояние
      * @param payload параметры (массив, callback*)
      */
-        [m_types.SET_COMMON_MODS](state, payload){
+    [m_types.SET_COMMON_MODS](state, payload) {
         state.modsCommon = payload.mods;
         if (payload.callback && typeof(payload.callback) === "function") {
             payload.callback();
@@ -155,7 +156,7 @@ export default {
      * @param state состояние
      * @param payload параметры (массив, callback*)
      */
-        [m_types.SET_POSITIONS_MODS](state, payload){
+    [m_types.SET_POSITIONS_MODS](state, payload) {
         state.modsPosition = payload.mods;
         if (payload.callback && typeof(payload.callback) === "function") {
             payload.callback();
@@ -167,7 +168,7 @@ export default {
      * @param state
      * @param payload параметры строки, новое значение
      */
-        [m_types.UPDATE_COMMON_MODS](state, payload){
+    [m_types.UPDATE_COMMON_MODS](state, payload) {
         let params = payload.params;
 
         state.orders.current = _.map(state.orders.current, (item) => {
@@ -192,7 +193,7 @@ export default {
      * @param state
      * @param payload параметры строки, новое значение
      */
-        [m_types.UPDATE_POSITIONS_MODS](state, payload){
+    [m_types.UPDATE_POSITIONS_MODS](state, payload) {
         let params = payload.params;
         state.orders.current = _.map(state.orders.current, (item) => {
             if (
@@ -216,7 +217,7 @@ export default {
      * @param state
      * @param payload параметры строки, новое значение
      */
-        [m_types.UPDATE_STRING_COURSE](state, payload){
+    [m_types.UPDATE_STRING_COURSE](state, payload) {
         let params = payload.params;
         state.orders.current = _.map(state.orders.current, (item) => {
             if (
@@ -241,7 +242,7 @@ export default {
      * @param state
      * @param строка заказа
      */
-        [m_types.SET_CURRENT_PAYLOAD](state, payload){
+    [m_types.SET_CURRENT_PAYLOAD](state, payload) {
         state.currentPayload = payload;
     },
 
@@ -250,12 +251,12 @@ export default {
      * @param state
      * @param payload
      */
-        [m_types.SET_CURRENT_ORDER_ID](state, payload){
+    [m_types.SET_CURRENT_ORDER_ID](state, payload) {
         state.orders.currentOrderId = payload.orderId;
         state.orders.summary = 0;
     },
 
-    [m_types.SET_PRINTED_ORDER](state, payload){
+    [m_types.SET_PRINTED_ORDER](state, payload) {
         state.orders.printed = _.map(payload.printedOrders, it => {
             return it;
         });
@@ -266,7 +267,7 @@ export default {
      * @param state
      * @param payload - логин
      */
-        [m_types.SET_LOGIN](state, payload){
+    [m_types.SET_LOGIN](state, payload) {
         state.settings.login = payload;
     },
 
@@ -275,7 +276,7 @@ export default {
      * @param state
      * @param payload - пароль
      */
-        [m_types.SET_PASS](state, payload){
+    [m_types.SET_PASS](state, payload) {
         state.settings.pass = payload;
     },
 
@@ -284,7 +285,7 @@ export default {
      * @param state
      * @param payload - номер планшета
      */
-        [m_types.SET_TABLET_NUM](state, payload){
+    [m_types.SET_TABLET_NUM](state, payload) {
         state.tabletNumber = payload;
     },
 
@@ -293,7 +294,7 @@ export default {
      * @param state
      * @param payload true/false
      */
-        [m_types.SET_SHOW_TABLE_ACTIONS_PANEL](state, payload){
+    [m_types.SET_SHOW_TABLE_ACTIONS_PANEL](state, payload) {
         state.showTableActions = payload;
     },
 
@@ -302,7 +303,7 @@ export default {
      * @param state
      * @param payload true/false
      */
-        [m_types.SET_SHOW_PRINTER_BTN](state, payload){
+    [m_types.SET_SHOW_PRINTER_BTN](state, payload) {
         state.showPrinterBtn = payload;
     },
 
@@ -312,16 +313,18 @@ export default {
      * @param state
      * @param payload status=['current' || 'printed' || 'menu']
      */
-    [m_types.SET_ACTIVE_ORDER_PANEL](state, payload){
-            const status = payload.status;
-            state.openedPanel.status = status;
-            state.openedPanel.current = status === 'current';
-            state.openedPanel.printed = status === 'printed';
-            state.openedPanel.menu = status === 'menu';
+    [m_types.SET_ACTIVE_ORDER_PANEL](state, payload) {
+        const status = payload.status;
+        state.openedPanel.status = status;
+        state.openedPanel.current = status === 'current';
+        state.openedPanel.printed = status === 'printed';
+        state.openedPanel.menu = status === 'menu';
     },
 
-    [m_types.SET_PRELOADED_ORDER] (state, payload){
+    [m_types.SET_PRELOADED_ORDER](state, payload) {
         state.orders.preloaded = payload.preloaded;
-        state.orders.preloaded = _.map(state.orders.preloaded, (item) => {return item});
+        state.orders.preloaded = _.map(state.orders.preloaded, (item) => {
+            return item
+        });
     }
 }

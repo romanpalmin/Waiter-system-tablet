@@ -41,19 +41,20 @@
     import btnAdd from './add-table-to-waitress';
     import listTables from './list-of-tables';
     import tableActions from './table-actions-panel.vue';
-    export default{
-        data(){
-            return{
-                name:'this component',
+
+    export default {
+        data() {
+            return {
+                name: 'this component',
                 currentTables: []//_.filter(tables, {waitress:this.$store.state.waiter.id})
             }
         },
-        mounted(){
+        mounted() {
             this.getTablesCurrentWaitress();
             this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
         },
-        methods:{
-            getTablesCurrentWaitress(){
+        methods: {
+            getTablesCurrentWaitress: function () {
                 this.$f7.showPreloader('Загрузка столов пользователя');
                 let numTablet = this.$store.state.tabletNumber;
                 let result = [];
@@ -62,36 +63,37 @@
                     numTablet,
                     'usrID': this.$store.state.waiter.id,
                     'uuid': this.$store.state.settings.uuid
-                }
-                console.log();
-                setTimeout(()=> {
+                };
+                setTimeout(() => {
                     this.axios.get(this.$store.getters.apiUrl, {params: options})
-                    .then(resp=>{
-                        if (resp && resp.data){
-                            result = _.filter(resp.data, item => {
-                                return item.garson === this.$store.state.waiter.id && (item.status === 1 || item.status === 5);
-                            })
-                        };
-                        this.currentTables = _.map(result, item => {return item});
-                        this.$f7.hidePreloader();
-                    })
-                    .catch((err=>{
-                        this.$f7.hidePreloader();
-                        this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
-                    }))
+                        .then(resp => {
+                            if (resp && resp.data) {
+                                result = _.filter(resp.data, item => {
+                                    return item.garson === this.$store.state.waiter.id && (item.status === 1 || item.status === 5);
+                                })
+                            }
+                            this.currentTables = _.map(result, item => {
+                                return item
+                            });
+                            this.$f7.hidePreloader();
+                        })
+                        .catch((err => {
+                            this.$f7.hidePreloader();
+                            this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
+                        }));
                     this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
                     this.$store.commit('REMOVE_FULL_CURRENT_ORDER');
 
                 }, 2000);
             }
         },
-        components:{
+        components: {
             'add-table-button': btnAdd,
-            'table-list' : listTables,
+            'table-list': listTables,
             'table-actions-panel': tableActions
         },
         computed: {
-            showPanel: function() {
+            showPanel: function () {
                 return this.$store.state.showTableActions;
             }
         }

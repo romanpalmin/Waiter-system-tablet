@@ -8,7 +8,7 @@ import crypt from './encryption.js';
 const tabletName = '02';
 state.settings.server = `http://tab${tabletName}:${tabletName}@${state.settings.ip}/`;
 state.settings.userName = `tab${tabletName}`;
-state.settings.password =`${tabletName}`;
+state.settings.password = `${tabletName}`;
 //-------------------------------
 
 const ip = state.settings.ip;
@@ -25,6 +25,7 @@ if (typeof device !== 'undefined') {
     uuid = '10e00be6a70f0bcc'
 }
 console.log(ajaxServerUrlShort);
+
 function executeRequest(url, callback) {
     axios.get(ajaxServerUrlShort + url)
         .then(function (response) {

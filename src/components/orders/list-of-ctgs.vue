@@ -21,7 +21,7 @@
                     </f7-list>
                 </template>
                 <template v-else>
-                    <positions-list :CurrentPositionsList="positionsList" />
+                    <positions-list :CurrentPositionsList="positionsList"/>
                 </template>
             </div>
         </f7-picker-modal>
@@ -58,7 +58,7 @@
         height: 90%;
         overflow: scroll;
         padding-top: 44px;
-        .menu-list-item{
+        .menu-list-item {
             font-size: 19pt;
             height: 70px;
             line-height: 60px;
@@ -80,8 +80,9 @@
 </style>
 <script>
     import positionsList from './positions-list.vue';
-    export default{
-        data(){
+
+    export default {
+        data() {
             return {
                 name: 'this component',
                 showBottomMenu: true,
@@ -94,24 +95,24 @@
                 positionsList: []
             }
         },
-        mounted(){
+        mounted() {
             this.populateMenuList();
         },
 
         computed: {
-            activePanel: function(){
+            activePanel: function () {
                 return this.$store.state.openedPanel.status;
             }
         },
 
         watch: {
-            activePanel: function(val){
+            activePanel: function (val) {
                 this.showBottomMenu = this.$store.state.openedPanel.menu;
             }
         },
 
         methods: {
-            getImages(imgName){
+            getImages(imgName) {
                 let src = '';
                 switch (imgName) {
                     case 'exit':
@@ -124,39 +125,39 @@
                 return src;
             },
 
-            togglePicker(){
-                if (this.$store.state.openedPanel.menu){
+            togglePicker() {
+                if (this.$store.state.openedPanel.menu) {
                     this.$store.commit('SET_ACTIVE_ORDER_PANEL', {'status': 'current'});
                 } else {
                     this.$store.commit('SET_ACTIVE_ORDER_PANEL', {'status': 'menu'});
                 }
             },
-            populateMenuList(){
+            populateMenuList() {
                 this.currentMenuList = _.map(this.$store.state.FullTree, (item) => {
                     item.name = item.name_RU;
                     return item;
                 });
             },
 
-            selectNextSubMenu(item){
-                if (item.groups.length === 1){
-                        /* Случай, когда только вложенная группа одна*/
-                        let title = item.name;
-                        if (item.groups[0].groups && item.groups[0].groups.length === 0) {
-                            /* Случай, когда только вложенная группа одна и нет других вложенных групп*/
-                            this.showBack = true;
-                            item = item.groups[0];
-                            this.positionsList = item.items;
-                            this.prevMenuList.push({'menu': this.currentMenuList, 'title': item.name});
-                            this.getBreadTitle();
-                            this.openPositions();
-                            return;
-                        }
+            selectNextSubMenu(item) {
+                if (item.groups.length === 1) {
+                    /* Случай, когда только вложенная группа одна*/
+                    let title = item.name;
+                    if (item.groups[0].groups && item.groups[0].groups.length === 0) {
+                        /* Случай, когда только вложенная группа одна и нет других вложенных групп*/
+                        this.showBack = true;
                         item = item.groups[0];
-                        if (!item.name){
-                            item.name = title;
-                        }
-                  }
+                        this.positionsList = item.items;
+                        this.prevMenuList.push({'menu': this.currentMenuList, 'title': item.name});
+                        this.getBreadTitle();
+                        this.openPositions();
+                        return;
+                    }
+                    item = item.groups[0];
+                    if (!item.name) {
+                        item.name = title;
+                    }
+                }
                 if (item.groups.length > 0) {
                     this.showBack = true;
                     this.prevMenuList.push({'menu': this.currentMenuList, 'title': item.name});
@@ -175,7 +176,7 @@
                 }
             },
 
-            selectPrevSubMenu(){
+            selectPrevSubMenu() {
                 if (this.prevMenuList.length > 0) {
                     let prev = this.prevMenuList.pop();
                     this.currentMenuList = _.map(prev.menu, (item) => {
@@ -191,7 +192,7 @@
             /**
              Заголовок предыдущего раздела для "хлебных крошек"
              */
-            getBreadTitle(){
+            getBreadTitle() {
                 if (this.prevMenuList.length > 1) {
                     this.title = this.prevMenuList[this.prevMenuList.length - 2].title;
                 } else {
@@ -199,7 +200,7 @@
                 }
             },
 
-            getPickerStyle(){
+            getPickerStyle() {
                 /*let countOfStrings = this.startLevel.length + 1; // количество строк + навигационная панель
                  let height = countOfStrings * this.stringHeight;
                  return `height: ${height}px`;*/
@@ -207,11 +208,11 @@
                 return `height: ${height}px`;
             },
 
-            openPositions(){
+            openPositions() {
                 this.showPositions = true;
             }
         },
-        components:{
+        components: {
             'positions-list': positionsList
         }
     }

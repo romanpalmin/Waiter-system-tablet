@@ -17,7 +17,8 @@
                     <span v-if="order.kurs > 0"> </span>
                 </f7-col>
                 <f7-col class="order-string" width="20">{{order.count}}x
-                    {{order.price}}&#8381;</f7-col>
+                    {{order.price}}&#8381;
+                </f7-col>
             </f7-grid>
         </div>
         <div class="list-of-orders current-panel passiv-current-panel" @click="setView('current')">
@@ -35,9 +36,10 @@
 
                         <f7-accordion-item :key="items.el.code" class="order-string-item">
                             <div @click="setCurrentPayload(items.el)">
-                                <f7-accordion-toggle :data-id="items.el.item.code">
-                                    <f7-grid>
-                                        <f7-col width="75" class="order-string" :data-id="items.el.item.code">
+                                <v-touch @swipeleft="onSwipeLeft(items)" @swiperight="onSwipeRight(items)">
+                                    <f7-accordion-toggle :data-id="items.el.item.code">
+                                        <f7-grid>
+                                            <f7-col width="75" class="order-string" :data-id="items.el.item.code">
                                         <span>
                                            {{getShortName(items.el.item.name)}}
                                             <template
@@ -49,17 +51,20 @@
                                             </template>
                                              <template
                                                      v-if="items.el.course !== 0 && items.el.course !== ' ' && items.el.course !== ''">
-                                                       / <!--{{getModsCommonName(items.el.modsCommon)}}-->К.{{items.el.course}}
+                                                       /
+                                                 <!--{{getModsCommonName(items.el.modsCommon)}}-->К.{{items.el.course}}
                                             </template>
                                         </span>
-                                        </f7-col>
-                                        <!--<f7-col class="order-string" width="3">{{items.count}}</f7-col>
-                                        <f7-col class="order-string" width="3">X</f7-col>
-                                        <f7-col class="order-string" width="14">{{items.el.item.price}}&#8381;</f7-col>-->
-                                        <f7-col class="order-string nowrap" width="25">{{items.count}} x
-                                            {{items.el.item.price}}&#8381;</f7-col>
-                                    </f7-grid>
-                                </f7-accordion-toggle>
+                                            </f7-col>
+                                            <!--<f7-col class="order-string" width="3">{{items.count}}</f7-col>
+                                            <f7-col class="order-string" width="3">X</f7-col>
+                                            <f7-col class="order-string" width="14">{{items.el.item.price}}&#8381;</f7-col>-->
+                                            <f7-col class="order-string nowrap" width="25">{{items.count}} x
+                                                {{items.el.item.price}}&#8381;
+                                            </f7-col>
+                                        </f7-grid>
+                                    </f7-accordion-toggle>
+                                </v-touch>
                             </div>
                             <f7-accordion-content>
                                 <buttons-panel :items="items.el" :count="items.count" :it="items"/>
@@ -222,8 +227,9 @@
 <script>
     import category from './list-of-ctgs.vue';
     import panel from './buttons-panel.vue';
-    export default{
-        data(){
+
+    export default {
+        data() {
             return {
                 name: 'this component',
                 showBottomMenu: true,
@@ -232,18 +238,18 @@
                 firstTime: false
             }
         },
-        watch:{
-            activePanel: function(val){
+        watch: {
+            activePanel: function (val) {
                 this.setActivePanelSize(val);
             },
-            currentOrdersAll: function(val){
+            currentOrdersAll: function (val) {
                 console.log('Прокручиваем скролл вниз');
                 this.scrollToBottom();
 
             }
         },
         computed: {
-            activePanel: function(){
+            activePanel: function () {
                 return this.$store.state.openedPanel.status;
             },
             getSumAmount: function () {
@@ -252,13 +258,13 @@
             getGuestsCount: function () {
                 return this.$store.state.guestsCount;
             },
-            printed: function(){
+            printed: function () {
                 console.log('PRINTED');
                 console.log(this.$store.state.orders.printed);
                 let curOrderItem = {};
-                let printedView  = _.map(this.$store.state.orders.printed, item => {
+                let printedView = _.map(this.$store.state.orders.printed, item => {
                     curOrderItem = _.filter(this.$store.state.SourceMenu.items, {'code': item.tovar});
-                   if (curOrderItem.length > 0){
+                    if (curOrderItem.length > 0) {
                         if (curOrderItem && curOrderItem[0] && curOrderItem[0].name) {
                             item.name = curOrderItem[0].name;
                             return item;
@@ -288,7 +294,7 @@
                                 filtered[idx].tableId === groupByProps[innerIdx].el.tableId &&
                                 filtered[idx].waiterId === groupByProps[innerIdx].el.waiterId &&
                                 filtered[idx].modsPosition === groupByProps[innerIdx].el.modsPosition &&
-                                filtered[idx].currentCount === groupByProps[innerIdx].el.currentCount&&
+                                filtered[idx].currentCount === groupByProps[innerIdx].el.currentCount &&
                                 filtered[idx].isHeader === true &&
                                 filtered[idx].modsCommon === groupByProps[innerIdx].el.modsCommon
                             ) {
@@ -311,7 +317,7 @@
                     return [{el: filtered[0], count: filtered[0].currentCount}];
                 }
             },
-            currentOrderByPosition(){
+            currentOrderByPosition() {
                 let filtered = _.filter(this.$store.state.orders.current, (item) => {
                     return item.tableId === this.$store.state.currentTable && item.isHeader === true;
                 });
@@ -370,27 +376,29 @@
                 }
             }
         },
-        mounted(){
+        mounted() {
             this.openGuest(1);
             this.setHandlers();
             this.$store.commit('SET_ACTIVE_ORDER_PANEL', {'status': 'menu'});
         },
         methods: {
-            scrollToBottom(){
-                let currentPanel = this.$$('.current-panel')[0];
-                currentPanel.scrollTop = currentPanel.scrollHeight+40;
+            onSwipeLeft(item) {
+                this.$store.dispatch('REMOVE_POSITION_FROM_ORDER', item.el);
             },
-            /*print(){
-                console.log(this.$$('a.print-order.close-panel.link')[0]);
-                this.$$('a.print-order.close-panel.link')[0].click();
-            },*/
+            onSwipeRight(item) {
+                this.$store.dispatch('ADD_POSITION_TO_ORDER', item.el);
+            },
+            scrollToBottom() {
+                let currentPanel = this.$$('.current-panel')[0];
+                currentPanel.scrollTop = currentPanel.scrollHeight + 40;
+            },
 
-            setView(currentType){
+            setView(currentType) {
                 this.$store.commit('SET_ACTIVE_ORDER_PANEL', {'status': currentType});
                 console.log(currentType);
             },
 
-            setViewType(type){
+            setViewType(type) {
                 this.showType = type;
                 const self = this;
                 if (type === 'byGuests') {
@@ -400,10 +408,14 @@
                     }, 0);
                 }
                 if (type === 'all') {
-                    this.$store.commit('SET_CURRENT_GUEST', {'currentGuest': 1, 'callback':()=>{console.log('openView')}});
+                    this.$store.commit('SET_CURRENT_GUEST', {
+                        'currentGuest': 1, 'callback': () => {
+                            console.log('openView')
+                        }
+                    });
                 }
             },
-            setHandlers(){
+            setHandlers() {
                 const self = this;
                 this.$$('.accordion-item.guest-item').on('accordion:open', function (el) {
                     let currentGuest = el.target.firstChild.dataset.id;
@@ -419,19 +431,23 @@
                     }
                 });
             },
-            openGuest(guestId){
+            openGuest(guestId) {
                 let el = this.$$('.accordion-item[data-main-id="' + guestId + '"]');
-                if (!this.$store.state.currentGuest || this.$store.state.currentGuest === 0){
-                    this.$store.commit('SET_CURRENT_GUEST', {'currentGuest': guestId, 'callback':()=>{console.log('openGuest')}});
+                if (!this.$store.state.currentGuest || this.$store.state.currentGuest === 0) {
+                    this.$store.commit('SET_CURRENT_GUEST', {
+                        'currentGuest': guestId, 'callback': () => {
+                            console.log('openGuest')
+                        }
+                    });
                 }
-                if (el.length > 0){
+                if (el.length > 0) {
                     this.$f7.accordionOpen(el);
                 }
             },
-            closePicker(){
+            closePicker() {
                 this.showBottomMenu = false;
             },
-            selectGuest(num){
+            selectGuest(num) {
                 const self = this;
                 this.$store.commit('SET_CURRENT_GUEST', {
                     'currentGuest': num, 'callback': function () {
@@ -439,54 +455,54 @@
                     }
                 });
             },
-            getModsPositionName(code){
-                let res = _.find(this.$store.state.modsPosition, (mod)=>{
+            getModsPositionName(code) {
+                let res = _.find(this.$store.state.modsPosition, (mod) => {
                     return mod.code === code;
                 });
 
                 return res ? res.name : '';
             },
-            getModsCommonName(code){
-                let res = _.find(this.$store.state.modsCommon, (mod)=>{
+            getModsCommonName(code) {
+                let res = _.find(this.$store.state.modsCommon, (mod) => {
                     return mod.code === code;
                 });
 
                 return res ? res.name : '';
             },
 
-            getShortName(name){
+            getShortName(name) {
                 let res = '';
-                if (name.length > 30){
+                if (name.length > 30) {
                     res = name.substring(0, 30) + '...';
                 } else {
                     res = name;
                 }
                 return res;
             },
-            setCurrentPayload(item){
+            setCurrentPayload(item) {
                 this.$store.commit('SET_CURRENT_PAYLOAD', item);
             },
 
-            setActivePanelSize(type){
+            setActivePanelSize(type) {
                 let currentPanel = this.$$('.current-panel');
                 let printedPanel = this.$$('.printed-panel');
 
 
                 // Выбрана текущая панель
-                if (this.$store.state.openedPanel.current){
+                if (this.$store.state.openedPanel.current) {
                     currentPanel.removeClass('passiv-current-panel').addClass('active-current-panel');
                     printedPanel.removeClass('active-printed-panel').addClass('passiv-printed-panel');
                     //console.log('Выбрана текущая панель');
                 }
                 //Выбрана панель напечатанного заказа
-                else if (this.$store.state.openedPanel.printed){
+                else if (this.$store.state.openedPanel.printed) {
                     currentPanel.removeClass('active-current-panel').addClass('passiv-current-panel');
                     printedPanel.removeClass('passiv-printed-panel').addClass('active-printed-panel');
                     //console.log('Выбрана панель напечатанного заказа');
                     this.scrollToBottom();
                 }
                 // Выбрана панель меню
-                else if (this.$store.state.openedPanel.menu){
+                else if (this.$store.state.openedPanel.menu) {
                     currentPanel.removeClass('active-current-panel').addClass('passiv-current-panel');
                     printedPanel.removeClass('active-printed-panel').addClass('passiv-printed-panel');
                     this.scrollToBottom();

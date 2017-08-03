@@ -55,7 +55,8 @@
                 </div>
                 <p class="buttons-row bottom-buttons">
                     <a href="#" class="button  button-big  button-raised close-popup">Отменить</a>
-                    <a href="#" class="button button-big  button-raised  close-popup" :disabled="!isEnabledComplectAcceptButton" @click="submitComplectPosition">Подтвердить</a>
+                    <a href="#" class="button button-big  button-raised  close-popup"
+                       :disabled="!isEnabledComplectAcceptButton" @click="submitComplectPosition">Подтвердить</a>
                 </p>
             </div>
 
@@ -144,9 +145,9 @@
 
 </style>
 <script>
-/*<script lang="javascript">*/
-    export default{
-        data(){
+    /*<script lang="javascript">*/
+    export default {
+        data() {
             return {
                 currentList: [],
                 name: 'this component',
@@ -162,26 +163,26 @@
             complected: function () {
                 return this.complect;
             },
-            isEnabledComplectAcceptButton: function() {
+            isEnabledComplectAcceptButton: function () {
                 let res = true;
-                for (let i = 0; i < this.complect.length; i++){
+                for (let i = 0; i < this.complect.length; i++) {
                     if (this.complect[i].selected === false) {
-                            res = false;
-                            return res;
-                        }
-                    if (i === this.complect.length - 1){
+                        res = false;
+                        return res;
+                    }
+                    if (i === this.complect.length - 1) {
                         return res;
                     }
                 }
             }
         },
         methods: {
-            getShowViewStyle(){
+            getShowViewStyle() {
                 let style = 'margin-top: ';
                 style += this.showList ? '-35px' : '0px';
                 return style;
             },
-            setShowType(type){
+            setShowType(type) {
                 switch (type) {
                     case 'byList':
                         this.showList = true;
@@ -197,15 +198,15 @@
                         break;
                 }
             },
-            getStyle(item){
+            getStyle(item) {
                 let url = 'http://10.10.182.11/images/' + item.urlImage;
                 let style = `;background-image: url(${url});`;
                 return style;
             },
-            getName(item){
+            getName(item) {
                 return item.name_ru;
             },
-            addPositionToOrder(item){
+            addPositionToOrder(item) {
                 if (this.$store.state.currentGuest && this.$store.state.currentGuest > 0) {
                     let payload = {
                         item: item,
@@ -235,7 +236,7 @@
 
                 }
             },
-            alertMods(id, callback){
+            alertMods(id, callback) {
                 let buttons = [];
                 let selectedMods = _.filter(this.$store.state.modsPosition, (item) => {
                     return +item.code.substring(0, 2) === +id;
@@ -260,9 +261,9 @@
                 })
             },
 
-            alertComplectsSubmenu(index, callback){
+            alertComplectsSubmenu(index, callback) {
                 let buttons = [];
-                let res = _.find(this.complect, (item)=>{
+                let res = _.find(this.complect, (item) => {
                     return item.name === index;
                 });
                 buttons = _.map(res.items, item => {
@@ -285,14 +286,14 @@
                 })
             },
 
-            alertComplects(item){
+            alertComplects(item) {
                 console.log(item);
                 console.log(item.complect);
                 this.sourceComplect = item;
                 let groupped = _.groupBy(item.complect, 'groupName');
                 console.log(groupped);
 
-                this.complect = _.map(groupped, (item, index, arr) =>{
+                this.complect = _.map(groupped, (item, index, arr) => {
                     if (item.length === 1) {
                         item.selected = item[0];
                     } else {
@@ -307,13 +308,13 @@
                 this.$f7.popup('.popup-complect');
 
             },
-            openSubmenu(index){
-                let res = _.find(this.complect, (item)=>{
+            openSubmenu(index) {
+                let res = _.find(this.complect, (item) => {
                     return item.name === index;
                 });
                 this.alertComplectsSubmenu(index, (result) => {
                     this.complect = _.map(this.complect, item => {
-                        if (item.name === index){
+                        if (item.name === index) {
                             item.selected = result;
                         }
                         return item;
@@ -324,8 +325,8 @@
 
             },
 
-            submitComplectPosition(){
-                if (this.isEnabledComplectAcceptButton){
+            submitComplectPosition() {
+                if (this.isEnabledComplectAcceptButton) {
                     var payload = {
                         item: this.sourceComplect,
                         course: 0,
@@ -360,11 +361,10 @@
                 }
             }
         },
-        mounted(){
+        mounted() {
             this.currentList = this.CurrentPositionsList;
         }
     }
-
 
 
 </script>

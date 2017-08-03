@@ -19,10 +19,11 @@
     .come-back {
         padding-top: 100px;
     }
-    .simple-input{
-        width:100%;
+
+    .simple-input {
+        width: 100%;
         text-align: center;
-        .simple{
+        .simple {
             height: 40pt;
             text-align: center;
             border: 2px lightgray;
@@ -32,66 +33,62 @@
 
 </style>
 <script>
-    export default{
-        data(){
-            return{
-                name:'this component',
+    export default {
+        data() {
+            return {
+                name: 'this component',
                 currentGuestCount: '',
                 keyPicker: {}
             }
         },
-        computed:{
-            pageTitle: function(){
+        computed: {
+            pageTitle: function () {
                 return 'Количество гостей';
             },
-            tableNumber: function(){
+            tableNumber: function () {
                 return this.$store.state.currentTable;
             }
         },
         methods: {
-                beginFormOrder(){
-                    if (this.currentGuestCount){
-                        this.$store.commit('SET_CURRENT_GUESTS', {'guestsCount': this.currentGuestCount});
-                        console.log('переходим к оформлению заказа');
-                        this.$router.load({url:'/add-order/', reload:true});
-                    }
+            beginFormOrder() {
+                if (this.currentGuestCount) {
+                    this.$store.commit('SET_CURRENT_GUESTS', {'guestsCount': this.currentGuestCount});
+                    console.log('переходим к оформлению заказа');
+                    this.$router.load({url: '/add-order/', reload: true});
                 }
-           },
-        mounted(){
+            }
+        },
+        mounted() {
             const self = this;
             this.keyPicker = this.$f7.keypad({
-                    toolbarCloseText: 'Готово',
-                    convertToPopover: false,
-                    closeByOutsideClick: false,
-                    scrollToInput:true,
-                    input: '.input-sub',
-                    dotButton: false,
-                    valueMaxLength: 3,
-                    inputReadOnly: true,
-                    onChange: function(p, value){
-                            self.currentGuestCount = +value;
-                        },
-                    onClose: function(e){
+                toolbarCloseText: 'Готово',
+                convertToPopover: false,
+                closeByOutsideClick: false,
+                scrollToInput: true,
+                input: '.input-sub',
+                dotButton: false,
+                valueMaxLength: 3,
+                inputReadOnly: true,
+                onChange: function (p, value) {
+                    self.currentGuestCount = +value;
+                },
+                onClose: function (e) {
                     console.log(e);
-                    if (self.$store.state.currentTable !== 0){
-                            console.log('Фиксируем количество гостей ' + e.value + ' и ');
-                            self.beginFormOrder();
-                            }
-                        }
-                    });
-             this.keyPicker.open();
+                    if (self.$store.state.currentTable !== 0) {
+                        console.log('Фиксируем количество гостей ' + e.value + ' и ');
+                        self.beginFormOrder();
+                    }
+                }
+            });
+            this.keyPicker.open();
         },
-        destroyed(){
+        destroyed() {
             /*this.$store.commit('SET_CURRENT_TABLE', {'tableId': 0});
             this.$store.commit('SET_CURRENT_GUESTS', {'guestsCount': 0});*/
             this.keyPicker.setValue('');
             this.keyPicker.close();
         }
     }
-
-
-
-
 
 
 </script>

@@ -7,13 +7,13 @@
 
 </style>
 <script>
-    export default{
-        data(){
-            return{
-                name:'this component'
+    export default {
+        data() {
+            return {
+                name: 'this component'
             }
         },
-        mounted(){
+        mounted() {
         }
     }
 </script>

@@ -5,7 +5,7 @@
         <!-- Statusbar -->
         <f7-statusbar/>
         <rightpanel/>
-        <login :show="showLogin" />
+        <login :show="showLogin"/>
 
 
         <!-- Main Views -->
@@ -15,7 +15,7 @@
                 <f7-navbar v-if="$theme.ios">
                     <f7-nav-left>
                         <!--<f7-button open-login-screen="#login-screen">Выход</f7-button>-->
-                        <f7-button open-login-screen="#login-screen" @click="logIn" >Выход</f7-button>
+                        <f7-button open-login-screen="#login-screen" @click="logIn">Выход</f7-button>
                     </f7-nav-left>
                     <f7-nav-center sliding>
                         Меню
@@ -60,37 +60,35 @@
 </style>
 
 <script>
-import rightpanel from './components/right-panel.vue';
-import login from './components/login.vue';
-import navbar from './components/navbar.vue';
-import category from './components/category.vue';
+    import rightpanel from './components/right-panel.vue';
+    import login from './components/login.vue';
+    import navbar from './components/navbar.vue';
+    import category from './components/category.vue';
 
-export default {
-    data(){
-        return {
-            showLogin : false
-        }
-    },
-    mounted(){
-        console.log('Start app...');
-    },
-    methods:{
-        pressButton(){
+    export default {
+        data() {
+            return {
+                showLogin: false
+            }
         },
-        logIn(){
-            console.log('Выход');
-            this.showLogin = false;
+        mounted() {
+            console.log('Start app...');
+        },
+        methods: {
+            pressButton() {
+            },
+            logIn() {
+                console.log('Выход');
+                this.showLogin = false;
+            }
+        },
+        components: {
+            rightpanel,
+            login,
+            navbar,
+            category
         }
-    },
-    components: {
-        rightpanel,
-        login,
-        navbar,
-        category
     }
-}
-
-
 
 
 </script>

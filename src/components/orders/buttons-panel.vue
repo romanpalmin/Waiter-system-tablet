@@ -113,7 +113,7 @@
                 <f7-grid class="count">
                     <f7-col>
                         <f7-buttons color="blue">
-                            <f7-button @click="setCount(n+5)" v-for="n in 5">{{n+5}}</f7-button>
+                            <f7-button @click="setCount(n+5)" v-for="n in 5">{{n + 5}}</f7-button>
                         </f7-buttons>
                     </f7-col>
                 </f7-grid>
@@ -190,8 +190,8 @@
     }
 </style>
 <script>
-    export default{
-        data(){
+    export default {
+        data() {
             return {
                 name: 'this component',
                 currentDishCount: 1,
@@ -201,16 +201,16 @@
         computed: {
             getPositionName: function () {
                 let positionString = this.items.item.name;
-                if (this.items.modsCommon && this.items.modsCommon !== '' && this.items.modsCommon !== ' '){
-                    positionString +=  ' / ' + this.getModsCommonName;
+                if (this.items.modsCommon && this.items.modsCommon !== '' && this.items.modsCommon !== ' ') {
+                    positionString += ' / ' + this.getModsCommonName;
                 }
                 let res = _.find(this.$store.state.modsPosition, (mod) => {
                     return mod.code === this.items.modsPosition
                 });
-                if (res && res.name){
+                if (res && res.name) {
                     positionString += ' / ' + res.name;
                 }
-                if (this.items.course){
+                if (this.items.course) {
                     positionString += ' / К.' + this.items.course;
                 }
                 return positionString;
@@ -273,11 +273,11 @@
                 console.log('Изменился контекст');
             }
         },
-        mounted(){
+        mounted() {
 
         },
         methods: {
-            getModsPosition(){
+            getModsPosition() {
                 let res = _.filter(this.$store.state.modsPosition, (mods) => {
                     return mods.code.substring(0, 2) === this.$store.state.currentPayload.item.mod
                 });
@@ -285,11 +285,11 @@
                 return res;
             },
 
-            getGuestsDish(){
+            getGuestsDish() {
                 return this.currentDishCount;
             },
 
-            getPayload(){
+            getPayload() {
                 return {
                     item: this.items.item,
                     course: this.items.course,
@@ -302,26 +302,26 @@
                     isHeader: this.items.isHeader
                 };
             },
-            plus(){
+            plus() {
                 let payload = this.getPayload();
                 this.$store.dispatch('ADD_POSITION_TO_ORDER', payload);
             },
-            minus(){
+            minus() {
                 let payload = this.getPayload();
                 this.$store.dispatch('REMOVE_POSITION_FROM_ORDER', payload);
             },
 
-            calc(){
+            calc() {
                 let payload = this.getPayload();
                 this.$f7.alert('Здесь будет калькулятор для ' + payload.item.name, 'Пользовательский ввод количества', () => {
                     this.$f7.alert('Выбрано значение ' + '%nnn%', 'Результат');
                 });
             },
-            remove(){
+            remove() {
                 let payload = this.getPayload();
                 this.$store.dispatch('REMOVE_POSITION_STRING_FROM_ORDER', payload);
             },
-            setCourse(course){
+            setCourse(course) {
                 const payload = {
                     params: this.$store.state.currentPayload,
                     newValue: course
@@ -330,10 +330,10 @@
                 this.$store.commit('UPDATE_STRING_COURSE', payload);
                 this.$f7.closeModal('.popover-course');
             },
-            eraseCountDish(){
+            eraseCountDish() {
                 this.currentDishCount = 1;
             },
-            guestCountDish(type){
+            guestCountDish(type) {
                 console.log('Текущее значение: ' + this.currentDishCount);
                 switch (type) {
                     case 'plus':
@@ -356,44 +356,44 @@
                         break;
                 }
             },
-            openModsCommon(){
+            openModsCommon() {
                 this.$store.commit('SET_CURRENT_PAYLOAD', this.getPayload());
 
             },
-            openModsPosition(){
+            openModsPosition() {
                 this.$store.commit('SET_CURRENT_PAYLOAD', this.getPayload());
             },
-            openCourse(){
+            openCourse() {
                 console.log(this.getPayload());
                 this.$store.commit('SET_CURRENT_PAYLOAD', this.getPayload());
             },
-            openCount(){
+            openCount() {
                 this.$store.commit('SET_CURRENT_PAYLOAD', this.getPayload());
             },
-            updateModsCommon(newValue){
+            updateModsCommon(newValue) {
                 const payload = {
                     params: this.$store.state.currentPayload,
                     newValue: newValue
                 };
                 this.$store.commit('UPDATE_COMMON_MODS', payload)
             },
-            updateModsPosition(newValue){
+            updateModsPosition(newValue) {
                 const payload = {
                     params: this.$store.state.currentPayload,
                     newValue: newValue
                 };
                 this.$store.commit('UPDATE_POSITIONS_MODS', payload)
             },
-            setCount(newCount){
+            setCount(newCount) {
                 let payload = this.$store.state.currentPayload;
                 let currentCount = this.getCurrentCount();
                 let difference = currentCount - newCount;
-                if (newCount > 0 && newCount < 1){
+                if (newCount > 0 && newCount < 1) {
                     console.log('Добавляем строку с неполным блюдом');
                     payload.currentCount = newCount;
                     this.$store.commit('ADD_NEW_ORDER_STRING', payload);
                 }
-                else if (difference > 0){
+                else if (difference > 0) {
                     console.log(`Удаляем ${difference} строк`);
                     this.deleteStrings(difference, payload);
                 }
@@ -405,40 +405,40 @@
             },
 
             /**
-                Удаление и добавление заданного количества строк из заказа с текущими выбранными параметрами
-            */
-            deleteStrings(count, payload){
+             Удаление и добавление заданного количества строк из заказа с текущими выбранными параметрами
+             */
+            deleteStrings(count, payload) {
                 console.log(`Удаление ${count} строк`);
                 console.log(payload);
-                for (let i = 0; i < count; i++){
+                for (let i = 0; i < count; i++) {
                     this.$store.dispatch('REMOVE_POSITION_FROM_ORDER', payload);
                 }
             },
 
-            addStrings(count, payload){
+            addStrings(count, payload) {
                 console.log('Количество: ' + count);
                 console.log(payload);
-                for (let i = 0; i < count; i++){
+                for (let i = 0; i < count; i++) {
                     this.$store.commit('ADD_NEW_ORDER_STRING', payload);
                     this.$store.dispatch('CALCULATE_ORDER_SUMMARY', payload.tableId);
                 }
             },
             /************************************************
 
-            */
+             */
 
-            getCurrentCount(callback){
+            getCurrentCount(callback) {
                 let payload = this.$store.state.currentPayload;
                 console.log(this.$store.state.orders.current);
                 let currentOrdersString = _.filter(this.$store.state.orders.current, (item) => {
                     return (item.course === payload.course &&
-                            item.item.code === payload.item.code &&
-                            item.waiterId === payload.waiterId &&
-                            item.tableId === payload.tableId &&
-                            item.modsCommon === payload.modsCommon &&
-                            item.currentCount === payload.currentCount &&
-                            item.modsPosition === payload.modsPosition &&
-                            item.guestId === payload.guestId
+                        item.item.code === payload.item.code &&
+                        item.waiterId === payload.waiterId &&
+                        item.tableId === payload.tableId &&
+                        item.modsCommon === payload.modsCommon &&
+                        item.currentCount === payload.currentCount &&
+                        item.modsPosition === payload.modsPosition &&
+                        item.guestId === payload.guestId
                     )
                 });
                 console.log(currentOrdersString);
@@ -450,9 +450,6 @@
             }
         }
     }
-
-
-
 
 
 </script>

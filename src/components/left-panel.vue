@@ -5,13 +5,21 @@
         </f7-block>
         <f7-block-title>Действия</f7-block-title>
         <f7-block inner>
-            <p><f7-link href="#" open-popup  data-popup=".select-tablet" close-panel>Загрузить данные</f7-link></p>
-            <p><f7-link href="#"  class="print-order" close-panel>Отправить на печать</f7-link></p>
+            <p>
+                <f7-link href="#" open-popup data-popup=".select-tablet" close-panel>Загрузить данные</f7-link>
+            </p>
+            <p>
+                <f7-link href="#" class="print-order" close-panel>Отправить на печать</f7-link>
+            </p>
         </f7-block>
         <f7-block-title>Навигация</f7-block-title>
         <f7-block inner>
-            <p><f7-link class="back-to-tables" close-panel data-ignore-cache="true">Список текущих столов</f7-link></p>
-            <p><f7-link class="exit" close-panel data-ignore-cache="true" @click="exit()">Выход</f7-link></p>
+            <p>
+                <f7-link class="back-to-tables" close-panel data-ignore-cache="true">Список текущих столов</f7-link>
+            </p>
+            <p>
+                <f7-link class="exit" close-panel data-ignore-cache="true" @click="exit()">Выход</f7-link>
+            </p>
             <!--<p><f7-link @click="$router.load({url: '/tables/'})" close-panel data-ignore-cache="true" >Выбор стола</f7-link></p>
             <p>Действие 2.2</p>
             <p>Действие 3.3</p>
@@ -26,11 +34,13 @@
         </f7-block>-->
         <f7-popup class="select-tablet">
             <!-- Popup content goes here -->
-            <p><f7-link href="#" close-popup  data-popup=".select-tablet">Закрыть</f7-link></p>
-            <hr />
-            <select-tablet />
+            <p>
+                <f7-link href="#" close-popup data-popup=".select-tablet">Закрыть</f7-link>
+            </p>
+            <hr/>
+            <select-tablet/>
         </f7-popup>
-        <print-order />
+        <print-order/>
     </div>
 
 </template>
@@ -41,27 +51,28 @@
     import selectTablet from './select-tablet.vue';
     import printOrder from './orders/print-order.vue';
     import logout from './mixins/logout.js'
-    export default{
-        data(){
-            return{
-                name:'this component'
+
+    export default {
+        data() {
+            return {
+                name: 'this component'
             }
         },
         mixins:
             [logout],
-        mounted(){
+        mounted() {
         },
-        computed:{
-            tabletNumber(){
+        computed: {
+            tabletNumber() {
                 return this.$store.state.tabletNumber;
             }
         },
-        components:{
+        components: {
             'select-tablet': selectTablet,
             'print-order': printOrder
         },
-        methods:{
-            exit(){
+        methods: {
+            exit() {
                 this.logout();
             }
         }

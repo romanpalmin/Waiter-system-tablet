@@ -3,6 +3,7 @@ import Framework7 from 'framework7';
 import Framework7Vue from 'framework7-vue';
 import keypad from '../bower_components/Framework7 Keypad/dist/framework7.keypad.min';
 import keypadCss from '../bower_components/Framework7 Keypad/dist/framework7.keypad.min.css';
+import VueTouch from 'vue-touch';
 import Vuex from 'vuex';
 
 // Import Styles
@@ -17,6 +18,7 @@ import VueAxios from 'vue-axios';
 Vue.use(Vuex);
 Vue.use(Framework7Vue);
 Vue.use(VueAxios, axios);
+Vue.use(VueTouch, {name: 'v-touch'})
 
 
 import Routes from './routes.js';
@@ -41,7 +43,7 @@ new Vue({
         app: App
     },
     methods: {
-        getNewJsonFullTree(){
+        getNewJsonFullTree() {
             this.$store.dispatch('GET_MENU');
             this.$store.dispatch('LOAD_POSITIONS_MODS', {
                 'callback': function () {
@@ -54,7 +56,7 @@ new Vue({
                 }
             });
         },
-        getTablet(){
+        getTablet() {
             this.$f7.showPreloader('Авторизация планшета');
             let options = {
                 'uuid': this.$store.state.settings.uuid,
@@ -70,11 +72,11 @@ new Vue({
                 .then(resp => {
                     if (resp && resp.data && resp.data.login && resp.data.pass && resp.data.nTab)
                         this.$store.commit('SET_LOGIN', resp.data.login);
-                        this.$store.commit('SET_PASS', resp.data.pass);
-                        this.$store.commit('SET_TABLET_NUM', resp.data.nTab);
+                    this.$store.commit('SET_PASS', resp.data.pass);
+                    this.$store.commit('SET_TABLET_NUM', resp.data.nTab);
 
-                        console.log('API: ' + this.$store.getters.apiUrl);
-                        return this.axios.get(url, {params: usersOptions});
+                    console.log('API: ' + this.$store.getters.apiUrl);
+                    return this.axios.get(url, {params: usersOptions});
                 })
                 .then(users => {
                     let usersList = [];
@@ -120,7 +122,7 @@ new Vue({
                 })
         }
     },
-    mounted(){
+    mounted() {
         this.getNewJsonFullTree();
         console.log('Start app');
         this.getTablet();

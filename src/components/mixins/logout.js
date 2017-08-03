@@ -1,6 +1,6 @@
 export default {
-    methods:{
-        logout(){
+    methods: {
+        logout() {
             this.$store.commit('SET_WAITER', {'waiter': {}});
             this.$store.commit('SET_USER_LOG_IN_OUT', {'login': false});
             location.reload();

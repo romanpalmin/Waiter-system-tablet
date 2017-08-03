@@ -11,14 +11,14 @@
 
 </style>
 <script>
-    export default{
-        data(){
-            return{
-                name:'this component',
+    export default {
+        data() {
+            return {
+                name: 'this component',
                 selectedTablet: 0
             }
         },
-        mounted(){
+        mounted() {
             const self = this;
             this.$$('.load-order').on('click', function () {
                 self.$f7.showPreloader('Загрузка данных с планшета №' + self.selectedTablet);
@@ -28,8 +28,8 @@
                 }, 2000);
             });
         },
-        methods:{
-            selectTablet(tabletId){
+        methods: {
+            selectTablet(tabletId) {
                 console.log(tabletId);
                 this.selectedTablet = tabletId;
             }

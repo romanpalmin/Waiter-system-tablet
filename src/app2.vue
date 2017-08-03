@@ -73,7 +73,7 @@
                 <!-- Pages -->
                 <f7-pages>
                     <f7-page>
-                       <!-- Page Content -->
+                        <!-- Page Content -->
                         <f7-block-title>Welcome to my App</f7-block-title>
                         <f7-block inner>
                             <p>Duis sed erat ac eros ultrices pharetra id ut tellus. Praesent rhoncus enim ornare ipsum
@@ -163,7 +163,7 @@
 </template>
 
 <script>
-export default {}
+    export default {}
 
 
 </script>

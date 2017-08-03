@@ -33,15 +33,16 @@ Your custom styles go here
     -moz-font-feature-settings: "liga";
     font-feature-settings: "liga";
 }
-.page-content{
+
+.page-content {
     overflow: hidden;
 }
 
-.content-block.position-item{
+.content-block.position-item {
     background-color: #5ac8fa;
     padding: 0;
 }
 
-.pages{
+.pages {
     background-color: #fff;
 }

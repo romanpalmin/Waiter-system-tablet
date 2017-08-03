@@ -2,7 +2,7 @@
     <div class="main-nav-bar">
         <f7-navbar class="navbar-style">
             <f7-nav-left>
-                <f7-link open-panel="left" v-if="this.$store.state.login ">
+                <f7-link open-panel="left" v-if="this.$store.state.login " @click="closeMenu()">
                     <div class="avatar images" :style="getStyle('avatar')"></div>
                 </f7-link>
                 <f7-link v-if="!this.$store.state.login && this.$store.state.pages.main" @click="showPopup=true">
@@ -87,8 +87,9 @@
 <script>
     import logout from './mixins/logout.js'
     import leftPanel from './left-panel.vue'
-    export default{
-        data(){
+
+    export default {
+        data() {
             return {
                 openLeft: false,
                 showPopup: false
@@ -96,12 +97,12 @@
         },
         mixins: [logout],
         computed: {
-            tabletNumber(){
+            tabletNumber() {
                 return this.$store.state.tabletNumber;
             }
         },
         methods: {
-            getStyle(type){
+            getStyle(type) {
                 let str = '';
                 switch (type) {
                     case 'avatar':
@@ -122,11 +123,14 @@
                 }
                 return str;
             },
-            exit(){
+            closeMenu() {
+                this.$store.commit('SET_ACTIVE_ORDER_PANEL', {'status': 'current'});
+            },
+            exit() {
                 this.openLeft = false;
                 this.logout();
             },
-            print(){
+            print() {
                 this.$f7.showPreloader('Печать счета');
                 //this.openLeft = false;
                 //console.log(this.$store.state);
@@ -136,29 +140,27 @@
                 let zakNo = this.$store.state.orders.currentOrderId;
                 this.$store.commit('SET_SHOW_PRINTER_BTN', false);
                 this.$store.commit('SET_SHOW_TABLE_ACTIONS_PANEL', false);
-                let options = {'cmd_garson': 'CHT',zakNo, usrID, table, uuid}
+                let options = {'cmd_garson': 'CHT', zakNo, usrID, table, uuid}
                 console.log(options);
                 this.axios.get(this.$store.getters.apiUrl, {params: options})
-                        .then(result => {
-                            console.log(result);
-                            setTimeout(()=>{
-                                this.$f7.hidePreloader();
-                            this.$router.refreshPage();
-                            }, 2000);
-
-                        })
-                        .catch(err => {
+                    .then(result => {
+                        console.log(result);
+                        setTimeout(() => {
                             this.$f7.hidePreloader();
-                            this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
-                        })
+                            this.$router.refreshPage();
+                        }, 2000);
+
+                    })
+                    .catch(err => {
+                        this.$f7.hidePreloader();
+                        this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
+                    })
             }
         },
         components: {
             'left-panel': leftPanel
         }
     }
-
-
 
 
 </script>

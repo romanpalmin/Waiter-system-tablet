@@ -8,7 +8,7 @@
                 </f7-block-title>
                 <f7-block>
                     <div class="list-of-orders">
-                        <orders-list />
+                        <orders-list/>
                     </div>
                 </f7-block>
             </div>
@@ -20,11 +20,13 @@
         /*padding-top: 40px;*/
         overflow: hidden;
     }
-    .current-padding{
+
+    .current-padding {
         padding-top: 70px;
         overflow: hidden;
     }
-    .add-order-page{
+
+    .add-order-page {
         overflow: hidden;
     }
 
@@ -32,15 +34,16 @@
 <script>
     import navbar from '../components/navbar-main.vue';
     import orderlist from '../components/orders/orders-list-add.vue';
-    export default{
-        data(){
-            return{
-                name:'this component'
+
+    export default {
+        data() {
+            return {
+                name: 'this component'
             }
         },
-        mounted(){
+        mounted() {
             console.log('Начинаем оформление заказа, загружаем товары');
-            if (!this.$store.state.pages.addorder){
+            if (!this.$store.state.pages.addorder) {
                 this.$f7.showPreloader('Загружаем заказ стола №' + this.$store.state.currentTable);
                 console.log('Загружаем весь заказ');
                 this.getPrinted();
@@ -48,10 +51,10 @@
         },
         components: {
             navbar,
-            'orders-list' : orderlist
+            'orders-list': orderlist
         },
-        methods:{
-            getPrinted(){
+        methods: {
+            getPrinted() {
                 let uuid = '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7';
                 let usrID = this.$store.state.waiter.id;
                 let table = this.$store.state.currentTable;
@@ -59,13 +62,13 @@
                 let guests = this.$store.state.guestsCount;
                 let numTablet = this.$store.state.tabletNumber;
 
-               let optionsRec = {
+                let optionsRec = {
                     'cmd_garson': 'REC', numTablet, zakNo, usrID, table, guests, uuid
-               }
-               this.axios.get(this.$store.getters.apiUrl, {params: optionsRec})
-                    .then(rec=>{
+                }
+                this.axios.get(this.$store.getters.apiUrl, {params: optionsRec})
+                    .then(rec => {
                         console.log(rec.data);
-                        if (rec && rec.data && rec.data[0] && rec.data[0].str1 && rec.data[0].str1[0] && rec.data[0].str1[0] && rec.data[0].str1[0].answCode === '0'){
+                        if (rec && rec.data && rec.data[0] && rec.data[0].str1 && rec.data[0].str1[0] && rec.data[0].str1[0] && rec.data[0].str1[0].answCode === '0') {
                             let currentPrinted = rec.data[0].str2;
                             console.log(currentPrinted);
                             this.$f7.hidePreloader();
@@ -76,13 +79,13 @@
                             throw new Error(rec.data);
                         }
                     })
-                    .then(currentPrinted=>{
+                    .then(currentPrinted => {
                         console.log('SECOND!');
                         console.log(currentPrinted);
                         this.$store.commit('SET_PRINTED_ORDER', {'printedOrders': currentPrinted});
                         this.$f7.hidePreloader();
                     })
-                    .catch(err=>{
+                    .catch(err => {
                         console.log(err);
                         this.$f7.hidePreloader();
                     })
