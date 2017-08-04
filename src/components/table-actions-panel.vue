@@ -34,11 +34,13 @@
 
 </style>
 <script>
+    import blocker from './helpers/table-blocker.js';
     export default {
         data() {
             return {
                 name: 'this component',
-                table: ''
+                table: '',
+                orderId: ''
             }
         },
         computed: {
@@ -49,6 +51,7 @@
                 //return this.$store.state.orders.preloaded;
                 let curOrderItem = {};
                 this.table = this.$store.state.currentTable;
+                this.orderId = this.$store.state.orders.currentOrderId;
                 let printedView = _.map(this.$store.state.orders.preloaded, item => {
                     curOrderItem = _.filter(this.$store.state.SourceMenu.items, {'code': item.tovar});
                     this.table = this.$store.state.currentTable;//item.table;
@@ -69,8 +72,16 @@
         },
         methods: {
             closePanel() {
-                this.$store.commit('SET_SHOW_TABLE_ACTIONS_PANEL', false);
-                this.$store.commit('SET_SHOW_PRINTER_BTN', false);
+                blocker.unblockTable({
+                    tableId: this.table,
+                    zakNo: this.orderId,
+                    uuid: this.$store.state.settings.uuid,
+                    //usrId: self.store.state.waiter.waiterId,
+                    callback: () => {
+                        this.$store.commit('SET_SHOW_TABLE_ACTIONS_PANEL', false);
+                        this.$store.commit('SET_SHOW_PRINTER_BTN', false);
+                    }
+                });
             }
         }
     }

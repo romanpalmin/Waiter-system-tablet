@@ -51,6 +51,7 @@
     }
 </style>
 <script>
+    import blocker from './helpers/table-blocker.js';
     export default {
         data() {
             return {
@@ -61,7 +62,8 @@
                 url: this.$store.getters.apiUrl,
                 pressed: {
                     isPressed: false,
-                    tableId: null
+                    tableId: null,
+                    zakNo: null
                 }
             }
         },
@@ -70,6 +72,7 @@
                 if (this.showPanel === false) {
                     this.$$('.pressed').removeClass('pressed');
                     this.pressed.tableId = null;
+                    this.pressed.zakNo = null;
                     this.pressed.isPressed = false;
                 }
             }
@@ -84,15 +87,6 @@
         props: ['list'],
         methods: {
             selectTable(table) {
-                /*if (table === 0){
-                    console.log('Снимаем выделение со стола');
-                    this.$store.commit('SET_SHOW_PRINTER_BTN', false);
-                    this.$store.commit('SET_SHOW_TABLE_ACTIONS_PANEL', false);
-                    if (this.pressed.isPressed){
-                            this.$$('[data-id="'+this.pressed.tableId + '"]').removeClass('pressed');
-                        }
-
-                }*/
                 if ((this.pressed.isPressed && this.pressed.tableId === table.table) || table.status === 0) {
                     //console.log('Второе нажатие на стол');
                     this.$store.commit('SET_SHOW_PRINTER_BTN', false);
@@ -111,22 +105,48 @@
                     }
                 } else {
                     if (table.status === 1 /*|| table.status === 5*/) {
-                        if (this.pressed.isPressed) {
-                            this.$$('[data-id="' + this.pressed.tableId + '"]').removeClass('pressed');
-                            this.$store.commit('SET_PRELOADED_ORDER', {'preloaded': []});
-                            this.$store.commit('SET_SHOW_PRINTER_BTN', false);
-                        }
-                        this.pressed.tableId = table.table;
-                        this.pressed.isPressed = true;
-                        this.$store.commit('SET_SHOW_TABLE_ACTIONS_PANEL', true);
-                        this.$store.commit('SET_CURRENT_TABLE', {'tableId': table.table});
-                        this.$store.commit('SET_CURRENT_ORDER_ID', {'orderId': table.zakNo});
-                        if (table.status === 1) {
-                            this.$store.commit('SET_SHOW_PRINTER_BTN', true);
-                            this.preloadPrinted(table.table, table.zakNo);
+                        const self = this;
+                        function lockTable(){
+                            function callback(){
+                                self.$store.commit('SET_SHOW_TABLE_ACTIONS_PANEL', true);
+                                self.$store.commit('SET_CURRENT_TABLE', {'tableId': table.table});
+                                self.$store.commit('SET_CURRENT_ORDER_ID', {'orderId': table.zakNo});
+                                self.$$('[data-id="' + table.table + '"]').addClass('pressed');
+                                if (table.status === 1) {
+                                    self.$store.commit('SET_SHOW_PRINTER_BTN', true);
+                                    self.preloadPrinted(table.table, table.zakNo);
+                                }
+                            }
+                            self.pressed.tableId = table.table;
+                            self.pressed.isPressed = true;
+                            self.pressed.zakNo = table.zakNo;
+                            blocker.blockTable({
+                                tableId: self.pressed.tableId,
+                                zakNo: self.pressed.zakNo,
+                                uuid: self.$store.state.settings.uuid,
+                                //usrId: self.store.state.waiter.waiterId,
+                                callback: callback()
+                            })
                         }
 
-                        this.$$('[data-id="' + table.table + '"]').addClass('pressed');
+                        if (this.pressed.isPressed) {
+                            function callback(){
+                                self.$$('[data-id="' + self.pressed.tableId + '"]').removeClass('pressed');
+                                self.$store.commit('SET_PRELOADED_ORDER', {'preloaded': []});
+                                self.$store.commit('SET_SHOW_PRINTER_BTN', false);
+                                lockTable();
+                            }
+
+                            blocker.unblockTable({
+                                tableId: self.pressed.tableId,
+                                zakNo: self.pressed.zakNo,
+                                uuid: self.$store.state.settings.uuid,
+                                //usrId: self.store.state.waiter.waiterId,
+                                callback: callback()
+                            });
+                        } else {
+                            lockTable();
+                        }
                     }
                 }
             },
