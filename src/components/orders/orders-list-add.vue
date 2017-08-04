@@ -16,7 +16,7 @@
                     <!--{{order.tovar}} / -->{{order.name}}
                     <span v-if="order.kurs > 0"> </span>
                 </f7-col>
-                <f7-col class="order-string" width="20">{{order.count}}x
+                <f7-col class="order-string" width="20">{{order.count}} x
                     {{order.price}}&#8381;
                 </f7-col>
             </f7-grid>
@@ -31,6 +31,7 @@
                 </f7-buttons>
             </div>-->
             <div v-if="showType === 'all'">
+
                 <f7-accordion>
                     <template v-for="items in currentOrderByPosition">
 
@@ -120,10 +121,7 @@
                     </f7-accordion-item>
                 </f7-accordion>
             </div>
-
         </div>
-
-
         <f7-block class="summary">
             Сумма: {{getSumAmount}} руб.
         </f7-block>
@@ -140,6 +138,8 @@
         <f7-block>
             <category/>
         </f7-block>
+
+
     </div>
     <print-order/>
 
@@ -387,6 +387,14 @@
             },
             onSwipeRight(item) {
                 this.$store.dispatch('ADD_POSITION_TO_ORDER', item.el);
+            },
+            onSwipeUp() {
+                this.setView('menu');
+                console.log('up');
+            },
+            onSwipeDown() {
+                this.setView('current');
+                console.log('up');
             },
             scrollToBottom() {
                 let currentPanel = this.$$('.current-panel')[0];
