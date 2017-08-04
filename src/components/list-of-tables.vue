@@ -5,7 +5,7 @@
                 <div class="table" v-for="table in list">
                     <!--<f7-link :href="nextLink">-->
                     <f7-link>
-                        <div class="table-image" :style="getStyle(table.status)" @click="selectTable(table)"
+                        <div class="table-image" :style="getStyle(table)" @click="selectTable(table)"
                              :data-id="table.table">
                             <f7-badge>{{table.status}}</f7-badge>
                         </div>
@@ -104,7 +104,7 @@
                         }
                     }
                 } else {
-                    if (table.status === 1 /*|| table.status === 5*/) {
+                    if (table.status === 1 && table.ocupate === 0/*|| table.status === 5*/) {
                         const self = this;
                         function lockTable(){
                             function callback(){
@@ -175,10 +175,10 @@
                     }))
             },
 
-            getStyle(status) {
+            getStyle(table) {
                 let res = ';background-color: ';
                 let color = '';
-                switch (status) {
+                switch (table.status) {
                     case 0:
                         color = 'green';
                         break;
@@ -193,6 +193,9 @@
                         break;
                     default:
                         break;
+                }
+                if (table.ocupate !== 0){
+                    color = 'black';
                 }
                 res += color + ';';
                 return res;
