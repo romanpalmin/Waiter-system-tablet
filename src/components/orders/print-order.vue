@@ -8,7 +8,7 @@
 </style>
 <script>
     import ls from '../helpers/local-storage.js';
-
+    import blocker from '../helpers/table-blocker.js';
     export default {
         data() {
             return {
@@ -96,11 +96,14 @@
             backToTables() {
                 const self = this;
                 this.$f7.showPreloader('Проверка текущего заказа');
+                let uuid = this.$store.state.settings.uuid;
+                let table = this.$store.state.currentTable;
+                let zakNo = this.$store.state.orders.currentOrderId;
                 if (this.$store.state.orders.printed && this.$store.state.orders.printed.length === 0) {
-                    let uuid = '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7';
+                    //let uuid = this.$store.state.settings.uuid;
                     let usrID = this.$store.state.waiter.id;
-                    let table = this.$store.state.currentTable;
-                    let zakNo = this.$store.state.orders.currentOrderId;
+                    //let table = this.$store.state.currentTable;
+                    //let zakNo = this.$store.state.orders.currentOrderId;
                     let guests = this.$store.state.guestsCount;
                     let numTablet = this.$store.state.tabletNumber;
                     let optionsRec = {
@@ -167,6 +170,13 @@
 
                 function success() {
                     setTimeout(() => {
+                        blocker.unblockTable({
+                            tableId: table,
+                            zakNo,
+                            uuid
+                            //usrId: self.store.state.waiter.waiterId,
+
+                        });
                         self.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
                         self.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
                         self.$store.commit('SET_EDIT_ORDER_PAGE', {'editorder': false});
@@ -223,10 +233,8 @@
                 console.log('Текущая строка');
                 console.log(rows);
                 if (rows && rows.length === 0) {
-                    console.log('Check for empty');
                     console.log('Отправленный на печать заказ');
                     console.log(this.$store.state.orders.printed);
-                    console.log('Размер: ' + this.$store.state.orders.printed.length);
                     let optionsCan = {
                         'cmd_garson': 'CAN', numTablet, zakNo, usrID, table, guests, uuid
                     };
@@ -234,6 +242,13 @@
                     if (this.$store.state.orders.printed && this.$store.state.orders.printed.length === 0) {
                         this.deleteOrder(optionsCan);
                     } else {
+                        blocker.unblockTable({
+                            tableId: table,
+                            zakNo,
+                            uuid,
+                            callback: ()=>{console.log('Разблокируется заказ');}
+                            //usrId: self.store.state.waiter.waiterId,
+                        });
                         this.$router.load({'url': '/tables/', 'reload': true});
                         this.$store.commit('REMOVE_FULL_CURRENT_ORDER');
                         this.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
