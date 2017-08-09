@@ -230,11 +230,7 @@
                     ? '0' + this.$store.state.tabletNumber
                     : this.$store.state.tabletNumber;
                 let rows = this.populateOrderStrings(this.usrID, this.$store.state.currentTable);
-                console.log('Текущая строка');
-                console.log(rows);
                 if (rows && rows.length === 0) {
-                    console.log('Отправленный на печать заказ');
-                    console.log(this.$store.state.orders.printed);
                     let optionsCan = {
                         'cmd_garson': 'CAN', numTablet, zakNo, usrID, table, guests, uuid
                     };
@@ -247,14 +243,12 @@
                             zakNo,
                             uuid,
                             callback: ()=>{
-                                console.log('Разблокируется заказ при печати');
                                 this.$store.commit('REMOVE_FULL_CURRENT_ORDER');
                                 this.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
                                 this.$router.load({'url': '/tables/', 'reload': true});
                             }
                             //usrId: self.store.state.waiter.waiterId,
                         });
-
                     }
                     return;
                 }
@@ -284,9 +278,16 @@
                     .then(response => {
                         this.$f7.hidePreloader();
                         if (typeof response === 'object') {
-                            this.$router.load({'url': '/tables/', 'reload': true});
-                            this.$store.commit('REMOVE_FULL_CURRENT_ORDER');
-                            this.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
+                            blocker.unblockTable({
+                                tableId: table,
+                                zakNo,
+                                uuid,
+                                callback: ()=>{
+                                    this.$store.commit('REMOVE_FULL_CURRENT_ORDER');
+                                    this.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
+                                    this.$router.load({'url': '/tables/', 'reload': true});
+                                }
+                            });
                         }
                     })
 

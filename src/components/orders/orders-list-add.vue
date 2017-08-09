@@ -12,11 +12,11 @@
             </f7-grid>
             <hr />-->
             <f7-grid v-for="order in printed">
-                <f7-col width="80" class="order-string" :data-id="num_str">
+                <f7-col width="75" class="order-string" :data-id="num_str">
                     <!--{{order.tovar}} / -->{{order.name}}
                     <span v-if="order.kurs > 0"> </span>
                 </f7-col>
-                <f7-col class="order-string" width="20">{{order.count}} x
+                <f7-col class="order-string" width="25">{{order.count}} x
                     {{order.price}}&#8381;
                 </f7-col>
             </f7-grid>

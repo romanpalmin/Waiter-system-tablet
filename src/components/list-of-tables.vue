@@ -52,6 +52,7 @@
 </style>
 <script>
     import blocker from './helpers/table-blocker.js';
+
     export default {
         data() {
             return {
@@ -106,8 +107,9 @@
                 } else {
                     if (table.status === 1 && table.ocupate === 0/*|| table.status === 5*/) {
                         const self = this;
-                        function lockTable(){
-                            function callback(){
+
+                        function lockTable() {
+                            function callback() {
                                 self.$store.commit('SET_SHOW_TABLE_ACTIONS_PANEL', true);
                                 self.$store.commit('SET_CURRENT_TABLE', {'tableId': table.table});
                                 self.$store.commit('SET_CURRENT_ORDER_ID', {'orderId': table.zakNo});
@@ -117,6 +119,7 @@
                                     self.preloadPrinted(table.table, table.zakNo);
                                 }
                             }
+
                             self.pressed.tableId = table.table;
                             self.pressed.isPressed = true;
                             self.pressed.zakNo = table.zakNo;
@@ -130,7 +133,7 @@
                         }
 
                         if (this.pressed.isPressed) {
-                            function callback(){
+                            function callback() {
                                 self.$$('[data-id="' + self.pressed.tableId + '"]').removeClass('pressed');
                                 self.$store.commit('SET_PRELOADED_ORDER', {'preloaded': []});
                                 self.$store.commit('SET_SHOW_PRINTER_BTN', false);
@@ -146,6 +149,21 @@
                             });
                         } else {
                             lockTable();
+                        }
+                    } else {
+                        if (table.status === 1 && table.ocupate !== 0 && table.garson === this.$store.state.waiter.id) {
+                            this.$f7.confirm(`Разблокировать стол №${table.table}?`, 'Стол заблокирован',
+                                () => {
+                                    blocker.unblockTable({
+                                            tableId: table.table,
+                                            zakNo: table.zakNo,
+                                            uuid: this.$store.state.settings.uuid,
+                                            callback: () => {
+                                                this.$router.load({'url': '/tables/', 'reload': true});
+                                            }
+                                        }
+                                    );
+                                });
                         }
                     }
                 }
@@ -194,7 +212,7 @@
                     default:
                         break;
                 }
-                if (table.ocupate !== 0){
+                if (table.ocupate !== 0) {
                     color = 'black';
                 }
                 res += color + ';';
