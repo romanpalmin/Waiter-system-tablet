@@ -209,13 +209,9 @@
 
             addOrderFromTablet(){
                 if (!this.CurrentPositionsList) {
-                    console.log('Закрытие окна загрузки, проверка и попытка добавить');
                     if (this.$store.state.orders.loadedFromTablet.length > 0){
                         let orderFromTablet = [];
                         orderFromTablet = this.$store.state.orders.loadedFromTablet;
-                        console.log('Добавляем массив');
-                        console.log(orderFromTablet);
-                        console.log('и очищаем его по завершению');
                         _.forEach(orderFromTablet, item => {
                             if (item){
                                 this.addPositionToOrder(item, false, false);
@@ -247,7 +243,8 @@
                     } else {
                         if (item.complect && item.complect[0] && item.complect[0].code2 !== null && withComplects) {
                             this.alertComplects(item);
-                        } else {
+                        }
+                        else {
                             this.$store.dispatch('ADD_POSITION_TO_ORDER', payload);
                         }
                     }
@@ -259,7 +256,7 @@
                     return +item.code.substring(0, 2) === +id;
                 });
                 buttons = _.map(selectedMods, (item) => {
-                    var button = {};
+                    let button = {};
                     button.text = item.name;
                     button.onClick = () => {
                         if (callback && typeof(callback) === "function") {
@@ -284,7 +281,7 @@
                     return item.name === index;
                 });
                 buttons = _.map(res.items, item => {
-                    var button = {};
+                    let button = {};
                     button.text = item.name_RU;
                     button.onClick = () => {
                         if (callback && typeof(callback) === "function") {
@@ -344,7 +341,7 @@
 
             submitComplectPosition() {
                 if (this.isEnabledComplectAcceptButton) {
-                    var payload = {
+                    let payload = {
                         item: this.sourceComplect,
                         course: 0,
                         waiterId: this.$store.state.waiter.id,
