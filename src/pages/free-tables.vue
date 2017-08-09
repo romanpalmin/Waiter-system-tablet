@@ -8,7 +8,7 @@
                                                  @click="back()"></f7-navbar></span>
             </f7-block>
             <f7-block>
-                <hall-tables :list='getList'/>
+                <free-tables :list='getList'/>
             </f7-block>
         </f7-page>
     </div>
@@ -53,14 +53,12 @@
         },
         components: {
             navbar,
-            'hall-tables': hallTables,
+            'free-tables': hallTables,
             currentList: []
         },
         methods: {
             back() {
-                console.log('Текущий режим1 ' + this.$store.state.pages.addorder);
                 this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
-                console.log('Текущий режим2 ' + this.$store.state.pages.addorder);
             },
             getTablesFromApi() {
                 let list = [];
@@ -69,7 +67,7 @@
                 let cmd_garson = 'getTableSt';
                 let numTablet = this.$store.state.tabletNumber;
                 let usrID = this.$store.state.waiter.id;
-                let uuid = '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7';
+                let uuid = this.$store.state.settings.uuid;
                 let options = {
                     cmd_garson,
                     numTablet,
@@ -83,7 +81,7 @@
                     .then(response => {
                         if (response && response.length > 0) {
                             let filteredTables = _.filter(response, item => {
-                                return (item.status === 0 && +item.table > 0 && +item.table < 100);// || item.status === 2 || item.status === 5);
+                                return (item.status === 0 && +item.table > 0 && +item.table < 100 && item.ocupate === 0);// || item.status === 2 || item.status === 5);
                             });
                             this.$f7.hidePreloader();
                             list = _.map(filteredTables, item => {
@@ -92,7 +90,6 @@
                             this.currentList = _.map(filteredTables, item => {
                                 return item
                             });
-                            console.log(this.currentList);
                             return this.currentList;
                         }
                     })

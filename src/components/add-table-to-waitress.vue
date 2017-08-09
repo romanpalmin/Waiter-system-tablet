@@ -1,6 +1,6 @@
 <template>
     <div>
-        <f7-link href="/hall-tables/" @click="addNewOrder()">
+        <f7-link href="/free-tables/" @click="addNewOrder()">
             <div class="add-table-button"></div>
         </f7-link>
     </div>

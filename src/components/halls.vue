@@ -1,7 +1,7 @@
 <template>
     <div class="halls-list">
         <f7-list v-for="item in list" :key="item.id">
-            <f7-list-item :title="'Зал №' + item.id" link="/hall-tables/" reload
+            <f7-list-item :title="'Зал №' + item.id" link="/free-tables/" reload
                           @click="selectHall(item.id)"></f7-list-item>
         </f7-list>
     </div>

@@ -32,8 +32,8 @@ export default [
         component: require('./pages/tables.vue')
     },
     {
-        path: '/hall-tables/',
-        component: require('./pages/tables-in-hall.vue')
+        path: '/free-tables/',
+        component: require('./pages/free-tables.vue')
     },
     {
         path: '/guest-count/',
