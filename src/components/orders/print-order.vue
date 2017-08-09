@@ -246,12 +246,15 @@
                             tableId: table,
                             zakNo,
                             uuid,
-                            callback: ()=>{console.log('Разблокируется заказ');}
+                            callback: ()=>{
+                                console.log('Разблокируется заказ при печати');
+                                this.$store.commit('REMOVE_FULL_CURRENT_ORDER');
+                                this.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
+                                this.$router.load({'url': '/tables/', 'reload': true});
+                            }
                             //usrId: self.store.state.waiter.waiterId,
                         });
-                        this.$router.load({'url': '/tables/', 'reload': true});
-                        this.$store.commit('REMOVE_FULL_CURRENT_ORDER');
-                        this.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
+
                     }
                     return;
                 }
