@@ -326,5 +326,19 @@ export default {
         state.orders.preloaded = _.map(state.orders.preloaded, (item) => {
             return item
         });
+    },
+
+    /**
+     * Устанавливает заказ из планшета
+     * @param state
+     * @param payload
+     */
+    [m_types.SET_LOADED_FROM_TABLET_ORDER](state, payload) {
+        console.log('Заполняем загрузку из корзины');
+        console.log(payload);
+        state.orders.loadedFromTablet = payload.loaded;
+        state.orders.loadedFromTablet = _.map(state.orders.loadedFromTablet, (item) => {
+            return item
+        });
     }
 }

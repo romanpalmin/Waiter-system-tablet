@@ -145,7 +145,6 @@
 
 </style>
 <script>
-    /*<script lang="javascript">*/
     export default {
         data() {
             return {
@@ -158,7 +157,8 @@
             }
         },
         props: ['CurrentPositionsList'],
-        watch: {},
+        watch: {
+        },
         computed: {
             complected: function () {
                 return this.complect;
@@ -206,7 +206,27 @@
             getName(item) {
                 return item.name_ru;
             },
-            addPositionToOrder(item) {
+
+            addOrderFromTablet(){
+                if (!this.CurrentPositionsList) {
+                    console.log('Закрытие окна загрузки, проверка и попытка добавить');
+                    if (this.$store.state.orders.loadedFromTablet.length > 0){
+                        let orderFromTablet = [];
+                        orderFromTablet = this.$store.state.orders.loadedFromTablet;
+                        console.log('Добавляем массив');
+                        console.log(orderFromTablet);
+                        console.log('и очищаем его по завершению');
+                        _.forEach(orderFromTablet, item => {
+                            if (item){
+                                this.addPositionToOrder(item, false, false);
+                            }
+                        });
+                        this.$store.commit('SET_LOADED_FROM_TABLET_ORDER', {'loaded':[]});
+                    }
+                }
+            },
+
+            addPositionToOrder(item, withMods = true, withComplects = true) {
                 if (this.$store.state.currentGuest && this.$store.state.currentGuest > 0) {
                     let payload = {
                         item: item,
@@ -219,21 +239,18 @@
                         ts: Date.now(),
                         isHeader: true
                     };
-                    if (item.mod !== null) {
+                    if (item.mod !== null && withMods) {
                         this.alertMods(item.mod, (res) => {
                             payload.modsPosition = res;
                             this.$store.dispatch('ADD_POSITION_TO_ORDER', payload);
                         });
                     } else {
-                        if (item.complect && item.complect[0] && item.complect[0].code2 !== null) {
+                        if (item.complect && item.complect[0] && item.complect[0].code2 !== null && withComplects) {
                             this.alertComplects(item);
                         } else {
                             this.$store.dispatch('ADD_POSITION_TO_ORDER', payload);
                         }
                     }
-                    ;
-
-
                 }
             },
             alertMods(id, callback) {
@@ -319,7 +336,7 @@
                         }
                         return item;
                     });
-                })
+                });
                 console.log(this.complect);
                 console.log(this.isEnabledComplectAcceptButton);
 
@@ -341,7 +358,7 @@
                     this.$store.dispatch('ADD_POSITION_TO_ORDER', payload);
 
                     _.forEach(this.complect, (item, index, arr) => {
-                        var payload = {
+                        const payload = {
                             item: item.selected,
                             course: 0,
                             waiterId: this.$store.state.waiter.id,
@@ -356,13 +373,16 @@
                         payload.item = item.selected;*/
                         console.log(payload.item);
                         this.$store.dispatch('ADD_POSITION_TO_ORDER', payload);
-                    })
+                    });
                     console.log(this.$store.state.orders.current);
                 }
             }
         },
         mounted() {
             this.currentList = this.CurrentPositionsList;
+            this.$$('.select-tablet').on('popup:closed', () => {
+                this.addOrderFromTablet();
+            });
         }
     }
 

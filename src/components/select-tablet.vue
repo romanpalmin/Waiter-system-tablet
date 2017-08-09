@@ -67,6 +67,9 @@
                 this.selectedTablet = tabletId;
                 this.getOrderFromTablet(tabletId);
             },
+            /**
+             * Загружаем список планшетов с заданными корзинами
+             */
             async getTabletsOrders() {
                 this.$f7.showPreloader('Загрузка данных планшетов');
                 try {
@@ -79,15 +82,23 @@
                     this.$f7.hidePreloader();
                 }
             },
+
+            /**
+             * Получаем массив code товаров по номеру планшета
+             * */
             getOrderFromTablet(tabletId) {
                 let orders =
                     _.map(
                         _.filter(this.tabletsList, {'planshet': tabletId}),
                         item => {
-                            return item.code; // todo когда появтся дополнительные признаки, добавить
+                            return item.code;
                         });
                 this.formNewOrderList(orders);
             },
+            /**
+             * Заполняем массив товаров по массиву их code'ов
+             * @param ordersList
+             */
             formNewOrderList(ordersList) {
                 if (ordersList.length === 0) return;
                 let arrRes = [];
@@ -96,10 +107,8 @@
                     arrRes.push(
                         _.find(this.$store.state.SourceMenu.items, {'code': code}));
                 });
-                console.log(this.$store.state.FullTree);
-                console.log(this.$store.state.SourceMenu);
-                console.log(arrRes);
-                //this.$f7.closeModal('.select-tablet');
+                this.$store.commit('SET_LOADED_FROM_TABLET_ORDER', {'loaded': arrRes});
+                this.$f7.closeModal('.select-tablet');
             }
         }
     }

@@ -42,7 +42,8 @@ const store = new Vuex.Store({
             summary: 0,
             currentOrderId: 0,
             printed: [],
-            preloaded: []
+            preloaded: [],
+            loadedFromTablet: []
         },
         currentPayload: {},
         showTableActions: false,

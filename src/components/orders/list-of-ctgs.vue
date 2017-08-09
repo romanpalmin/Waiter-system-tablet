@@ -1,46 +1,58 @@
 <template>
     <div class="picker-component">
-            <f7-picker-modal :opened="showBottomMenu" class="current-picker" :style="getPickerStyle()">
-                <f7-navbar class="picker-navbar sub-navbar">
-                    <f7-nav-left v-if="showBack">
-                        <i class="icon icon-back" @click="selectPrevSubMenu()"></i> <a href="#"
-                                                                                       class="title-left_padding"
-                                                                                       @click="selectPrevSubMenu()">{{title}}</a>
+        <f7-picker-modal :opened="showBottomMenu" class="current-picker" :style="getPickerStyle()">
+            <f7-navbar class="picker-navbar sub-navbar">
+                <f7-nav-left v-if="showBack">
+                    <i class="icon icon-back" @click="selectPrevSubMenu()"></i> <a href="#"
+                                                                                   class="title-left_padding"
+                                                                                   @click="selectPrevSubMenu()">{{title}}</a>
+                </f7-nav-left>
+                <f7-nav-center v-if="!showBack">
+                    Меню
+                </f7-nav-center>
+                <f7-nav-right>
+                    <img :src="getImages('exit')" width="30px" @click="togglePicker()">
+                </f7-nav-right>
+            </f7-navbar>
+            <div class="menu-wrapper">
+                <template v-if="!showPositions">
+                    <f7-list v-for="item in currentMenuList" :key="item.code">
+                        <f7-list-item :title="item.name" :data-id="item.code" link="#" class="menu-list-item"
+                                      @click="selectNextSubMenu(item)"/>
+                    </f7-list>
+                </template>
+                <template v-else>
+                    <positions-list :CurrentPositionsList="positionsList"/>
+                </template>
+            </div>
+            <div class="non-display">
+                <positions-list/>
+            </div>
+        </f7-picker-modal>
+        <div @click="togglePicker()">
+            <f7-block class="bottom-menu-bar">
+                <f7-navbar @click="togglePicker()">
+                    <f7-nav-left>
+                        Menu
                     </f7-nav-left>
-                    <f7-nav-center v-if="!showBack">
-                        Меню
-                    </f7-nav-center>
                     <f7-nav-right>
-                        <img :src="getImages('exit')" width="30px" @click="togglePicker()">
+                        <span> top </span>
                     </f7-nav-right>
                 </f7-navbar>
-                <div class="menu-wrapper">
-                    <template v-if="!showPositions">
-                        <f7-list v-for="item in currentMenuList" :key="item.code">
-                            <f7-list-item :title="item.name" :data-id="item.code" link="#" class="menu-list-item"
-                                          @click="selectNextSubMenu(item)"/>
-                        </f7-list>
-                    </template>
-                    <template v-else>
-                        <positions-list :CurrentPositionsList="positionsList"/>
-                    </template>
-                </div>
-            </f7-picker-modal>
-            <div @click="togglePicker()">
-                <f7-block class="bottom-menu-bar">
-                    <f7-navbar @click="togglePicker()">
-                        <f7-nav-left>
-                            Menu
-                        </f7-nav-left>
-                        <f7-nav-right>
-                            <span> top </span>
-                        </f7-nav-right>
-                    </f7-navbar>
-                </f7-block>
-            </div>
+            </f7-block>
+        </div>
     </div>
 </template>
 <style scoped lang="less">
+    .non-display{
+        position: absolute;
+        height: 0;
+        width: 0;
+        background-color: #5ac8fa;
+        bottom: 0;
+        left: 0;
+        display: none;
+    }
     .bottom-menu-bar {
         background-color: #fff;
         position: absolute;
