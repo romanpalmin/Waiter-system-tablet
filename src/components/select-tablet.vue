@@ -44,8 +44,6 @@
             currentTablet: function () {
                 let currentTable = this.$store.state.currentTable;
                 let res = _.find(this.tabletsList, {'table': +currentTable});
-                console.log('Верхняя строка: ');
-                console.log(res);
                 return res;
             }
         },

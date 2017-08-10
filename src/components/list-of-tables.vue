@@ -52,6 +52,7 @@
 </style>
 <script>
     import blocker from './helpers/table-blocker.js';
+    import ajax from './helpers/get-data';
 
     export default {
         data() {
@@ -65,7 +66,8 @@
                     isPressed: false,
                     tableId: null,
                     zakNo: null
-                }
+                },
+                currentInterval: 0
             }
         },
         watch: {
@@ -152,6 +154,19 @@
                         }
                     } else {
                         if (table.status === 1 && table.ocupate !== 0 && table.garson === this.$store.state.waiter.id) {
+                            clearInterval(this.currentInterval);
+                            this.$$('.pressed').removeClass('pressed');
+                            console.log(this.pressed);
+                            blocker.unblockTable({
+                                    tableId: this.pressed.tableId,
+                                    zakNo: this.pressed.zakNo,
+                                    uuid: this.$store.state.settings.uuid,
+                                    callback: () => {
+                                        this.pressed.isPressed = false;
+                                    }
+                                }
+                            );
+
                             this.$f7.confirm(`Разблокировать стол №${table.table}?`, 'Стол заблокирован',
                                 () => {
                                     blocker.unblockTable({
@@ -169,8 +184,8 @@
                 }
             },
 
-            preloadPrinted(tableId, zakNo) {
-                let uuid = '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7';
+            async preloadPrinted(tableId, zakNo) {
+                let uuid = this.$store.state.settings.uuid;
                 let usrID = this.$store.state.waiter.id;
                 let table = tableId;
                 let guests = this.$store.state.guestsCount;
@@ -178,19 +193,15 @@
                 let optionsRec = {
                     'cmd_garson': 'REC', numTablet, zakNo, usrID, table, guests, uuid
                 };
-                this.axios.get(this.$store.getters.apiUrl, {params: optionsRec})
-                    .then(rec => {
-                        if (rec && rec.data && rec.data[0] && rec.data[0].str1 && rec.data[0].str1[0] && rec.data[0].str1[0] && rec.data[0].str1[0].answCode === '0') {
-                            let currentPrinted = rec.data[0].str2;
-                            this.$store.commit('SET_PRELOADED_ORDER', {'preloaded': currentPrinted});
-                        }
-                        else {
-                            throw new Error(rec.data);
-                        }
-                    })
-                    .catch((err => {
-                        this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
-                    }))
+
+                try {
+                    const res = await ajax.getData(optionsRec);
+                    let currentPrinted = res.str2 ? res.str2 : [];
+                    this.$store.commit('SET_PRELOADED_ORDER', {'preloaded': currentPrinted});
+                }
+                catch (err) {
+                    this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
+                }
             },
 
             getStyle(table) {
@@ -227,46 +238,29 @@
                 this.$router.load({'url': '/add-order/', 'reload': true});
             },
 
-            addNewOrder(table) {
-                let url = this.url;
-                let options = {
+            async addNewOrder(table) {
+                let optionsNew = {
                     'cmd_garson': 'NEW',
                     'table': table.table,
                     'numTablet': this.$store.state.tabletNumber,
                     'usrID': this.usrID,
                     'guests': 1,
-                    'uuid': '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7',
+                    'uuid': this.$store.state.settings.uuid,
                     'zakNo': ''
                 };
-                this.axios.get(url, {params: options})
-                    .then((resp) => {
-                        /** генерация тестовой ошибки
-                         throw new Error('Ошибка добавления заказа');
-                         */
-
-                        this.checkForAnswerCode(resp.data, table);
-                    })
-                    .catch((err) => {
-                        this.$f7.hidePreloader();
-                        //console.log('Ошибка создания заказа: ' + err);
-                        if (this.$store.state.settings.isDebug) {
-                            if (table.status && table.status === 1) {
-                                let debugOrderId = 111;
-                                this.nextPage(table.table, debugOrderId);
-                            }
-                        } else { // что то пошло не так, проверяем наличие заказа на столе
-                            this.checkOrderInTables(table.id);
-                        }
-                    });
+                const res = await ajax.getData(optionsNew);
+                if (res) {
+                    this.checkForAnswerCode(res, table)
+                }
+                this.$f7.hidePreloader();
             },
 
             /**
              Проверяем код ответа, в зависимости от кода ответа выбираем действие
              */
             checkForAnswerCode(data, table) {
-                //console.log(data);
-                const resp = data[0].str1[0];
-                if (data[0] && resp && resp.answCode) {
+                const resp = data.str1[0];
+                if (resp.answCode) {
                     switch (resp.answCode) {
                         case '0': // Все ок
                             this.nextPage(table.table, resp.zakaz);
@@ -288,8 +282,6 @@
              В случае успеха сохраняем номер заказа, номер  стола, скрываем прелоадер переходим на следующую страницу
              */
             nextPage(tableId, orderId) {
-                //console.log('Новый заказ: ' + orderId);
-                //console.log('Стол: ' + tableId);
                 this.$f7.hidePreloader();
                 this.$store.commit('SET_CURRENT_TABLE', {'tableId': tableId});
                 this.$store.commit('SET_CURRENT_ORDER_ID', {'orderId': orderId});
@@ -317,7 +309,6 @@
                             let res = _.find(resp.data, (item) => {
                                 return (item.table === +table && item.garson === +this.usrID)
                             });
-                            //console.log(res);
                             // если найден заказ по заданным столу и официанту, считаем, что все ок, переходим на следующую страницу
                             if (res && res.zakNo && res.zakNo > 0) {
                                 this.nextPage(table, res.zakNo);
