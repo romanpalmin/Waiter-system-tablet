@@ -32,6 +32,7 @@
 <script>
     import navbar from '../components/navbar-main.vue';
     import orderlist from '../components/orders/orders-list-add.vue';
+    import ajax from '../components/helpers/ajax';
     export default{
         data(){
             return{
@@ -51,7 +52,7 @@
             'orders-list' : orderlist
         },
         methods:{
-            getPrinted(){
+            async getPrinted(){
                 let uuid = '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7';
                 let usrID = this.$store.state.waiter.id;
                 let table = this.$store.state.currentTable;
@@ -61,8 +62,18 @@
 
                let optionsRec = {
                     'cmd_garson': 'REC', numTablet, zakNo, usrID, table, guests, uuid
-               }
-               this.axios.get(this.$store.getters.apiUrl, {params: optionsRec})
+               };
+                try {
+                    const res = await ajax.getData(optionsRec);
+                    let currentPrinted = res.str2 ? res.str2 : [];
+                    this.$store.commit('SET_PRINTED_ORDER', {'printedOrders': currentPrinted});
+                    this.$f7.hidePreloader();
+                }
+                catch (err) {
+                    this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
+                    this.$f7.hidePreloader();
+                }
+               /*this.axios.get(this.$store.getters.apiUrl, {params: optionsRec})
                     .then(rec=>{
                         console.log(rec.data);
                         if (rec && rec.data && rec.data[0] && rec.data[0].str1 && rec.data[0].str1[0] && rec.data[0].str1[0] && rec.data[0].str1[0].answCode === '0'){
@@ -77,15 +88,13 @@
                         }
                     })
                     .then(currentPrinted=>{
-                        console.log('SECOND!');
-                        console.log(currentPrinted);
                         this.$store.commit('SET_PRINTED_ORDER', {'printedOrders': currentPrinted});
                         this.$f7.hidePreloader();
                     })
                     .catch(err=>{
                         console.log(err);
                         this.$f7.hidePreloader();
-                    })
+                    })*/
             }
         }
     }

@@ -259,8 +259,6 @@
                 return this.$store.state.guestsCount;
             },
             printed: function () {
-                console.log('PRINTED');
-                console.log(this.$store.state.orders.printed);
                 let curOrderItem = {};
                 let printedView = _.map(this.$store.state.orders.printed, item => {
                     curOrderItem = _.filter(this.$store.state.SourceMenu.items, {'code': item.tovar});

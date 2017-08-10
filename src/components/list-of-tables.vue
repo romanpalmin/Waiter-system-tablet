@@ -52,7 +52,7 @@
 </style>
 <script>
     import blocker from './helpers/table-blocker.js';
-    import ajax from './helpers/get-data';
+    import ajax from './helpers/ajax';
 
     export default {
         data() {
