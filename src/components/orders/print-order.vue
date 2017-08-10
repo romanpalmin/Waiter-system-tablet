@@ -9,6 +9,7 @@
 <script>
     import ls from '../helpers/local-storage.js';
     import blocker from '../helpers/table-blocker.js';
+    import ajax from '../helpers/ajax';
     export default {
         data() {
             return {
@@ -89,79 +90,51 @@
             },
 
             printOrderOrTable() {
-                console.log('PRINT SMTH...');
                 console.log(this.$store.state.pages);
             },
 
-            backToTables() {
+            async backToTables() {
                 const self = this;
                 this.$f7.showPreloader('Проверка текущего заказа');
                 let uuid = this.$store.state.settings.uuid;
                 let table = this.$store.state.currentTable;
                 let zakNo = this.$store.state.orders.currentOrderId;
                 if (this.$store.state.orders.printed && this.$store.state.orders.printed.length === 0) {
-                    //let uuid = this.$store.state.settings.uuid;
                     let usrID = this.$store.state.waiter.id;
-                    //let table = this.$store.state.currentTable;
-                    //let zakNo = this.$store.state.orders.currentOrderId;
                     let guests = this.$store.state.guestsCount;
                     let numTablet = this.$store.state.tabletNumber;
                     let optionsRec = {
                         'cmd_garson': 'REC', numTablet, zakNo, usrID, table, guests, uuid
                     };
-                    this.axios.get(this.$store.getters.apiUrl, {params: optionsRec})
-                        .then(rec => {
-                            if (rec && rec.data && rec.data[0] && rec.data[0].str1 && rec.data[0].str1[0] && rec.data[0].str1[0] && rec.data[0].str1[0].answCode === '0') {
-                                let currentPrinted = rec.data[0].str2;
-                                this.$f7.hidePreloader();
-                                return currentPrinted;
-                            }
-                            else {
-                                throw new Error(rec.data);
-                            }
-                        })
-                        .then(currentPrinted => {
-                            console.log(currentPrinted);
-                            if (currentPrinted && currentPrinted.length > 0) {
-                                console.log('Оставляем все как есть');
-                                /*this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
-                                 this.$router.load({'url':'/tables/', 'reload':true});*/
-                                success();
-                            } else {
-                                console.log('Обнуляем заказ');
-                                this.$f7.hidePreloader();
-
-                                this.$f7.confirm('Заказ будет удален', 'Вы уверены?', () => {
-                                        optionsRec.cmd_garson = 'CAN';
-                                        this.$f7.showPreloader('Удаление текущего заказа');
-                                        this.axios.get(this.$store.getters.apiUrl, {params: optionsRec})
-                                            .then(resp => {
-                                                console.log(resp);
-                                                this.$f7.hidePreloader();
-                                                this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
-                                                setTimeout(() => {
-                                                    this.$router.load({'url': '/tables/', 'reload': true});
-                                                }, 0);
-                                            })
-                                            .catch(err => {
-                                                this.$f7.hidePreloader();
-                                                this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
-                                                success();
-                                                /*this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
-                                                 this.$router.load({'url':'/tables/', 'reload':true});
-                                                 this.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
-                                                 this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
-                                                 this.$router.load({'url':'/tables/', 'reload':true});*/
-                                            })
-
-                                    }
-                                );
-                            }
-                        })
-                        .catch((err => {
+                    try {
+                        const res = await ajax.getData(optionsRec);
+                        let currentPrinted = res.str2 ? res.str2 : [];
+                        if (currentPrinted && currentPrinted.length > 0) {
+                            console.log('Оставляем все как есть');
+                            success();
                             this.$f7.hidePreloader();
-                            this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
-                        }))
+                        } else {
+                            console.log('Обнуляем заказ');
+                            this.$f7.hidePreloader();
+                            const optionsDel = Object.assign({}, optionsRec, {'cmd_garson': 'CAN'});
+                            blocker.unblockTable({
+                                tableId: table,
+                                zakNo,
+                                uuid,
+                                callback: ()=>{
+                                    this.deleteOrder(optionsDel);
+                                }
+                            });
+
+                        }
+
+                    }
+                    catch (err) {
+                        this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
+                        this.$f7.hidePreloader();
+
+                    }
+
                 } else {
                     this.$f7.hidePreloader();
                     console.log('Оставляем');
@@ -192,35 +165,32 @@
             },
 
             deleteOrder(optionsCan) {
-                this.$f7.confirm('Заказ будет удален', 'Вы уверены?', () => {
+                console.log(optionsCan);
+                this.$f7.confirm('Заказ будет удален', 'Вы уверены?', async () => {
                         this.$f7.showPreloader('Удаление текущего заказа');
-                        this.axios.get(this.$store.getters.apiUrl, {params: optionsCan})
-                            .then(resp => {
-                                console.log(resp);
-                                this.$f7.hidePreloader();
-                                this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
-                                setTimeout(() => {
-                                    console.log('Выждем какое-то время');
-                                    this.$router.load({'url': '/tables/', 'reload': true});
-                                }, 0);
-                            })
-                            .catch(err => {
-                                this.$f7.hidePreloader();
-                                this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
-                                this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
-                                this.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
-                                setTimeout(() => {
-                                    console.log('Выждем какое-то время');
-                                    this.$router.load({'url': '/tables/', 'reload': true});
-                                }, 0);
-                            })
-
+                        try {
+                            const del = await ajax.getData(optionsCan);
+                            this.$f7.hidePreloader();
+                            this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
+                            setTimeout(() => {
+                                this.$router.load({'url': '/tables/', 'reload': true});
+                            }, 0);
+                        }
+                        catch (err){
+                            this.$f7.hidePreloader();
+                            this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
+                            this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
+                            this.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
+                            setTimeout(() => {
+                                 this.$router.load({'url': '/tables/', 'reload': true});
+                            }, 0);
+                        }
                     }
                 );
             },
 
-            addNewOrder() {
-                let uuid = '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7';
+            async addNewOrder() {
+                let uuid = this.$store.state.settings.uuid;
                 let usrID = this.$store.state.waiter.id;
                 let table = this.$store.state.currentTable;
                 let zakNo = this.$store.state.orders.currentOrderId;
@@ -247,7 +217,6 @@
                                 this.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
                                 this.$router.load({'url': '/tables/', 'reload': true});
                             }
-                            //usrId: self.store.state.waiter.waiterId,
                         });
                     }
                     return;
@@ -257,12 +226,41 @@
                     'cmd_garson': 'ADD', numTablet, usrID, table, zakNo, guests,
                     'rows': rows, uuid
                 };
+                try {
+                    const add = await ajax.getData(optionsAdd);
+                    console.log(add);
+                    let str = add.str1[0] ?  add.str1[0] : '';
+                    if (str){
+                        this.$f7.hidePreloader();
+                        if (typeof str === 'object') {
+                            blocker.unblockTable({
+                                tableId: table,
+                                zakNo,
+                                uuid,
+                                callback: ()=>{
+                                    this.$store.commit('REMOVE_FULL_CURRENT_ORDER');
+                                    this.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
+                                    this.$router.load({'url': '/tables/', 'reload': true});
+                                }
+                            });
+                        } else {
+                            this.$f7.hidePreloader();
+                            throw new Error(str.answText);
+                        }
+                    }
+                }
+                catch (err){
+                    console.log(err);
+                    this.$f7.hidePreloader();
+                    if (err) {
+                        this.$f7.alert(`Ошибка ${err}`, 'Ошибка!');
+                    } else {
+                        this.$f7.alert(`Неизвестная ошибка`, 'Ошибка!');
+                    }
+                }
 
-                let optionsRec = {
-                    'cmd_garson': 'REC', numTablet, zakNo, usrID, table, guests, uuid
-                };
                 //this.$f7.hidePreloader();
-                this.axios.get(this.$store.getters.apiUrl, {params: optionsAdd})
+                /*this.axios.get(this.$store.getters.apiUrl, {params: optionsAdd})
                     .then((resp) => {
                         let response = {};
                         if (resp && resp.data && resp.data[0] && resp.data[0].str1 && resp.data[0].str1[0]) {
@@ -300,7 +298,7 @@
                         } else {
                             this.$f7.alert(`Неизвестная ошибка`, 'Ошибка!');
                         }
-                    }))
+                    }))*/
             },
 
             populateOrderStrings(userId, tableId) {

@@ -73,28 +73,7 @@
                     this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
                     this.$f7.hidePreloader();
                 }
-               /*this.axios.get(this.$store.getters.apiUrl, {params: optionsRec})
-                    .then(rec=>{
-                        console.log(rec.data);
-                        if (rec && rec.data && rec.data[0] && rec.data[0].str1 && rec.data[0].str1[0] && rec.data[0].str1[0] && rec.data[0].str1[0].answCode === '0'){
-                            let currentPrinted = rec.data[0].str2;
-                            console.log(currentPrinted);
-                            this.$f7.hidePreloader();
-                            return currentPrinted;
-                        }
-                        else {
-                            console.log(rec.data);
-                            throw new Error(rec.data);
-                        }
-                    })
-                    .then(currentPrinted=>{
-                        this.$store.commit('SET_PRINTED_ORDER', {'printedOrders': currentPrinted});
-                        this.$f7.hidePreloader();
-                    })
-                    .catch(err=>{
-                        console.log(err);
-                        this.$f7.hidePreloader();
-                    })*/
+
             }
         }
     }
