@@ -53,7 +53,7 @@
             beginFormOrder() {
                 if (this.currentGuestCount) {
                     this.$store.commit('SET_CURRENT_GUESTS', {'guestsCount': this.currentGuestCount});
-                    console.log('переходим к оформлению заказа');
+                    this.$store.commit('SET_EDIT_ORDER_PAGE', {'editorder': true});
                     this.$router.load({url: '/add-order/', reload: true});
                 }
             }

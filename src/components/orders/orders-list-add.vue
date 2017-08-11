@@ -378,6 +378,7 @@
             this.openGuest(1);
             this.setHandlers();
             this.$store.commit('SET_ACTIVE_ORDER_PANEL', {'status': 'menu'});
+            console.log(this);
         },
         methods: {
             onSwipeLeft(item) {

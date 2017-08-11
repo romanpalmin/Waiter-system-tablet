@@ -16,16 +16,22 @@
             <f7-nav-center v-if="this.$store.state.pages.password"> {{this.$store.state.waiter.shortFullName}}
             </f7-nav-center>
             <f7-nav-right>
+                <span @click="printOrder()" class="print-order-or-table"
+                      v-if="this.$store.state.pages.editorder">
+                    <div class="avatar images print-order-or-table"
+                         :style="getStyle('printer')">
+                    </div>
+                </span>
                 <!--<span @click="print()" class="print-order-or-table"
                       v-if="!this.$store.state.pages.main && !this.$store.state.pages.password && !this.$store.state.pages.users"><div
                         class="avatar images print-order-or-table"
-                        :style="getStyle('printer')"></div></span>-->
+                        :style="getStyle('printer')"></div></span>
                 <span @click="print()" class="print-order-or-table"
                       v-if="this.$store.state.showPrinterBtn">
                     <div class="avatar images print-order-or-table"
                          :style="getStyle('printer')">
                     </div>
-                </span>
+                </span>-->
 
             </f7-nav-right>
         </f7-navbar>
@@ -85,8 +91,9 @@
     }
 </style>
 <script>
-    import logout from './mixins/logout.js'
-    import leftPanel from './left-panel.vue'
+    import logout from './mixins/logout.js';
+    import leftPanel from './left-panel.vue';
+    import printer from './helpers/print-orders';
 
     export default {
         data() {
@@ -140,7 +147,7 @@
                 let zakNo = this.$store.state.orders.currentOrderId;
                 this.$store.commit('SET_SHOW_PRINTER_BTN', false);
                 this.$store.commit('SET_SHOW_TABLE_ACTIONS_PANEL', false);
-                let options = {'cmd_garson': 'CHT', zakNo, usrID, table, uuid}
+                let options = {'cmd_garson': 'CHT', zakNo, usrID, table, uuid};
                 console.log(options);
                 this.axios.get(this.$store.getters.apiUrl, {params: options})
                     .then(result => {
@@ -155,6 +162,9 @@
                         this.$f7.hidePreloader();
                         this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
                     })
+            },
+            printOrder(){
+                printer.addStringsToOrder(this);
             }
         },
         components: {

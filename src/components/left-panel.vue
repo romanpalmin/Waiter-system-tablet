@@ -9,7 +9,7 @@
                 <f7-link href="#" open-popup data-popup=".select-tablet" close-panel>Загрузить данные</f7-link>
             </p>
             <p>
-                <f7-link href="#" class="print-order" close-panel>Отправить на печать</f7-link>
+                <!--<f7-link href="#" class="print-order" close-panel>Отправить на печать</f7-link>-->
             </p>
         </f7-block>
         <f7-block-title>Навигация</f7-block-title>
@@ -51,6 +51,7 @@
     import selectTablet from './select-tablet.vue';
     import printOrder from './orders/print-order.vue';
     import logout from './mixins/logout.js'
+    import print from '../components/helpers/print-orders'
 
     export default {
         data() {
