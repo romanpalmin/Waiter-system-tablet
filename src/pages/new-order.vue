@@ -53,7 +53,7 @@
         },
         methods:{
             async getPrinted(){
-                let uuid = '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7';
+                let uuid = this.$store.state.settings.uuid;
                 let usrID = this.$store.state.waiter.id;
                 let table = this.$store.state.currentTable;
                 let zakNo = this.$store.state.orders.currentOrderId;

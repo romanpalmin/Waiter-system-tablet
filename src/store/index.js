@@ -14,7 +14,7 @@ const store = new Vuex.Store({
             urlModel: '10.10.182.11/planshet/hs/model',*/
             login: 'planshet',
             pass: 'planshet',
-            uuid: '64$fe$f2$72$6a$0e$34$f1$51$7c$2a$54$b2$b0$d7$e7'
+            uuid:this.$store.state.settings.uuid
         },
         tabletNumber: '13',
         waiter: {},

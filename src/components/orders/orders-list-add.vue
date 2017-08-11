@@ -1,28 +1,37 @@
 <template>
     <div>
-        <div class="printed-order printed-panel passiv-printed-panel" @click="setView('printed')"
-             v-if="printed.length > 0">
-            Отправленный на печать заказ
-            <hr/>
-            <!--<f7-grid>
-                <f7-col  width="60">
-                    Наименование
-                </f7-col>
-                <f7-col width="7">Количество</f7-col>
-            </f7-grid>
-            <hr />-->
-            <f7-grid v-for="order in printed">
-                <f7-col width="75" class="order-string" :data-id="num_str">
-                    <!--{{order.tovar}} / -->{{order.name}}
+        <template v-if="printed.length > 0">
+
+            <div>
+                Отправленный на печать заказ
+                <hr/>
+            </div>
+            <div class="printed-order printed-panel passiv-printed-panel" @click="setView('printed')">
+                <!--Отправленный на печать заказ
+
+                <hr/>-->
+                <!--<f7-grid>
+                    <f7-col  width="60">
+                        Наименование
+                    </f7-col>
+                    <f7-col width="7">Количество</f7-col>
+                </f7-grid>
+                <hr />-->
+                <f7-grid v-for="order in printed">
+                    <f7-col width="75" class="order-string" :data-id="num_str">
+                        <!--{{order.tovar}} / -->{{order.name}}
                     <span v-if="order.kurs > 0"> </span>
-                </f7-col>
-                <f7-col class="order-string" width="25">{{order.count}} x
+                    </f7-col>
+                    <f7-col class="order-string" width="25">{{order.count}} x
                     {{order.price}}&#8381;
-                </f7-col>
-            </f7-grid>
-        </div>
+
+                    </f7-col>
+                </f7-grid>
+            </div>
+        </template>
         <div class="list-of-orders current-panel passiv-current-panel" @click="setView('current')">
             Текущий заказ
+
             <hr/>
             <!--<div class="select-view-type">
                 <f7-buttons color="gray" class="btns-type-list">
@@ -44,7 +53,7 @@
                                         <span>
                                            {{getShortName(items.el.item.name)}}
                                             <template
-                                                    v-if="items.el.modsPosition !== '' && items.el.modsPosition !== ' '">
+                                                v-if="items.el.modsPosition !== '' && items.el.modsPosition !== ' '">
                                                        / <!--{{getModsPositionName(items.el.modsPosition)}}-->M1
                                             </template>
                                             <template v-if="items.el.modsCommon !== '' && items.el.modsCommon !== ' '">
@@ -62,6 +71,7 @@
                                             <f7-col class="order-string" width="14">{{items.el.item.price}}&#8381;</f7-col>-->
                                             <f7-col class="order-string nowrap" width="25">{{items.count}} x
                                                 {{items.el.item.price}}&#8381;
+
                                             </f7-col>
                                         </f7-grid>
                                     </f7-accordion-toggle>
@@ -94,7 +104,7 @@
                                                     <span>{{items.el.item.name}}
                                                      {{items.el.item.modsPosition}}
                                                        <template
-                                                               v-if="items.el.modsPosition !== '' && items.el.modsPosition !== ' '">
+                                                            v-if="items.el.modsPosition !== '' && items.el.modsPosition !== ' '">
                                                                    / {{getModsPositionName(items.el.modsPosition)}}
                                                         </template>
                                                         <template
@@ -106,6 +116,7 @@
                                                     <f7-col class="order-string" width="7">{{items.count}}</f7-col>
                                                     <f7-col class="order-string" width="4">X</f7-col>
                                                     <f7-col class="order-string" width="12">{{items.el.item.price}} руб.
+
                                                     </f7-col>
                                                 </f7-grid>
                                             </f7-accordion-toggle>
@@ -124,6 +135,7 @@
         </div>
         <f7-block class="summary">
             Сумма: {{getSumAmount}} руб.
+
         </f7-block>
         <!--<f7-block class="summary">
             <p class="buttons-row bottom-buttons">
