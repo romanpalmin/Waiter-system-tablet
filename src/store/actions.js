@@ -98,17 +98,17 @@ export default {
      */
         [a_types.GET_MENU]({commit}) {
         console.log('Загружаем меню');
-        //let url = store.getters.apiUrlModel;
-        let url = store.getters.apiUrl;
-        /*let options = {
+        let url = store.getters.apiUrlModel;
+        //let url = store.getters.apiUrl;
+        let options = {
          'groups': '',
          'category': '',
          'data': 1,
          'uuid': store.state.settings.uuid
-         };*/
-        let options = {
+         };
+/*        let options = {
             'menuGarson': 1,
-        };
+        };*/
         axios.get(url, {params: options})
             .then(resp => {
                 console.log('Меню:');
