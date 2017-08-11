@@ -80,7 +80,6 @@
                     this.backToTables();
                 });
                 this.$$('.print-order-or-table').on('click', () => {
-                    console.log(12345);
                     this.printOrderOrTable();
                 });
 
@@ -121,20 +120,16 @@
                                 tableId: table,
                                 zakNo,
                                 uuid,
-                                callback: ()=>{
+                                callback: () => {
                                     this.deleteOrder(optionsDel);
                                 }
                             });
-
                         }
-
                     }
                     catch (err) {
                         this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
                         this.$f7.hidePreloader();
-
                     }
-
                 } else {
                     this.$f7.hidePreloader();
                     console.log('Оставляем');
@@ -176,13 +171,13 @@
                                 this.$router.load({'url': '/tables/', 'reload': true});
                             }, 0);
                         }
-                        catch (err){
+                        catch (err) {
                             this.$f7.hidePreloader();
                             this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
                             this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
                             this.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
                             setTimeout(() => {
-                                 this.$router.load({'url': '/tables/', 'reload': true});
+                                this.$router.load({'url': '/tables/', 'reload': true});
                             }, 0);
                         }
                     }
@@ -212,7 +207,7 @@
                             tableId: table,
                             zakNo,
                             uuid,
-                            callback: ()=>{
+                            callback: () => {
                                 this.$store.commit('REMOVE_FULL_CURRENT_ORDER');
                                 this.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
                                 this.$router.load({'url': '/tables/', 'reload': true});
@@ -229,15 +224,15 @@
                 try {
                     const add = await ajax.getData(optionsAdd);
                     console.log(add);
-                    let str = add.str1[0] ?  add.str1[0] : '';
-                    if (str){
+                    let str = add.str1[0] ? add.str1[0] : '';
+                    if (str) {
                         this.$f7.hidePreloader();
                         if (typeof str === 'object') {
                             blocker.unblockTable({
                                 tableId: table,
                                 zakNo,
                                 uuid,
-                                callback: ()=>{
+                                callback: () => {
                                     this.$store.commit('REMOVE_FULL_CURRENT_ORDER');
                                     this.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
                                     this.$router.load({'url': '/tables/', 'reload': true});
@@ -249,7 +244,7 @@
                         }
                     }
                 }
-                catch (err){
+                catch (err) {
                     console.log(err);
                     this.$f7.hidePreloader();
                     if (err) {
@@ -259,46 +254,7 @@
                     }
                 }
 
-                //this.$f7.hidePreloader();
-                /*this.axios.get(this.$store.getters.apiUrl, {params: optionsAdd})
-                    .then((resp) => {
-                        let response = {};
-                        if (resp && resp.data && resp.data[0] && resp.data[0].str1 && resp.data[0].str1[0]) {
-                            response = resp.data[0].str1[0];
-                            console.log(response);
-                            return response;
-                        } else {
-                            console.log('Бросаем ошибку');
-                            throw new Error(resp.data[0].text);
 
-                        }
-                    })
-                    .then(response => {
-                        this.$f7.hidePreloader();
-                        if (typeof response === 'object') {
-                            blocker.unblockTable({
-                                tableId: table,
-                                zakNo,
-                                uuid,
-                                callback: ()=>{
-                                    this.$store.commit('REMOVE_FULL_CURRENT_ORDER');
-                                    this.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
-                                    this.$router.load({'url': '/tables/', 'reload': true});
-                                }
-                            });
-                        }
-                    })
-
-                    .catch((err => {
-
-                        console.log(err);
-                        this.$f7.hidePreloader();
-                        if (err) {
-                            this.$f7.alert(`Ошибка ${err}`, 'Ошибка!');
-                        } else {
-                            this.$f7.alert(`Неизвестная ошибка`, 'Ошибка!');
-                        }
-                    }))*/
             },
 
             populateOrderStrings(userId, tableId) {

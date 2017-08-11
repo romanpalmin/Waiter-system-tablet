@@ -207,6 +207,9 @@
                 return item.name_ru;
             },
 
+            /**
+             * Добавление заказа с планшета пользователя
+             */
             addOrderFromTablet(){
                 if (!this.CurrentPositionsList) {
                     if (this.$store.state.orders.loadedFromTablet.length > 0){
@@ -214,7 +217,7 @@
                         orderFromTablet = this.$store.state.orders.loadedFromTablet;
                         _.forEach(orderFromTablet, item => {
                             if (item){
-                                this.addPositionToOrder(item, false, false);
+                                this.addPositionToOrder(item, true, true);
                             }
                         });
                         this.$store.commit('SET_LOADED_FROM_TABLET_ORDER', {'loaded':[]});
