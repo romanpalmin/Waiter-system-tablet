@@ -29,38 +29,39 @@
                                   class="no-fastclick">
                         {{item.price}} руб.
 
+
                     </f7-list-item>
                 </f7-list>
             </div>
         </div>
+        <template v-if="CurrentPositionsList">
+            <div class="popup popup-complect">
+                <div class="content-block">
+                    <f7-block-title>Формирование комплексного заказа</f7-block-title>
 
-        <div class="popup popup-complect">
-            <div class="content-block">
-                <f7-block-title>Формирование комплексного заказа</f7-block-title>
-
-                <div class="list-of-positions">
-                    <f7-list>
-                        <template v-for="(item, index) in complected">
-                            <template v-if="item.items.length===1">
-                                <f7-list-item :title="item.name">{{item.selected.name_RU}}</f7-list-item>
+                    <div class="list-of-positions">
+                        <f7-list>
+                            <template v-for="(item, index) in complected">
+                                <template v-if="item.items.length===1">
+                                    <f7-list-item :title="item.name">{{item.selected.name_RU}}</f7-list-item>
+                                </template>
+                                <template v-if="item.length > 1">
+                                    <f7-list-item :title="item.name" @click="openSubmenu(item.name)">
+                                        <f7-link v-if="!item.selected">Выбрать</f7-link>
+                                        <f7-link v-if="item.selected">{{item.selected.name_RU}}</f7-link>
+                                    </f7-list-item>
+                                </template>
                             </template>
-                            <template v-if="item.length > 1">
-                                <f7-list-item :title="item.name" @click="openSubmenu(item.name)">
-                                    <f7-link v-if="!item.selected">Выбрать</f7-link>
-                                    <f7-link v-if="item.selected">{{item.selected.name_RU}}</f7-link>
-                                </f7-list-item>
-                            </template>
-                        </template>
-                    </f7-list>
+                        </f7-list>
+                    </div>
+                    <p class="buttons-row bottom-buttons">
+                        <a href="#" class="button  button-big  button-raised close-popup">Отменить</a>
+                        <a href="#" class="button button-big  button-raised  close-popup"
+                           :disabled="!isEnabledComplectAcceptButton" @click="submitComplectPosition">Подтвердить</a>
+                    </p>
                 </div>
-                <p class="buttons-row bottom-buttons">
-                    <a href="#" class="button  button-big  button-raised close-popup">Отменить</a>
-                    <a href="#" class="button button-big  button-raised  close-popup"
-                       :disabled="!isEnabledComplectAcceptButton" @click="submitComplectPosition">Подтвердить</a>
-                </p>
             </div>
-
-        </div>
+        </template>
     </div>
 
 </template>
@@ -157,8 +158,7 @@
             }
         },
         props: ['CurrentPositionsList'],
-        watch: {
-        },
+        watch: {},
         computed: {
             complected: function () {
                 return this.complect;
@@ -212,15 +212,15 @@
              */
             addOrderFromTablet(){
                 if (!this.CurrentPositionsList) {
-                    if (this.$store.state.orders.loadedFromTablet.length > 0){
+                    if (this.$store.state.orders.loadedFromTablet.length > 0) {
                         let orderFromTablet = [];
                         orderFromTablet = this.$store.state.orders.loadedFromTablet;
                         _.forEach(orderFromTablet, item => {
-                            if (item){
+                            if (item) {
                                 this.addPositionToOrder(item, true, true);
                             }
                         });
-                        this.$store.commit('SET_LOADED_FROM_TABLET_ORDER', {'loaded':[]});
+                        this.$store.commit('SET_LOADED_FROM_TABLET_ORDER', {'loaded': []});
                     }
                 }
             },
@@ -244,7 +244,7 @@
                             this.$store.dispatch('ADD_POSITION_TO_ORDER', payload);
                         });
                     } else {
-                        if (item.complect && item.complect[0] && item.complect[0].code2 !== null && withComplects) {
+                        if (item.complect && item.complect[0] && item.complect[0].code2 !== null && withComplects && this.CurrentPositionsList) {
                             this.alertComplects(item);
                         }
                         else {
@@ -304,8 +304,6 @@
             },
 
             alertComplects(item) {
-                console.log(item);
-                console.log(item.complect);
                 this.sourceComplect = item;
                 let groupped = _.groupBy(item.complect, 'groupName');
                 console.log(groupped);
@@ -320,7 +318,6 @@
                     item.items = arr[index];
                     return item;
                 });
-                console.log(this.complect);
                 this.$store.commit('SET_ACTIVE_ORDER_PANEL', {'status': 'current'});
                 this.$f7.popup('.popup-complect');
 
@@ -369,12 +366,8 @@
                             ts: Date.now(),
                             isHeader: false
                         };
-                        /*payload.isHeader = false;
-                        payload.item = item.selected;*/
-                        console.log(payload.item);
                         this.$store.dispatch('ADD_POSITION_TO_ORDER', payload);
                     });
-                    console.log(this.$store.state.orders.current);
                 }
             }
         },
