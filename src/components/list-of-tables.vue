@@ -11,7 +11,6 @@
                         </div>
                     </f7-link>
                     <div class="table-title">№{{table.table}}</div>
-
                 </div>
             </div>
         </f7-block>
@@ -185,6 +184,7 @@
             },
 
             async preloadPrinted(tableId, zakNo) {
+                this.$store.commit('SET_SHOW_PRELOADER_SPINNER', true);
                 let uuid = this.$store.state.settings.uuid;
                 let usrID = this.$store.state.waiter.id;
                 let table = tableId;
@@ -198,9 +198,11 @@
                     const res = await ajax.getData(optionsRec);
                     let currentPrinted = res.str2 ? res.str2 : [];
                     this.$store.commit('SET_PRELOADED_ORDER', {'preloaded': currentPrinted});
+                    this.$store.commit('SET_SHOW_PRELOADER_SPINNER', false);
                 }
                 catch (err) {
                     this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
+                    this.$store.commit('SET_SHOW_PRELOADER_SPINNER', false);
                 }
             },
 

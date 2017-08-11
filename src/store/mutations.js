@@ -307,6 +307,15 @@ export default {
         state.showPrinterBtn = payload;
     },
 
+    /**
+     * Устанавливает признак показа спиннера предзагрузки заказа
+     * @param state
+     * @param payload true/false
+     */
+    [m_types.SET_SHOW_PRELOADER_SPINNER](state, payload) {
+        state.showOrderPreloaderSpinner = payload;
+    },
+
 
     /**
      * Устанавливает состояния панелей на экране добавления заказа

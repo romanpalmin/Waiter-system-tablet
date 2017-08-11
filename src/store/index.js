@@ -48,6 +48,7 @@ const store = new Vuex.Store({
         currentPayload: {},
         showTableActions: false,
         showPrinterBtn: false,
+        showOrderPreloaderSpinner: false,
         openedPanel: {
             status: 'menu',
             printed: false,

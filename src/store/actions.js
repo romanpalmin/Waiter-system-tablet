@@ -10,7 +10,7 @@ export default {
      * Добавояет товар в текущий заказ
      * @param payload - параметры (item, table, course, waiterId...)
      */
-    [a_types.ADD_POSITION_TO_ORDER]({commit, dispatch}, payload) {
+        [a_types.ADD_POSITION_TO_ORDER]({commit, dispatch}, payload) {
         payload.callback = () => {
             dispatch('CALCULATE_ORDER_SUMMARY', payload.tableId);
         };
@@ -22,19 +22,19 @@ export default {
      * Удаляет товар из массива заказов текущего пользователя
      * @param payload - параметры (item, table, course ...)
      */
-    [a_types.REMOVE_POSITION_FROM_ORDER]({state, commit, dispatch}, payload) {
+        [a_types.REMOVE_POSITION_FROM_ORDER]({state, commit, dispatch}, payload) {
         console.log(state.orders.current);
         console.log(payload);
         let index = _.findLastIndex(state.orders.current, function (items) {
             return (
-                items.item.code === payload.item.code &&
-                items.course === payload.course &&
-                items.tableId === payload.tableId &&
-                items.waiterId === payload.waiterId &&
-                items.guestId === payload.guestId &&
-                items.isHeader === payload.isHeader &&
-                items.currentCount === payload.currentCount &&
-                items.modsPosition === payload.modsPosition)
+            items.item.code === payload.item.code &&
+            items.course === payload.course &&
+            items.tableId === payload.tableId &&
+            items.waiterId === payload.waiterId &&
+            items.guestId === payload.guestId &&
+            items.isHeader === payload.isHeader &&
+            items.currentCount === payload.currentCount &&
+            items.modsPosition === payload.modsPosition)
         });
         let comitPayload = {
             'index': index,
@@ -49,7 +49,7 @@ export default {
      * Удаляет строку заказа из массива заказов текущего пользователя
      * @param payload - параметры (item, table, course ...)
      */
-    [a_types.REMOVE_POSITION_STRING_FROM_ORDER]({state, commit, dispatch}, payload) {
+        [a_types.REMOVE_POSITION_STRING_FROM_ORDER]({state, commit, dispatch}, payload) {
         let indexArr = [];
         let cursor = 0;
         let comitPayload = {
@@ -79,7 +79,7 @@ export default {
      * Подсчитывает ткущую сумму заказа
      * @param tableId - id стола
      */
-    [a_types.CALCULATE_ORDER_SUMMARY]({state, commit}, tableId) {
+        [a_types.CALCULATE_ORDER_SUMMARY]({state, commit}, tableId) {
         // отфильтровываем строки для текущего стола
         let currentTableOrder = _.filter(state.orders.current, (item) => {
             return item.tableId === tableId
@@ -96,14 +96,18 @@ export default {
     /**
      * Получение полного меню
      */
-    [a_types.GET_MENU]({commit}) {
+        [a_types.GET_MENU]({commit}) {
         console.log('Загружаем меню');
-        let url = store.getters.apiUrlModel;
+        //let url = store.getters.apiUrlModel;
+        let url = store.getters.apiUrl;
+        /*let options = {
+         'groups': '',
+         'category': '',
+         'data': 1,
+         'uuid': store.state.settings.uuid
+         };*/
         let options = {
-            'groups': '',
-            'category': '',
-            'data': 1,
-            'uuid': store.state.settings.uuid
+            'menuGarson': 1,
         };
         axios.get(url, {params: options})
             .then(resp => {
@@ -123,6 +127,7 @@ export default {
             if (json.groups && json.groups.length === 0) {
                 return;
             }
+            // todo добавить проверку
             let roots = _.filter(json.groups, function (item) {
                 if (item.parrent_code === '') {
                     // заполняем первый уровень
@@ -190,7 +195,7 @@ export default {
      * @param commit
      * @param payload пераметры ( URL или JSON, callback )
      */
-    [a_types.LOAD_COMMON_MODS]({commit}, payload) {
+        [a_types.LOAD_COMMON_MODS]({commit}, payload) {
         let result = modsCommon;
         let commitPayload = {};
 
@@ -206,7 +211,7 @@ export default {
      * @param commit
      * @param payload пераметры ( URL или JSON, callback  )
      */
-    [a_types.LOAD_POSITIONS_MODS]({commit}, payload) {
+        [a_types.LOAD_POSITIONS_MODS]({commit}, payload) {
         let result = _.filter(modsPosition, (item) => {
             return item.code.length > 2;
         });
