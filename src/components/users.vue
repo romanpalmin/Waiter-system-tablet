@@ -30,7 +30,6 @@
         },
         methods: {
             getWaiter(item) {
-                console.log(item);
                 this.$store.commit('SET_WAITER', {'waiter': item});
                 this.$store.commit('SET_USERS_PAGE', {'users': false});
                 this.$store.commit('SET_PASSWORD_PAGE', {'password': true});
