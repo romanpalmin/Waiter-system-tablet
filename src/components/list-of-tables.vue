@@ -153,9 +153,9 @@
                         }
                     } else {
                         if (table.status === 1 && table.ocupate !== 0 && table.garson === this.$store.state.waiter.id) {
-                            clearInterval(this.currentInterval);
                             this.$$('.pressed').removeClass('pressed');
-                            console.log(this.pressed);
+                            this.$store.commit('SET_PRELOADED_ORDER', {'preloaded': []});
+                            this.$store.commit('SET_SHOW_TABLE_ACTIONS_PANEL', false);
                             blocker.unblockTable({
                                     tableId: this.pressed.tableId,
                                     zakNo: this.pressed.zakNo,

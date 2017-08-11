@@ -47,7 +47,6 @@ export default {
         };
         try {
             const add = await ajax.getData(optionsAdd);
-            console.log(add);
             let str = add.str1[0] ? add.str1[0] : '';
             if (str) {
                 ctx.$f7.hidePreloader();
@@ -84,8 +83,6 @@ export default {
 }
 
 function getCurrentOrder(){
-    console.log('Текущее состояние заказа');
-    console.log(store.state.orders.current);
     let filtered = _.filter(store.state.orders.current, (item) => {
         return item.tableId === store.state.currentTable
     });
@@ -128,7 +125,6 @@ function populateOrderStrings(userId, tableId) {
     let orderStrings = '';
     let currentOrder = getCurrentOrder();
     if (currentOrder) {
-        console.log(currentOrder);
         currentOrder.forEach((item, index) => {
             if (index > 0) {
                 orderStrings += '*'; // разделитель строк
@@ -162,7 +158,6 @@ function populateOrderStrings(userId, tableId) {
 }
 
 function deleteOrder(optionsCan, ctx) {
-    console.log(optionsCan);
     ctx.$f7.confirm('Заказ будет удален', 'Вы уверены?', async () => {
         ctx.$f7.showPreloader('Удаление текущего заказа');
             try {
