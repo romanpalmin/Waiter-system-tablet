@@ -46,16 +46,32 @@
         data() {
             return {
                 name: 'this component',
+                currentInterval: 0,
                 currentTables: []//_.filter(tables, {waitress:this.$store.state.waiter.id})
             }
         },
+        destroyed(){
+            console.log('Kill interval...', this.currentInterval);
+            clearInterval(this.currentInterval);
+        },
+        beforeDestroy(){
+            console.log('Kill interval before...', this.currentInterval);
+            clearInterval(this.$store.state.intervals.updateUserTables);
+        },
         mounted() {
-            this.getTablesCurrentWaitress();
+            this.getTablesCurrentWaitress(true);
+            let state = setInterval(()=>{
+                this.getTablesCurrentWaitress(false);
+            }, 2000);
+            this.$store.commit('SET_UPDATE_USER_TABLES', {state});
+            this.currentInterval =
+            this.getTablesCurrentWaitress(true);
+
             this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
         },
         methods: {
-            getTablesCurrentWaitress: function () {
-                this.$f7.showPreloader('Загрузка столов пользователя');
+            getTablesCurrentWaitress: function ( isShowPreloader = false) {
+                if (isShowPreloader) this.$f7.showPreloader('Загрузка столов пользователя');
                 let numTablet = this.$store.state.tabletNumber;
                 let result = [];
                 let options = {
@@ -75,16 +91,16 @@
                             this.currentTables = _.map(result, item => {
                                 return item
                             });
-                            this.$f7.hidePreloader();
+                            if (isShowPreloader) this.$f7.hidePreloader();
                         })
                         .catch((err => {
-                            this.$f7.hidePreloader();
+                            if (isShowPreloader) this.$f7.hidePreloader();
                             this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
                         }));
-                    this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
+                    //this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
                     this.$store.commit('REMOVE_FULL_CURRENT_ORDER');
 
-                }, 2000);
+                }, 100);
             }
         },
         components: {

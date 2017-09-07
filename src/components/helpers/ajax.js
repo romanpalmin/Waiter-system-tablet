@@ -11,7 +11,7 @@ export default {
                 const answer = preloadAns.data[0];
                 if (!answer || answer.status !== 1) {
                     console.log('Следующая попытка через 2 секунды');
-                    await delay(2000);
+                    await delay(1200);
                     return getDataStr(optionsUuid.ReqUuid);
                 } else {
                     return new Promise((resolve) => {

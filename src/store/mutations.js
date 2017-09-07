@@ -2,6 +2,10 @@ import * as m_types from './mutations-types';
 import _ from 'lodash';
 
 export default {
+    [m_types.SET_UPDATE_USER_TABLES](state, payload){
+      state.intervals.updateUserTables = payload.state;
+    },
+
     [m_types.SET_USERS](state, payload) {
         state.waiters = payload;
     },

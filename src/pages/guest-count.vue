@@ -59,6 +59,7 @@
             }
         },
         mounted() {
+            clearInterval(this.$store.state.intervals.updateUserTables);
             const self = this;
             this.keyPicker = this.$f7.keypad({
                 toolbarCloseText: 'Готово',
