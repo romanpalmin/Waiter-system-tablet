@@ -62,7 +62,7 @@
             this.getTablesCurrentWaitress(true);
             let state = setInterval(()=>{
                 this.getTablesCurrentWaitress(false);
-            }, 2000);
+            }, 10000);
             this.$store.commit('SET_UPDATE_USER_TABLES', {state});
             this.currentInterval =
             this.getTablesCurrentWaitress(true);

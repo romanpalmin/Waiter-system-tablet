@@ -4,13 +4,23 @@
             <div class="list-of-tables" @click="selectTable(0)">
                 <div class="table" v-for="table in list">
                     <!--<f7-link :href="nextLink">-->
-                    <f7-link>
+                    <!-- OLD VERSION -->
+                    <!--<f7-link>
                         <div class="table-image" :style="getStyle(table)" @click="selectTable(table)"
                              :data-id="table.table">
                             <f7-badge>{{table.status}}</f7-badge>
                         </div>
                     </f7-link>
-                    <div class="table-title">№{{table.table}}</div>
+                    <div class="table-title">№{{table.table}}</div>-->
+                    <!-- END OLD VERSION -->
+                    <!-- NEW VERSION -->
+                    <f7-link>
+                        <div class="table-image table-item"  :style="getStyle(table)" @click="selectTable(table)"
+                             :data-id="table.table">
+                            {{table.table}}
+                        </div>
+                    </f7-link>
+                    <!-- END OLD VERSION -->
                 </div>
             </div>
         </f7-block>
@@ -22,17 +32,22 @@
         overflow: scroll;
         .table {
             /*width: 70px;*/
-            height: 69px;
+            /*height: 69px;*/
             float: left;
-            margin: 15px;
+            margin: 10px;
             .table-image {
                 border: 1px solid gray;
                 width: 55px;
                 height: 54px;
                 background-size: cover;
-                background: url(http://10.10.182.11/ept/waiter-tablet/images/table.png);
+                /*background: url(http://10.10.182.11/ept/waiter-tablet/images/table.png);*/
                 border-radius: 20px;
-
+            }
+            .table-item{
+                color: #ffffff;
+                font-weight: 900;
+                line-height: 50px;
+                font-size: 23pt;
             }
             .title {
                 border: 2px solid gray;
@@ -85,6 +100,7 @@
             }
         },
         mounted() {
+            this.$store.commit('SET_CURRENT_TABLE', {tableId: 0});
         },
         props: ['list'],
         methods: {
@@ -92,6 +108,7 @@
                 if ((this.pressed.isPressed && this.pressed.tableId === table.table) || table.status === 0) {
                     //console.log('Второе нажатие на стол');
                     this.$store.commit('SET_SHOW_PRINTER_BTN', false);
+
                     if (this.$store.state.pages.addorder) {
                         //console.log('Создаем новый стол');
                         this.$f7.showPreloader('Открытие стола №' + table.table);

@@ -12,7 +12,12 @@
             <f7-nav-center v-if="this.$store.state.pages.users">
                 <div class="page-title">Список официантов</div>
             </f7-nav-center>
-            <f7-nav-center v-if="this.$store.state.login"> {{this.$store.state.waiter.shortFullName}}</f7-nav-center>
+            <f7-nav-center v-if="this.$store.state.login">
+                <span>{{this.$store.state.waiter.shortFullName}}</span>
+                <template v-if="this.$store.state.currentTable !== 0">
+                    <div class="table-number">{{this.$store.state.currentTable}}</div>
+                </template>
+            </f7-nav-center>
             <f7-nav-center v-if="this.$store.state.pages.password"> {{this.$store.state.waiter.shortFullName}}
             </f7-nav-center>
             <f7-nav-right>
@@ -80,6 +85,20 @@
         }
         .page-title {
             width: 100%;
+        }
+        .table-number {
+            width: 70px;
+            height: 70px;
+            line-height: 65px;
+            background-color: #d3d3d3;
+            color: #000;
+            margin-left: 20px;
+            border: 1px solid gray;
+            border-radius: 20px;
+            font-size: 40pt;
+            font-weight: 900;
+            /*background-size: cover;
+            background: url(http://10.10.182.11/ept/waiter-tablet/images/table.png);*/
         }
 
     }
@@ -171,6 +190,7 @@
             'left-panel': leftPanel
         }
     }
+
 
 
 </script>

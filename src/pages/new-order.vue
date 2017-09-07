@@ -3,9 +3,9 @@
         <f7-page :cached="false" class="current-padding">
             <f7-navbar sliding></f7-navbar>
             <div class="add-order-page">
-                <f7-block-title class="title-table">
+                <!--<f7-block-title class="title-table">
                     Стол № {{$store.state.currentTable}}
-                </f7-block-title>
+                </f7-block-title>-->
                 <f7-block>
                     <div class="list-of-orders">
                         <orders-list />
