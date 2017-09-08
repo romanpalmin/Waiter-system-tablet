@@ -21,10 +21,10 @@
             <f7-nav-center v-if="this.$store.state.pages.password"> {{this.$store.state.waiter.shortFullName}}
             </f7-nav-center>
             <f7-nav-right>
-                <span class="back-to-tables"
+                <span class="back-to-tables" @click="backToTables()"
                       v-if="this.$store.state.pages.editorder">
                     <div class="avatar images "
-                         :style="getStyle('back')">
+                         :style="getStyle('undo')">
                     </div>
                 </span>
                 <span @click="printOrder()" class="print-order-or-table"
@@ -176,14 +176,13 @@
             printOrder(){
                 console.log('Print 1');
                 (_.once(()=>{printer.addStringsToOrder(this)}))();
+            },
+            backToTables(){
+                console.log('Back');
             }
         },
         components: {
             'left-panel': leftPanel
         }
     }
-
-
-
-
 </script>
