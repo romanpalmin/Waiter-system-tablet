@@ -3,6 +3,7 @@ import _ from 'lodash';
 
 export default {
     [m_types.SET_UPDATE_USER_TABLES](state, payload){
+        console.log('Сработало обновление столов пользователя: ', payload.state);
       state.intervals.updateUserTables = payload.state;
     },
 

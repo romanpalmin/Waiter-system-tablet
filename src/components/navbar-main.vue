@@ -87,16 +87,19 @@
             width: 100%;
         }
         .table-number {
-            width: 70px;
-            height: 70px;
-            line-height: 65px;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
             background-color: #d3d3d3;
             color: #000;
             margin-left: 20px;
             border: 1px solid gray;
             border-radius: 20px;
-            font-size: 40pt;
+            font-size: 20pt;
             font-weight: 900;
+            position: absolute;
+            top: 50px;
+            left: 130px;
             /*background-size: cover;
             background: url(http://10.10.182.11/ept/waiter-tablet/images/table.png);*/
         }

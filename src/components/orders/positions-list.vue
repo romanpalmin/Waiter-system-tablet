@@ -1,9 +1,11 @@
 <template>
     <div>
-        <div class="show-type-block" :style="getShowViewStyle()">
+       <!--
+            Закомментированы кнопки переключения между видом списком и иконками
+            <div class="show-type-block" :style="getShowViewStyle()">
             <button class="btn btn-by-list" @click="setShowType('byList')"></button>
             <button class="btn btn-by-icons" @click="setShowType('byIcons')"></button>
-        </div>
+        </div>-->
         <div>
             <div v-if="!showList"> <!-- иконками -->
                 <f7-block v-for="item in currentList" class="position-item" @click="addPositionToOrder(item)"
@@ -23,10 +25,10 @@
                 <f7-list>
                     <f7-list-item v-for="item in currentList"
                                   :key="item.code"
-                                  :title="item.name"
+                                  :title="getShortName(item.name, 40)"
                                   :data-id="item.code"
                                   @click="addPositionToOrder(item)"
-                                  class="no-fastclick">
+                                  class="no-fastclick items">
                         {{item.price}} руб.
 
 
@@ -94,6 +96,11 @@
         text-align: right;
         height: 0;
         padding-right: 15px;
+    }
+
+    .items {
+        color: black;
+        font-weight: 700;
     }
 
     .position-item {
@@ -177,6 +184,15 @@
             }
         },
         methods: {
+            getShortName(name, letters) {
+                let res = '';
+                if (name.length > letters) {
+                    res = name.substring(0, letters) + '...';
+                } else {
+                    res = name;
+                }
+                return res;
+            },
             getShowViewStyle() {
                 let style = 'margin-top: ';
                 style += this.showList ? '-35px' : '0px';
@@ -378,6 +394,7 @@
             });
         }
     }
+
 
 
 </script>

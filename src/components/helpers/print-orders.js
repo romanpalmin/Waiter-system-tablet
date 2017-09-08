@@ -4,7 +4,9 @@ import ajax from './ajax';
 
 
 export default {
-    addStringsToOrder: async (ctx) => {
+    addStringsToOrder: async(ctx) => {
+        console.log('Попытка печати');
+        console.log(store.state.orders.printed);
         ctx.$f7.showPreloader('Печать стола №' + store.state.currentTable);
         ctx.$f7.closeModal();
         let uuid = store.state.settings.uuid;
@@ -17,11 +19,27 @@ export default {
             ? '0' + store.state.tabletNumber
             : store.state.tabletNumber;
         let rows = populateOrderStrings(usrID, store.state.currentTable);
+        console.log('Количество строк ', rows.length);
         if (rows && rows.length === 0) {
             let optionsCan = {
                 'cmd_garson': 'CAN', numTablet, zakNo, usrID, table, guests, uuid
             };
             ctx.$f7.hidePreloader();
+            if (store.state.orders.printed.length === 0) {
+                console.log('Текущее состояние окна');
+                console.log(store.state.pages);
+                if (!store.state.pages.addorder) {
+                    console.log('Уходим 2 !!!!!');
+                    blocker.unblockTable({
+                        tableId: table,
+                        zakNo,
+                        uuid,
+                        callback: () => {
+                            exitToTables(ctx);
+                        }
+                    });
+                }
+            }
             if (store.state.orders.printed && store.state.orders.printed.length === 0) {
                 deleteOrder(optionsCan, ctx);
             } else {
@@ -30,11 +48,12 @@ export default {
                     zakNo,
                     uuid,
                     callback: () => {
-                        ctx.$store.commit('REMOVE_FULL_CURRENT_ORDER');
-                        ctx.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
-                        ctx.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
-                        ctx.$store.commit('SET_EDIT_ORDER_PAGE', {'editorder': false});
-                        ctx.$router.load({'url': '/tables/', 'reload': true});
+                        exitToTables(ctx);
+                        /*ctx.$store.commit('REMOVE_FULL_CURRENT_ORDER');
+                         ctx.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
+                         ctx.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
+                         ctx.$store.commit('SET_EDIT_ORDER_PAGE', {'editorder': false});
+                         ctx.$router.load({'url': '/tables/', 'reload': true});*/
                     }
                 });
             }
@@ -56,11 +75,12 @@ export default {
                         zakNo,
                         uuid,
                         callback: () => {
-                            ctx.$store.commit('REMOVE_FULL_CURRENT_ORDER');
-                            ctx.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
-                            ctx.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
-                            ctx.$store.commit('SET_EDIT_ORDER_PAGE', {'editorder': false});
-                            ctx.$router.load({'url': '/tables/', 'reload': true});
+                            exitToTables(ctx);
+                            /*ctx.$store.commit('REMOVE_FULL_CURRENT_ORDER');
+                             ctx.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
+                             ctx.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
+                             ctx.$store.commit('SET_EDIT_ORDER_PAGE', {'editorder': false});
+                             ctx.$router.load({'url': '/tables/', 'reload': true});*/
                         }
                     });
                 } else {
@@ -82,7 +102,17 @@ export default {
     }
 }
 
-function getCurrentOrder(){
+function exitToTables(ctx) {
+    ctx.$store.commit('REMOVE_FULL_CURRENT_ORDER');
+    ctx.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
+    ctx.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
+    ctx.$store.commit('SET_EDIT_ORDER_PAGE', {'editorder': false});
+    setTimeout(() => {
+        ctx.$router.load({'url': '/tables/', 'reload': true});
+    }, 0);
+}
+
+function getCurrentOrder() {
     let filtered = _.filter(store.state.orders.current, (item) => {
         return item.tableId === store.state.currentTable
     });
@@ -124,6 +154,8 @@ function getCurrentOrder(){
 function populateOrderStrings(userId, tableId) {
     let orderStrings = '';
     let currentOrder = getCurrentOrder();
+    console.log('PRINT');
+    console.log(currentOrder);
     if (currentOrder) {
         currentOrder.forEach((item, index) => {
             if (index > 0) {
@@ -158,8 +190,8 @@ function populateOrderStrings(userId, tableId) {
 }
 
 function deleteOrder(optionsCan, ctx) {
-    ctx.$f7.confirm('Заказ будет удален', 'Вы уверены?', async () => {
-        ctx.$f7.showPreloader('Удаление текущего заказа');
+    ctx.$f7.confirm('Заказ будет удален', 'Вы уверены?', async() => {
+            ctx.$f7.showPreloader('Удаление текущего заказа');
             try {
                 const del = await ajax.getData(optionsCan);
                 ctx.$f7.hidePreloader();

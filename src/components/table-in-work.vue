@@ -51,26 +51,35 @@
             }
         },
         destroyed(){
-            console.log('Kill interval...', this.currentInterval);
-            clearInterval(this.currentInterval);
+            /*console.log('Kill interval...', this.$store.state.intervals.updateUserTables);
+             clearInterval(this.$store.state.intervals.updateUserTables);*/
         },
         beforeDestroy(){
-            console.log('Kill interval before...', this.currentInterval);
-            clearInterval(this.$store.state.intervals.updateUserTables);
+            /*console.log('Kill interval before...', this.$store.state.intervals.updateUserTables);
+            clearInterval(this.$store.state.intervals.updateUserTables);*/
         },
         mounted() {
+            console.log('Текущая страница');
+            console.log(this.$store.state.pages);
             this.getTablesCurrentWaitress(true);
-            let state = setInterval(()=>{
-                this.getTablesCurrentWaitress(false);
+            let state = setInterval(() => {
+                if (this.$store.state.pages.main){
+                    console.log('Обновляем столы');
+                    this.getTablesCurrentWaitress(false);
+                } else {
+                    console.log('Не обновляем столы');
+                }
             }, 10000);
+            console.log('Очищаем интервал ', this.$store.state.intervals.updateUserTables);
+            clearInterval(this.$store.state.intervals.updateUserTables);
             this.$store.commit('SET_UPDATE_USER_TABLES', {state});
-            this.currentInterval =
-            this.getTablesCurrentWaitress(true);
+            //this.currentInterval =
+            //this.getTablesCurrentWaitress(true);
 
             this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
         },
         methods: {
-            getTablesCurrentWaitress: function ( isShowPreloader = false) {
+            getTablesCurrentWaitress: function (isShowPreloader = false) {
                 if (isShowPreloader) this.$f7.showPreloader('Загрузка столов пользователя');
                 let numTablet = this.$store.state.tabletNumber;
                 let result = [];
@@ -100,7 +109,7 @@
                     //this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
                     this.$store.commit('REMOVE_FULL_CURRENT_ORDER');
 
-                }, 100);
+                }, 300);
             }
         },
         components: {

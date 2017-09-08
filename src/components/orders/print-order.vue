@@ -258,6 +258,7 @@
             },
 
             populateOrderStrings(userId, tableId) {
+            console.log('PRINT');
                 let orderStrings = '';
                 let currentOrder = this.currentOrderByPosition;
                 if (currentOrder) {

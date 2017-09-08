@@ -1,12 +1,15 @@
 <template>
     <div>
-        <template v-if="printed.length > 0">
 
-            <div>
-                Отправленный на печать заказ
-                <hr/>
+        <template v-if="printed.length > 0">
+            <div class="btn-show-printed" @click="setView('printed')" v-if="!this.$store.state.openedPanel.printed">i
             </div>
+
             <div class="printed-order printed-panel passiv-printed-panel" @click="setView('printed')">
+                <div>
+                    Отправленный на печать заказ
+                    <hr/>
+                </div>
                 <!--Отправленный на печать заказ
 
                 <hr/>-->
@@ -20,10 +23,10 @@
                 <f7-grid v-for="order in printed">
                     <f7-col width="75" class="order-string" :data-id="num_str">
                         <!--{{order.tovar}} / -->{{order.name}}
-                    <span v-if="order.kurs > 0"> </span>
+                        <span v-if="order.kurs > 0"> </span>
                     </f7-col>
                     <f7-col class="order-string" width="25">{{order.count}} x
-                    {{order.price}}&#8381;
+                        {{order.price}}&#8381;
 
                     </f7-col>
                 </f7-grid>
@@ -41,7 +44,7 @@
             </div>-->
             <div v-if="showType === 'all'">
 
-                <f7-accordion>
+                <f7-accordion v-model="testDiv">
                     <template v-for="items in currentOrderByPosition">
 
                         <f7-accordion-item :key="items.el.code" class="order-string-item">
@@ -53,7 +56,7 @@
                                         <span>
                                            {{getShortName(items.el.item.name)}}
                                             <template
-                                                v-if="items.el.modsPosition !== '' && items.el.modsPosition !== ' '">
+                                                    v-if="items.el.modsPosition !== '' && items.el.modsPosition !== ' '">
                                                        / <!--{{getModsPositionName(items.el.modsPosition)}}-->M1
                                             </template>
                                             <template v-if="items.el.modsCommon !== '' && items.el.modsCommon !== ' '">
@@ -104,7 +107,7 @@
                                                     <span>{{items.el.item.name}}
                                                      {{items.el.item.modsPosition}}
                                                        <template
-                                                            v-if="items.el.modsPosition !== '' && items.el.modsPosition !== ' '">
+                                                               v-if="items.el.modsPosition !== '' && items.el.modsPosition !== ' '">
                                                                    / {{getModsPositionName(items.el.modsPosition)}}
                                                         </template>
                                                         <template
@@ -134,7 +137,7 @@
             </div>
         </div>
         <f7-block class="summary">
-            Сумма: {{getSumAmount}} руб.
+            Сумма: <span class="sum">{{getSumAmount}} руб.</span>
 
         </f7-block>
         <!--<f7-block class="summary">
@@ -157,11 +160,25 @@
 
 </template>
 <style scoped lang="less">
+    .btn-show-printed {
+        width: 50px;
+        height: 50px;
+        background-color: lightgrey;
+        position: absolute;
+        right: 0;
+        border-radius: 50%;
+        line-height: 50px;
+        font-size: 20pt;
+        font-weight: 900;
+        border: 2px solid;
+        cursor: pointer;
+    }
+
     .list-of-orders {
         background-color: #fafafa;
         width: 100%;
         min-height: 180px;
-        max-height: 500px;
+        /*max-height: 500px;*/
         overflow-y: scroll;
         font-size: 14pt;
         .select-view-type {
@@ -212,12 +229,13 @@
         .passiv-printed-panel {
             background-color: #DCDFEB;
             font-size: 12pt;
-            height: 80px;
+            /* height: 80px;*/
+            height: 0;
         }
 
         .active-current-panel {
             background-color: #fafafa;
-            height: 450px;
+            height: 650px;
 
         }
 
@@ -232,6 +250,11 @@
         width: 100%;
         text-align: left;
         margin: 10px 0;
+        font-size: 17pt;
+        font-weight: 900;
+        .sum {
+            color: red;
+        }
     }
 
 
@@ -247,17 +270,20 @@
                 showBottomMenu: true,
                 showType: 'all',
                 //showType: 'byGuests',
-                firstTime: false
+                firstTime: false,
+                testDiv: ''
             }
         },
         watch: {
+            testDiv: function(){
+                console.log('DIV change');
+            },
             activePanel: function (val) {
                 this.setActivePanelSize(val);
             },
             currentOrdersAll: function (val) {
                 console.log('Прокручиваем скролл вниз');
                 this.scrollToBottom();
-
             }
         },
         computed: {
@@ -387,10 +413,14 @@
             }
         },
         mounted() {
+            console.log('Текущая страница!!');
+            console.log(this.$store.state.pages);
+            console.log('Очищаем интервал ', this.$store.state.intervals.updateUserTables);
+            clearInterval(this.$store.state.intervals.updateUserTables);
             this.openGuest(1);
             this.setHandlers();
             this.$store.commit('SET_ACTIVE_ORDER_PANEL', {'status': 'menu'});
-            console.log(this);
+
         },
         methods: {
             onSwipeLeft(item) {
@@ -409,7 +439,9 @@
             },
             scrollToBottom() {
                 let currentPanel = this.$$('.current-panel')[0];
-                currentPanel.scrollTop = currentPanel.scrollHeight + 40;
+                setTimeout(()=>{
+                    currentPanel.scrollTop = currentPanel.scrollHeight + 40;
+                }, 100);
             },
 
             setView(currentType) {
@@ -534,6 +566,8 @@
             'buttons-panel': panel
         }
     }
+
+
 
 
 </script>

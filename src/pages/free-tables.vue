@@ -45,6 +45,8 @@
         },
 
         mounted() {
+            console.log('Текущая страница2');
+            console.log(this.$store.state.pages);
             if (this.$store.state.currentTable === 0) {
                 this.$store.commit('SET_CURRENT_GUESTS', {'guestsCount': 0});
             }
