@@ -19,17 +19,13 @@ export default {
             ? '0' + store.state.tabletNumber
             : store.state.tabletNumber;
         let rows = populateOrderStrings(usrID, store.state.currentTable);
-        console.log('Количество строк ', rows.length);
         if (rows && rows.length === 0) {
             let optionsCan = {
                 'cmd_garson': 'CAN', numTablet, zakNo, usrID, table, guests, uuid
             };
             ctx.$f7.hidePreloader();
             if (store.state.orders.printed.length === 0) {
-                console.log('Текущее состояние окна');
-                console.log(store.state.pages);
                 if (!store.state.pages.addorder) {
-                    console.log('Уходим 2 !!!!!');
                     blocker.unblockTable({
                         tableId: table,
                         zakNo,
@@ -38,10 +34,9 @@ export default {
                             exitToTables(ctx);
                         }
                     });
+                } else {
+                    deleteOrder(optionsCan, ctx);
                 }
-            }
-            if (store.state.orders.printed && store.state.orders.printed.length === 0) {
-                deleteOrder(optionsCan, ctx);
             } else {
                 blocker.unblockTable({
                     tableId: table,
@@ -49,53 +44,43 @@ export default {
                     uuid,
                     callback: () => {
                         exitToTables(ctx);
-                        /*ctx.$store.commit('REMOVE_FULL_CURRENT_ORDER');
-                         ctx.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
-                         ctx.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
-                         ctx.$store.commit('SET_EDIT_ORDER_PAGE', {'editorder': false});
-                         ctx.$router.load({'url': '/tables/', 'reload': true});*/
                     }
                 });
             }
-            return;
-        }
+        } else {
 
-        let optionsAdd = {
-            'cmd_garson': 'ADD', numTablet, usrID, table, zakNo, guests,
-            'rows': rows, uuid
-        };
-        try {
-            const add = await ajax.getData(optionsAdd);
-            let str = add.str1[0] ? add.str1[0] : '';
-            if (str) {
-                ctx.$f7.hidePreloader();
-                if (typeof str === 'object') {
-                    blocker.unblockTable({
-                        tableId: table,
-                        zakNo,
-                        uuid,
-                        callback: () => {
-                            exitToTables(ctx);
-                            /*ctx.$store.commit('REMOVE_FULL_CURRENT_ORDER');
-                             ctx.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
-                             ctx.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
-                             ctx.$store.commit('SET_EDIT_ORDER_PAGE', {'editorder': false});
-                             ctx.$router.load({'url': '/tables/', 'reload': true});*/
-                        }
-                    });
-                } else {
+            let optionsAdd = {
+                'cmd_garson': 'ADD', numTablet, usrID, table, zakNo, guests,
+                'rows': rows, uuid
+            };
+            try {
+                const add = await ajax.getData(optionsAdd);
+                let str = add.str1[0] ? add.str1[0] : '';
+                if (str) {
                     ctx.$f7.hidePreloader();
-                    throw new Error(str.answText);
+                    if (typeof str === 'object') {
+                        blocker.unblockTable({
+                            tableId: table,
+                            zakNo,
+                            uuid,
+                            callback: () => {
+                                exitToTables(ctx);
+                            }
+                        });
+                    } else {
+                        ctx.$f7.hidePreloader();
+                        throw new Error(str.answText);
+                    }
                 }
             }
-        }
-        catch (err) {
-            console.log(err);
-            ctx.$f7.hidePreloader();
-            if (err) {
-                ctx.$f7.alert(`Ошибка ${err}`, 'Ошибка!');
-            } else {
-                ctx.$f7.alert(`Неизвестная ошибка`, 'Ошибка!');
+            catch (err) {
+                console.log(err);
+                ctx.$f7.hidePreloader();
+                if (err) {
+                    ctx.$f7.alert(`Ошибка ${err}`, 'Ошибка!');
+                } else {
+                    ctx.$f7.alert(`Неизвестная ошибка`, 'Ошибка!');
+                }
             }
         }
 

@@ -21,23 +21,18 @@
             <f7-nav-center v-if="this.$store.state.pages.password"> {{this.$store.state.waiter.shortFullName}}
             </f7-nav-center>
             <f7-nav-right>
+                <span class="back-to-tables"
+                      v-if="this.$store.state.pages.editorder">
+                    <div class="avatar images "
+                         :style="getStyle('back')">
+                    </div>
+                </span>
                 <span @click="printOrder()" class="print-order-or-table"
                       v-if="this.$store.state.pages.editorder">
                     <div class="avatar images print-order-or-table"
                          :style="getStyle('printer')">
                     </div>
                 </span>
-                <!--<span @click="print()" class="print-order-or-table"
-                      v-if="!this.$store.state.pages.main && !this.$store.state.pages.password && !this.$store.state.pages.users"><div
-                        class="avatar images print-order-or-table"
-                        :style="getStyle('printer')"></div></span>
-                <span @click="print()" class="print-order-or-table"
-                      v-if="this.$store.state.showPrinterBtn">
-                    <div class="avatar images print-order-or-table"
-                         :style="getStyle('printer')">
-                    </div>
-                </span>-->
-
             </f7-nav-right>
         </f7-navbar>
 
@@ -50,16 +45,6 @@
                 <f7-nav-left><span @click="showPopup=false"><div class="close-settings images"
                                                                  :style="getStyle('exit')"></div></span></f7-nav-left>
             </f7-navbar>
-            <!-- <f7-block-title>Настройки</f7-block-title>
-             <f7-block>
-                 Настройки 1
-             </f7-block>
-             <f7-block>
-                 Настройки 2
-             </f7-block>
-             <f7-block>
-                 Настройки 3
-             </f7-block>-->
         </f7-popup>
     </div>
 </template>
@@ -146,6 +131,9 @@
                     case 'printer':
                         str = `background-image: url("http://10.10.182.11/ept/waiter-tablet/images/printer-new.png");background-size: cover; background-color: transparent;`;
                         break;
+                    case 'undo':
+                        str = `background-image: url("http://10.10.182.11/ept/waiter-tablet/images/undo.png");background-size: cover; background-color: transparent;`;
+                        break;
                     default :
                         str = '';
                         break;
@@ -159,7 +147,7 @@
                 this.openLeft = false;
                 this.logout();
             },
-            print() {
+            /*print() {
                 this.$f7.showPreloader('Печать счета');
                 //this.openLeft = false;
                 //console.log(this.$store.state);
@@ -184,15 +172,17 @@
                         this.$f7.hidePreloader();
                         this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
                     })
-            },
+            },*/
             printOrder(){
-                printer.addStringsToOrder(this);
+                console.log('Print 1');
+                (_.once(()=>{printer.addStringsToOrder(this)}))();
             }
         },
         components: {
             'left-panel': leftPanel
         }
     }
+
 
 
 

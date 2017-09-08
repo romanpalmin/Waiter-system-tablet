@@ -105,32 +105,61 @@
                     let optionsRec = {
                         'cmd_garson': 'REC', numTablet, zakNo, usrID, table, guests, uuid
                     };
-                    try {
-                        const res = await ajax.getData(optionsRec);
-                        let currentPrinted = res.str2 ? res.str2 : [];
-                        if (currentPrinted && currentPrinted.length > 0) {
-                            console.log('Оставляем все как есть');
-                            success();
+                    if (!this.$store.state.pages.addorder) {
+                        this.$f7.hidePreloader();
+                        console.log('Уходим 3 !!!!!');
+                        blocker.unblockTable({
+                            tableId: table,
+                            zakNo,
+                            uuid,
+                            callback: () => {
+                                //exitToTables(ctx);
+                                success();
+                            }
+                        });
+                    } else {
+                        try {
+                            const res = await ajax.getData(optionsRec);
+                            let currentPrinted = res.str2 ? res.str2 : [];
+                            if (currentPrinted && currentPrinted.length > 0) {
+                                console.log('Оставляем все как есть');
+                                success();
+                                this.$f7.hidePreloader();
+                            } else {
+                                console.log('Обнуляем заказ');
+                                this.$f7.hidePreloader();
+                                const optionsDel = Object.assign({}, optionsRec, {'cmd_garson': 'CAN'});
+                                blocker.unblockTable({
+                                    tableId: table,
+                                    zakNo,
+                                    uuid,
+                                    callback: () => {
+                                        if (!this.$store.state.pages.addorder) {
+                                            console.log('Уходим 3 !!!!!');
+                                            blocker.unblockTable({
+                                                tableId: table,
+                                                zakNo,
+                                                uuid,
+                                                callback: () => {
+                                                    //exitToTables(ctx);
+                                                    success();
+                                                }
+                                            });
+                                        } else {
+                                            this.deleteOrder(optionsDel);
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                        catch (err) {
+                            this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
                             this.$f7.hidePreloader();
-                        } else {
-                            console.log('Обнуляем заказ');
-                            this.$f7.hidePreloader();
-                            const optionsDel = Object.assign({}, optionsRec, {'cmd_garson': 'CAN'});
-                            blocker.unblockTable({
-                                tableId: table,
-                                zakNo,
-                                uuid,
-                                callback: () => {
-                                    this.deleteOrder(optionsDel);
-                                }
-                            });
                         }
                     }
-                    catch (err) {
-                        this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
-                        this.$f7.hidePreloader();
-                    }
-                } else {
+                }
+
+                else {
                     this.$f7.hidePreloader();
                     console.log('Оставляем');
                     success();
@@ -149,7 +178,9 @@
                         self.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
                         self.$store.commit('SET_EDIT_ORDER_PAGE', {'editorder': false});
                         self.$store.commit('SET_ACTIVE_ORDER_PANEL', {'status': 'current'});
-                        self.$router.load({'url': '/tables/', 'reload': true});
+                        setTimeout(() => {
+                            self.$router.load({'url': '/tables/', 'reload': true});
+                        }, 0);
                     }, 0)
                 }
             },
@@ -161,7 +192,7 @@
 
             deleteOrder(optionsCan) {
                 console.log(optionsCan);
-                this.$f7.confirm('Заказ будет удален', 'Вы уверены?', async () => {
+                this.$f7.confirm('Заказ будет удален', 'Вы уверены?', async() => {
                         this.$f7.showPreloader('Удаление текущего заказа');
                         try {
                             const del = await ajax.getData(optionsCan);
@@ -258,7 +289,7 @@
             },
 
             populateOrderStrings(userId, tableId) {
-            console.log('PRINT');
+                console.log('PRINT');
                 let orderStrings = '';
                 let currentOrder = this.currentOrderByPosition;
                 if (currentOrder) {
@@ -296,5 +327,6 @@
             }
         }
     }
+
 
 </script>
