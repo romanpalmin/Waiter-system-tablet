@@ -2,7 +2,7 @@
     <div>
 
         <template v-if="printed.length > 0">
-            <div class="btn-show-printed" @click="setView('printed')" v-if="!this.$store.state.openedPanel.printed">i
+            <div class="btn-show-printed" @click="setView('printed')" v-if="!this.$store.state.openedPanel.printed" :style="getStyle('info')">
             </div>
 
             <div class="printed-order printed-panel passiv-printed-panel" @click="setView('printed')">
@@ -442,6 +442,19 @@
                 setTimeout(()=>{
                     currentPanel.scrollTop = currentPanel.scrollHeight + 40;
                 }, 100);
+            },
+
+            getStyle(type) {
+                let str = '';
+                switch (type) {
+                    case 'info':
+                        str = `background-image: url("http://10.10.182.11/ept/waiter-tablet/images/info.png");background-size: cover; `;
+                        break;
+                    default :
+                        str = '';
+                        break;
+                }
+                return str;
             },
 
             setView(currentType) {

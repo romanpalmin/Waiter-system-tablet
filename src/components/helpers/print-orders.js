@@ -5,10 +5,9 @@ import ajax from './ajax';
 
 export default {
     addStringsToOrder: async(ctx) => {
-        console.log('Попытка печати');
-        console.log(store.state.orders.printed);
+        //ctx.$f7.closeModal();
         ctx.$f7.showPreloader('Печать стола №' + store.state.currentTable);
-        ctx.$f7.closeModal();
+
         let uuid = store.state.settings.uuid;
         let usrID = store.state.waiter.id;
         let table = store.state.currentTable;
@@ -57,7 +56,7 @@ export default {
                 const add = await ajax.getData(optionsAdd);
                 let str = add.str1[0] ? add.str1[0] : '';
                 if (str) {
-                    ctx.$f7.hidePreloader();
+
                     if (typeof str === 'object') {
                         blocker.unblockTable({
                             tableId: table,
@@ -84,6 +83,100 @@ export default {
             }
         }
 
+    },
+    backToTables: async(ctx) => {
+        {
+            const self = ctx;
+            self.$f7.showPreloader('Проверка текущего заказа');
+            let uuid = self.$store.state.settings.uuid;
+            let table = self.$store.state.currentTable;
+            let zakNo = self.$store.state.orders.currentOrderId;
+            if (self.$store.state.orders.printed && self.$store.state.orders.printed.length === 0) {
+                let usrID = self.$store.state.waiter.id;
+                let guests = self.$store.state.guestsCount;
+                let numTablet = self.$store.state.tabletNumber;
+                let optionsRec = {
+                    'cmd_garson': 'REC', numTablet, zakNo, usrID, table, guests, uuid
+                };
+                if (!self.$store.state.pages.addorder) {
+                    self.$f7.hidePreloader();
+                    console.log('Уходим 3 !!!!!');
+                    blocker.unblockTable({
+                        tableId: table,
+                        zakNo,
+                        uuid,
+                        callback: () => {
+                            //exitToTables(ctx);
+                            success();
+                        }
+                    });
+                } else {
+                    try {
+                        const res = await ajax.getData(optionsRec);
+                        let currentPrinted = res.str2 ? res.str2 : [];
+                        if (currentPrinted && currentPrinted.length > 0) {
+                            console.log('Оставляем все как есть');
+                            success();
+                            self.$f7.hidePreloader();
+                        } else {
+                            console.log('Обнуляем заказ');
+                            self.$f7.hidePreloader();
+                            const optionsDel = Object.assign({}, optionsRec, {'cmd_garson': 'CAN'});
+                            blocker.unblockTable({
+                                tableId: table,
+                                zakNo,
+                                uuid,
+                                callback: () => {
+                                    if (!self.$store.state.pages.addorder) {
+                                        console.log('Уходим 3 !!!!!');
+                                        blocker.unblockTable({
+                                            tableId: table,
+                                            zakNo,
+                                            uuid,
+                                            callback: () => {
+                                                //exitToTables(ctx);
+                                                success();
+                                            }
+                                        });
+                                    } else {
+                                        deleteOrder(optionsDel, self);
+                                    }
+                                }
+                            });
+                        }
+                    }
+                    catch (err) {
+                        self.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
+                        self.$f7.hidePreloader();
+                    }
+                }
+            }
+
+            else {
+                self.$f7.hidePreloader();
+                console.log('Оставляем');
+                success();
+            }
+
+            function success() {
+                setTimeout(() => {
+                    blocker.unblockTable({
+                        tableId: table,
+                        zakNo,
+                        uuid
+                        //usrId: self.store.state.waiter.waiterId,
+
+                    });
+                    self.$store.commit('SET_PRINTED_ORDER', {printedOrders: []});
+                    self.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
+                    self.$store.commit('SET_EDIT_ORDER_PAGE', {'editorder': false});
+                    self.$store.commit('SET_ACTIVE_ORDER_PANEL', {'status': 'current'});
+                    setTimeout(() => {
+                        self.$router.load({'url': '/tables/', 'reload': true});
+                    }, 0);
+                }, 0)
+            }
+        }
     }
 }
 
@@ -93,6 +186,7 @@ function exitToTables(ctx) {
     ctx.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
     ctx.$store.commit('SET_EDIT_ORDER_PAGE', {'editorder': false});
     setTimeout(() => {
+        ctx.$f7.hidePreloader();
         ctx.$router.load({'url': '/tables/', 'reload': true});
     }, 0);
 }
@@ -139,8 +233,6 @@ function getCurrentOrder() {
 function populateOrderStrings(userId, tableId) {
     let orderStrings = '';
     let currentOrder = getCurrentOrder();
-    console.log('PRINT');
-    console.log(currentOrder);
     if (currentOrder) {
         currentOrder.forEach((item, index) => {
             if (index > 0) {

@@ -101,6 +101,8 @@
     .items {
         color: black;
         font-weight: 700;
+        min-height: 60px;
+        line-height: 60px;
     }
 
     .position-item {

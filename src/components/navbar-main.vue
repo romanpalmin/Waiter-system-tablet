@@ -14,13 +14,22 @@
             </f7-nav-center>
             <f7-nav-center v-if="this.$store.state.login">
                 <span>{{this.$store.state.waiter.shortFullName}}</span>
-                <template v-if="this.$store.state.currentTable !== 0">
+               <!-- <template v-if="this.$store.state.currentTable !== 0">
                     <div class="table-number">{{this.$store.state.currentTable}}</div>
-                </template>
+                </template>-->
             </f7-nav-center>
             <f7-nav-center v-if="this.$store.state.pages.password"> {{this.$store.state.waiter.shortFullName}}
             </f7-nav-center>
             <f7-nav-right>
+                <template v-if="this.$store.state.currentTable !== 0">
+                    <div class="table-number">{{this.$store.state.currentTable}}</div>
+                </template>
+                <span class="download-from-tablet" @click="downloadFromTablet()"
+                      v-if="this.$store.state.pages.editorder">
+                    <div class="avatar images "
+                         :style="getStyle('download')">
+                    </div>
+                </span>
                 <span class="back-to-tables" @click="backToTables()"
                       v-if="this.$store.state.pages.editorder">
                     <div class="avatar images "
@@ -30,7 +39,7 @@
                 <span @click="printOrder()" class="print-order-or-table"
                       v-if="this.$store.state.pages.editorder">
                     <div class="avatar images print-order-or-table"
-                         :style="getStyle('printer')">
+                         :style="getStyle('printer2')">
                     </div>
                 </span>
             </f7-nav-right>
@@ -82,7 +91,7 @@
             border-radius: 20px;
             font-size: 20pt;
             font-weight: 900;
-            position: absolute;
+            /*position: absolute;*/
             top: 50px;
             left: 130px;
             /*background-size: cover;
@@ -131,8 +140,14 @@
                     case 'printer':
                         str = `background-image: url("http://10.10.182.11/ept/waiter-tablet/images/printer-new.png");background-size: cover; background-color: transparent;`;
                         break;
+                    case 'printer2':
+                        str = `background-image: url("http://10.10.182.11/ept/waiter-tablet/images/printer-new2.png");background-size: cover; background-color: transparent;`;
+                        break;
                     case 'undo':
                         str = `background-image: url("http://10.10.182.11/ept/waiter-tablet/images/undo.png");background-size: cover; background-color: transparent;`;
+                        break;
+                    case 'download':
+                        str = `background-image: url("http://10.10.182.11/ept/waiter-tablet/images/download.png");background-size: cover; background-color: transparent;`;
                         break;
                     default :
                         str = '';
@@ -179,6 +194,7 @@
             },
             backToTables(){
                 console.log('Back');
+                printer.backToTables(this);
             }
         },
         components: {
