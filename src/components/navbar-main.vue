@@ -24,11 +24,13 @@
                 <template v-if="this.$store.state.currentTable !== 0">
                     <div class="table-number">{{this.$store.state.currentTable}}</div>
                 </template>
-                <span class="download-from-tablet" @click="downloadFromTablet()"
+                <span class="download-from-tablet"
                       v-if="this.$store.state.pages.editorder">
+                    <f7-link href="#" open-popup data-popup=".select-tablet" close-panel>
                     <div class="avatar images "
                          :style="getStyle('download')">
                     </div>
+                        </f7-link>
                 </span>
                 <span class="back-to-tables" @click="backToTables()"
                       v-if="this.$store.state.pages.editorder">
@@ -54,6 +56,14 @@
                 <f7-nav-left><span @click="showPopup=false"><div class="close-settings images"
                                                                  :style="getStyle('exit')"></div></span></f7-nav-left>
             </f7-navbar>
+        </f7-popup>
+        <f7-popup class="select-tablet">
+            <!-- Popup content goes here -->
+            <p>
+                <f7-link href="#" close-popup data-popup=".select-tablet">Закрыть</f7-link>
+            </p>
+            <hr/>
+            <select-tablet/>
         </f7-popup>
     </div>
 </template>
@@ -110,6 +120,7 @@
     import logout from './mixins/logout.js';
     import leftPanel from './left-panel.vue';
     import printer from './helpers/print-orders';
+    import selectTablet from './select-tablet.vue';
 
     export default {
         data() {
@@ -162,32 +173,7 @@
                 this.openLeft = false;
                 this.logout();
             },
-            /*print() {
-                this.$f7.showPreloader('Печать счета');
-                //this.openLeft = false;
-                //console.log(this.$store.state);
-                let uuid = this.$store.state.settings.uuid;
-                let usrID = this.$store.state.waiter.id;
-                let table = this.$store.state.currentTable;
-                let zakNo = this.$store.state.orders.currentOrderId;
-                this.$store.commit('SET_SHOW_PRINTER_BTN', false);
-                this.$store.commit('SET_SHOW_TABLE_ACTIONS_PANEL', false);
-                let options = {'cmd_garson': 'CHT', zakNo, usrID, table, uuid};
-                console.log(options);
-                this.axios.get(this.$store.getters.apiUrl, {params: options})
-                    .then(result => {
-                        console.log(result);
-                        setTimeout(() => {
-                            this.$f7.hidePreloader();
-                            this.$router.refreshPage();
-                        }, 2000);
 
-                    })
-                    .catch(err => {
-                        this.$f7.hidePreloader();
-                        this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
-                    })
-            },*/
             printOrder(){
                 console.log('Print 1');
                 (_.once(()=>{printer.addStringsToOrder(this)}))();
@@ -198,7 +184,8 @@
             }
         },
         components: {
-            'left-panel': leftPanel
+            'left-panel': leftPanel,
+            'select-tablet': selectTablet
         }
     }
 </script>

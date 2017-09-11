@@ -3,20 +3,20 @@
         <f7-block inner>
             <p>Планшет №{{tabletNumber}}</p>
         </f7-block>
-        <f7-block-title>Действия</f7-block-title>
+        <!-- <f7-block-title>Действия</f7-block-title>
         <f7-block inner>
-            <p>
+           <p>
                 <f7-link href="#" open-popup data-popup=".select-tablet" close-panel>Загрузить данные</f7-link>
             </p>
             <p>
-                <!--<f7-link href="#" class="print-order" close-panel>Отправить на печать</f7-link>-->
+                <f7-link href="#" class="print-order" close-panel>Отправить на печать</f7-link
             </p>
-        </f7-block>
+        </f7-block>-->
         <f7-block-title>Навигация</f7-block-title>
         <f7-block inner>
-            <p>
+            <!--<p>
                 <f7-link class="back-to-tables" close-panel data-ignore-cache="true">Список текущих столов</f7-link>
-            </p>
+            </p>-->
             <p>
                 <f7-link class="exit" close-panel data-ignore-cache="true" @click="exit()">Выход</f7-link>
             </p>
