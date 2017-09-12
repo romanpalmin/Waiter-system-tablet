@@ -100,7 +100,6 @@ export default {
                 };
                 if (!self.$store.state.pages.addorder) {
                     self.$f7.hidePreloader();
-                    console.log('Уходим 3 !!!!!');
                     blocker.unblockTable({
                         tableId: table,
                         zakNo,
@@ -128,7 +127,6 @@ export default {
                                 uuid,
                                 callback: () => {
                                     if (!self.$store.state.pages.addorder) {
-                                        console.log('Уходим 3 !!!!!');
                                         blocker.unblockTable({
                                             tableId: table,
                                             zakNo,
