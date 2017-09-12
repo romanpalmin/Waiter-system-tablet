@@ -3,17 +3,6 @@
         <f7-block>
             <div class="list-of-tables" @click="selectTable(0)">
                 <div class="table" v-for="table in list">
-                    <!--<f7-link :href="nextLink">-->
-                    <!-- OLD VERSION -->
-                    <!--<f7-link>
-                        <div class="table-image" :style="getStyle(table)" @click="selectTable(table)"
-                             :data-id="table.table">
-                            <f7-badge>{{table.status}}</f7-badge>
-                        </div>
-                    </f7-link>
-                    <div class="table-title">№{{table.table}}</div>-->
-                    <!-- END OLD VERSION -->
-                    <!-- NEW VERSION -->
                     <f7-link>
                         <div class="table-image table-item"  :style="getStyle(table)" @click="selectTable(table)"
                              :data-id="table.table">
@@ -105,6 +94,7 @@
         props: ['list'],
         methods: {
             selectTable(table) {
+                console.log(table);
                 if ((this.pressed.isPressed && this.pressed.tableId === table.table) || table.status === 0) {
                     //console.log('Второе нажатие на стол');
                     this.$store.commit('SET_SHOW_PRINTER_BTN', false);
@@ -231,7 +221,11 @@
                         color = 'green';
                         break;
                     case 1:
-                        color = 'blue';
+                        if (table.ocupate !== 0 && table.ocupate === this.usrID){
+                            color = 'gray';
+                        } else {
+                            color = 'blue';
+                        }
                         break;
                     case 2:
                         color = 'black';
@@ -242,9 +236,10 @@
                     default:
                         break;
                 }
-                if (table.ocupate !== 0) {
-                    color = 'black';
-                }
+                // заплатка для статуса 2 в случае блокированности
+                /*if (table.status === 2 && table.ocupate !== 0 && table.ocupate === this.usrID) {
+                    color = 'gray';
+                }*/
                 res += color + ';';
                 return res;
             },

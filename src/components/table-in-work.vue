@@ -94,7 +94,7 @@
                         .then(resp => {
                             if (resp && resp.data) {
                                 result = _.filter(resp.data, item => {
-                                    return item.garson === this.$store.state.waiter.id && (item.status === 1 || item.status === 5);
+                                    return item.garson === this.$store.state.waiter.id; //&& (item.status === 1 || item.status === 5);
                                 })
                             }
                             this.currentTables = _.map(result, item => {
