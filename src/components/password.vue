@@ -7,6 +7,9 @@
                 </template>
             </f7-grid>
         </f7-block>
+        <f7-block inner>
+            <f7-button @click="toggleMsgForm()">Открыть окно отправки сообщения</f7-button>
+        </f7-block>
         <!-- <f7-block inner no-hairlines>
              <f7-buttons>
                  <f7-button @click="enterPassword()" big raised round center>Ввод</f7-button>
@@ -59,6 +62,15 @@
                 </f7-block>
             </f7-popup>
         </f7-block>
+        <f7-popup class="message-form-popup" :opened=showMsgForm @popup:closed="toggleMsgForm()">
+            <f7-block inner no-hairlines>
+                <f7-grid>
+                    <f7-col>
+                        <msg-form :options="{'tableId': 1}" />
+                    </f7-col>
+                </f7-grid>
+            </f7-block>
+        </f7-popup>
     </div>
 </template>
 <style scoped lang="less">
@@ -95,7 +107,8 @@
     }
 </style>
 <script>
-    import logout from './mixins/logout.js'
+    import logout from './mixins/logout.js';
+    import MFofm from './message-form.vue';
 
     export default {
         data() {
@@ -106,8 +119,12 @@
                 currentPassword: '',
                 stars: [],
                 showPopup: false,
-                goToStart: false
+                goToStart: false,
+                showMsgForm: false
             }
+        },
+        components: {
+            'msg-form': MFofm
         },
         mixins: [logout],
         mounted() {
@@ -124,6 +141,15 @@
             }
         },
         methods: {
+            change(){
+                this.showMsgForm = false;
+            },
+            openMsgForm(){
+                this.showMsgForm = true;
+            },
+            toggleMsgForm(){
+                this.showMsgForm = !this.showMsgForm;
+            },
             pressNumber(num) {
                 if (this.currentClick < 4) {
                     this.pass[this.currentClick] = true;
