@@ -62,11 +62,6 @@
                         console.log(resp);
                         this.cancelMsg();
                     })
-                    /*.then(this.axios.spread(function (barResponse, restResponse) {
-                        console.log('Bar', barResponse.data);
-                        console.log('Rest', restResponse.data);
-                        this.cancelMsg();
-                    }))*/
                     .catch(err => {
                         console.log(err);
                         this.cancelMsg();
