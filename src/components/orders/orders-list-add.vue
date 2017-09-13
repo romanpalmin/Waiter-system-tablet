@@ -10,16 +10,6 @@
                     Отправленный на печать заказ
                     <hr/>
                 </div>
-                <!--Отправленный на печать заказ
-
-                <hr/>-->
-                <!--<f7-grid>
-                    <f7-col  width="60">
-                        Наименование
-                    </f7-col>
-                    <f7-col width="7">Количество</f7-col>
-                </f7-grid>
-                <hr />-->
                 <f7-grid v-for="order in printed">
                     <f7-col width="75" class="order-string" :data-id="num_str">
                         <!--{{order.tovar}} / -->{{order.name}}
@@ -36,12 +26,6 @@
             Текущий заказ
 
             <hr/>
-            <!--<div class="select-view-type">
-                <f7-buttons color="gray" class="btns-type-list">
-                    <f7-button @click="setViewType('all')">Все</f7-button>
-                    <f7-button @click="setViewType('byGuests')">По гостям</f7-button>
-                </f7-buttons>
-            </div>-->
             <div v-if="showType === 'all'">
 
                 <f7-accordion v-model="testDiv">
@@ -140,15 +124,7 @@
             Сумма: <span class="sum">{{getSumAmount}} руб.</span>
 
         </f7-block>
-        <!--<f7-block class="summary">
-            <p class="buttons-row bottom-buttons">
-                <a href="#" class="button  button-raised ">Отменить</a>
-                <a href="#" class="button button-raised" @click="print()">Отправить на печать</a>
-            </p>
-        </f7-block>
-        <p>
-            <f7-link href="#" class="print-order-btn">Отправить на печать</f7-link>
-        </p>-->
+
 
         <f7-block>
             <category/>
