@@ -69,7 +69,7 @@
                 } else {
                     console.log('Не обновляем столы');
                 }
-            }, 10000);
+            }, 3000);
             console.log('Очищаем интервал ', this.$store.state.intervals.updateUserTables);
             clearInterval(this.$store.state.intervals.updateUserTables);
             this.$store.commit('SET_UPDATE_USER_TABLES', {state});
