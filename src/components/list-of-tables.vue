@@ -94,7 +94,6 @@
         props: ['list'],
         methods: {
             selectTable(table) {
-                console.log(table);
                 if ((this.pressed.isPressed && this.pressed.tableId === table.table) || table.status === 0) {
                     //console.log('Второе нажатие на стол');
                     this.$store.commit('SET_SHOW_PRINTER_BTN', false);
@@ -163,7 +162,7 @@
                             this.$$('.pressed').removeClass('pressed');
                             this.$store.commit('SET_PRELOADED_ORDER', {'preloaded': []});
                             this.$store.commit('SET_SHOW_TABLE_ACTIONS_PANEL', false);
-                            blocker.unblockTable({
+                            /*blocker.unblockTable({
                                     tableId: this.pressed.tableId,
                                     zakNo: this.pressed.zakNo,
                                     uuid: this.$store.state.settings.uuid,
@@ -171,7 +170,7 @@
                                         this.pressed.isPressed = false;
                                     }
                                 }
-                            );
+                            );*/
 
                             this.$f7.confirm(`Разблокировать стол №${table.table}?`, 'Стол заблокирован',
                                 () => {

@@ -8,15 +8,6 @@
             </f7-grid>
         </f7-block>
         <f7-block inner>
-            <f7-button @click="toggleMsgForm()">Открыть окно отправки сообщения</f7-button>
-        </f7-block>
-        <!-- <f7-block inner no-hairlines>
-             <f7-buttons>
-                 <f7-button @click="enterPassword()" big raised round center>Ввод</f7-button>
-                 <f7-button @click="erasePassword()" big raised round center>Очистить</f7-button>
-             </f7-buttons>
-         </f7-block>-->
-        <f7-block inner>
             <table class="phone-table">
                 <tr>
                     <td v-for="n in 3">
@@ -62,7 +53,7 @@
                 </f7-block>
             </f7-popup>
         </f7-block>
-        <f7-popup class="message-form-popup" :opened=showMsgForm @popup:closed="toggleMsgForm()">
+        <!--<f7-popup class="message-form-popup" :opened=showMsgForm @popup:closed="toggleMsgForm()">
             <f7-block inner no-hairlines>
                 <f7-grid>
                     <f7-col>
@@ -70,7 +61,7 @@
                     </f7-col>
                 </f7-grid>
             </f7-block>
-        </f7-popup>
+        </f7-popup>-->
     </div>
 </template>
 <style scoped lang="less">
@@ -108,7 +99,7 @@
 </style>
 <script>
     import logout from './mixins/logout.js';
-    import MForm from './message-form.vue';
+    /*import MForm from './message-form.vue';*/
 
     export default {
         data() {
@@ -120,11 +111,11 @@
                 stars: [],
                 showPopup: false,
                 goToStart: false,
-                showMsgForm: false
+                /*showMsgForm: false*/
             }
         },
         components: {
-            'msg-form': MForm
+            /*'msg-form': MForm*/
         },
         mixins: [logout],
         mounted() {
@@ -141,9 +132,9 @@
             }
         },
         methods: {
-            toggleMsgForm(){
+           /* toggleMsgForm(){
                 this.showMsgForm = !this.showMsgForm;
-            },
+            },*/
             pressNumber(num) {
                 if (this.currentClick < 4) {
                     this.pass[this.currentClick] = true;

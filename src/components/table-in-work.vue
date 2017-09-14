@@ -3,12 +3,37 @@
 
         <table-list :list="currentTables"/>
         <add-table-button/>
+        <div class="btn-show-message-form"  :style="getStyle('message')" @click="openMsgForm()"></div>
         <template v-if="showPanel">
             <table-actions-panel/>
         </template>
+        <f7-popup class="message-form-popup" :opened=showMsgForm @popup:closed="closeMsgForm()">
+            <f7-block inner no-hairlines>
+                <f7-grid>
+                    <f7-col>
+                        <msg-form :options="{'tableId': 1}" />
+                    </f7-col>
+                </f7-grid>
+            </f7-block>
+        </f7-popup>
     </div>
 </template>
 <style scoped lang="less">
+    .btn-show-message-form {
+        width: 50px;
+        height: 50px;
+        background-color: #d3d3d3;
+        position: absolute;
+        border-radius: 50%;
+        line-height: 50px;
+        font-size: 20pt;
+        font-weight: 900;
+        border: 1px solid;
+        cursor: pointer;
+        bottom: 60px;
+        left: 10px;
+        z-index: 1;
+    }
     .list-of-tables {
         .table {
             width: 70px;
@@ -41,13 +66,15 @@
     import btnAdd from './add-table-to-waitress';
     import listTables from './list-of-tables';
     import tableActions from './table-actions-panel.vue';
+    import MForm from './message-form.vue';
 
     export default {
         data() {
             return {
                 name: 'this component',
                 currentInterval: 0,
-                currentTables: []//_.filter(tables, {waitress:this.$store.state.waiter.id})
+                currentTables: [],//_.filter(tables, {waitress:this.$store.state.waiter.id})
+                showMsgForm: false
             }
         },
         destroyed(){
@@ -59,8 +86,6 @@
             clearInterval(this.$store.state.intervals.updateUserTables);*/
         },
         mounted() {
-            console.log('Текущая страница');
-            console.log(this.$store.state.pages);
             this.getTablesCurrentWaitress(true);
             let state = setInterval(() => {
                 if (this.$store.state.pages.main){
@@ -79,6 +104,27 @@
             this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
         },
         methods: {
+            getStyle(type) {
+                let str = '';
+                switch (type) {
+                    case 'message':
+                        str = `background-image: url("http://10.10.182.11/ept/waiter-tablet/images/message.png");background-size: cover; `;
+                        break;
+                    default :
+                        str = '';
+                        break;
+                }
+                return str;
+            },
+            toggleMsgForm(){
+                this.showMsgForm = !this.showMsgForm;
+            },
+            closeMsgForm(){
+                this.showMsgForm = false;
+            },
+            openMsgForm(){
+                this.showMsgForm = true;
+            },
             getTablesCurrentWaitress: function (isShowPreloader = false) {
                 if (isShowPreloader) this.$f7.showPreloader('Загрузка столов пользователя');
                 let numTablet = this.$store.state.tabletNumber;
@@ -115,7 +161,8 @@
         components: {
             'add-table-button': btnAdd,
             'table-list': listTables,
-            'table-actions-panel': tableActions
+            'table-actions-panel': tableActions,
+            'msg-form': MForm
         },
         computed: {
             showPanel: function () {
@@ -123,6 +170,4 @@
             }
         }
     }
-
-
 </script>

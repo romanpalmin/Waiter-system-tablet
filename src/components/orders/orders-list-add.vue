@@ -259,7 +259,7 @@
 <script>
     import category from './list-of-ctgs.vue';
     import panel from './buttons-panel.vue';
-    import MForm from '../message-form.vue'
+    import MForm from '../message-form.vue';
 
     export default {
         data() {
@@ -421,15 +421,12 @@
         },
         methods: {
             toggleMsgForm(){
-                console.log('Меняем showMsgForm');
                 this.showMsgForm = !this.showMsgForm;
             },
             closeMsgForm(){
-                console.log('closeMsgForm');
                 this.showMsgForm = false;
             },
             openMsgForm(){
-                console.log('openMsgForm');
                 this.showMsgForm = true;
             },
             onSwipeLeft(item) {
