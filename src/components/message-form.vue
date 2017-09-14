@@ -68,15 +68,15 @@
                     })
             },
             configureMsg() {
-                let url = this.$store.getters.apiUrl + '';
-                let options = {
+                const url = this.$store.getters.apiUrl + '';
+                const options = {
                     'cmd_garson': 'MSG',
                     'table': this.$store.state.currentTable,
                     'usrID': this.$store.state.waiter.id,
                     'uuid': this.$store.state.settings.uuid,
                 };
-                let optionsBar = Object.assign({}, options, {msgBar: this.msg});
-                let optionsRest = Object.assign({}, options, {msgRest: this.msg});
+                const optionsBar = Object.assign({}, options, {msgBar: this.msg});
+                const optionsRest = Object.assign({}, options, {msgRest: this.msg});
 
                 if (this.msg !== '') {
                     if (this.isToBar && this.isToRest) {
@@ -96,8 +96,6 @@
                     }
                 }
             },
-        },
-        mounted() {
         }
     }
 </script>
