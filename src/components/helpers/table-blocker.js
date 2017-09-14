@@ -19,9 +19,10 @@ export default {
 
 function ajax(options) {
     const url = store.getters.apiUrl;
+    let numTablet = store.state.tabletNumber;
     let {cmd_garson, tableId: table, usrID = store.state.waiter.id, zakNo, uuid, callback} = options;
     let currentOptions = {
-        cmd_garson, table, usrID, zakNo, uuid
+        cmd_garson, table, usrID, zakNo, uuid, numTablet
     };
 
     console.log(currentOptions);
