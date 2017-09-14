@@ -108,7 +108,7 @@
 </style>
 <script>
     import logout from './mixins/logout.js';
-    import MFofm from './message-form.vue';
+    import MForm from './message-form.vue';
 
     export default {
         data() {
@@ -124,7 +124,7 @@
             }
         },
         components: {
-            'msg-form': MFofm
+            'msg-form': MForm
         },
         mixins: [logout],
         mounted() {
@@ -141,12 +141,6 @@
             }
         },
         methods: {
-            change(){
-                this.showMsgForm = false;
-            },
-            openMsgForm(){
-                this.showMsgForm = true;
-            },
             toggleMsgForm(){
                 this.showMsgForm = !this.showMsgForm;
             },

@@ -78,7 +78,6 @@
                 };
                 const optionsBar = Object.assign({}, options, {msgBar: this.msg});
                 const optionsRest = Object.assign({}, options, {msgRest: this.msg});
-                console.log(options);
                 if (this.msg !== '') {
                     if (this.isToBar && this.isToRest) {
                         console.log('Отправляем и на кухню, и на бар');

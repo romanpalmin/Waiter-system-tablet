@@ -1,6 +1,6 @@
 <template>
     <div>
-
+        <div class="btn-show-message-form"  :style="getStyle('message')" @click="openMsgForm()"></div>
         <template v-if="printed.length > 0">
             <div class="btn-show-printed" @click="setView('printed')" v-if="!this.$store.state.openedPanel.printed" :style="getStyle('info')">
             </div>
@@ -129,7 +129,15 @@
         <f7-block>
             <category/>
         </f7-block>
-
+        <f7-popup class="message-form-popup" :opened=showMsgForm @popup:closed="closeMsgForm()">
+            <f7-block inner no-hairlines>
+                <f7-grid>
+                    <f7-col>
+                        <msg-form :options="{'tableId': 1}" />
+                    </f7-col>
+                </f7-grid>
+            </f7-block>
+        </f7-popup>
 
     </div>
     <print-order/>
@@ -142,6 +150,19 @@
         background-color: lightgrey;
         position: absolute;
         right: 0;
+        border-radius: 50%;
+        line-height: 50px;
+        font-size: 20pt;
+        font-weight: 900;
+        border: 2px solid;
+        cursor: pointer;
+    }
+    .btn-show-message-form {
+        width: 50px;
+        height: 50px;
+        background-color: lightgrey;
+        position: absolute;
+        left: 0;
         border-radius: 50%;
         line-height: 50px;
         font-size: 20pt;
@@ -238,6 +259,7 @@
 <script>
     import category from './list-of-ctgs.vue';
     import panel from './buttons-panel.vue';
+    import MForm from '../message-form.vue'
 
     export default {
         data() {
@@ -247,7 +269,8 @@
                 showType: 'all',
                 //showType: 'byGuests',
                 firstTime: false,
-                testDiv: ''
+                testDiv: '',
+                showMsgForm: false
             }
         },
         watch: {
@@ -389,8 +412,6 @@
             }
         },
         mounted() {
-            console.log('Текущая страница!!');
-            console.log(this.$store.state.pages);
             console.log('Очищаем интервал ', this.$store.state.intervals.updateUserTables);
             clearInterval(this.$store.state.intervals.updateUserTables);
             this.openGuest(1);
@@ -399,6 +420,18 @@
 
         },
         methods: {
+            toggleMsgForm(){
+                console.log('Меняем showMsgForm');
+                this.showMsgForm = !this.showMsgForm;
+            },
+            closeMsgForm(){
+                console.log('closeMsgForm');
+                this.showMsgForm = false;
+            },
+            openMsgForm(){
+                console.log('openMsgForm');
+                this.showMsgForm = true;
+            },
             onSwipeLeft(item) {
                 this.$store.dispatch('REMOVE_POSITION_FROM_ORDER', item.el);
             },
@@ -425,6 +458,9 @@
                 switch (type) {
                     case 'info':
                         str = `background-image: url("http://10.10.182.11/ept/waiter-tablet/images/info.png");background-size: cover; `;
+                        break;
+                    case 'message':
+                        str = `background-image: url("http://10.10.182.11/ept/waiter-tablet/images/message.png");background-size: cover; `;
                         break;
                     default :
                         str = '';
@@ -552,7 +588,8 @@
         },
         components: {
             category,
-            'buttons-panel': panel
+            'buttons-panel': panel,
+            'msg-form': MForm
         }
     }
 
