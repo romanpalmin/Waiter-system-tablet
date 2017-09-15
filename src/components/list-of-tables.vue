@@ -93,7 +93,9 @@
         },
         props: ['list'],
         methods: {
+
             selectTable(table) {
+                console.log(table);
                 if ((this.pressed.isPressed && this.pressed.tableId === table.table) || table.status === 0) {
                     //console.log('Второе нажатие на стол');
                     this.$store.commit('SET_SHOW_PRINTER_BTN', false);
@@ -183,7 +185,7 @@
                                     }
                                 );
                             });
-                    } else if (table.status === 2 && table.ocupate === this.$store.state.waiter.id && table.garson === this.$store.state.waiter.id){
+                    } else if (table.status === 2 && (table.ocupate === this.$store.state.waiter.id || table.ocupate === 0) && table.garson === this.$store.state.waiter.id){
                         console.log('Попытка разблокировать');
                         blocker.unblockTable({
                                 tableId: table.table,
