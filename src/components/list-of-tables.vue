@@ -4,7 +4,7 @@
             <div class="list-of-tables" @click="selectTable(0)">
                 <div class="table" v-for="table in list">
                     <f7-link>
-                        <div class="table-image table-item"  :style="getStyle(table)" @click="selectTable(table)"
+                        <div class="table-image table-item" :style="getStyle(table)" @click="selectTable(table)"
                              :data-id="table.table">
                             {{table.table}}
                         </div>
@@ -32,7 +32,7 @@
                 /*background: url(http://10.10.182.11/ept/waiter-tablet/images/table.png);*/
                 border-radius: 20px;
             }
-            .table-item{
+            .table-item {
                 color: #ffffff;
                 font-weight: 900;
                 line-height: 50px;
@@ -45,9 +45,9 @@
                 font-size: smaller;
             }
             .pressed {
-                box-shadow: -5px -5px grey;
-                margin-top: 5px;
-                margin-left: 5px;
+                box-shadow: 5px 5px grey;
+                /*margin-top: 5px;
+                margin-left: 5px;*/
             }
         }
 
@@ -157,34 +157,43 @@
                         } else {
                             lockTable();
                         }
-                    } else {
-                        if (table.status === 1 && table.ocupate !== 0 && table.garson === this.$store.state.waiter.id) {
-                            this.$$('.pressed').removeClass('pressed');
-                            this.$store.commit('SET_PRELOADED_ORDER', {'preloaded': []});
-                            this.$store.commit('SET_SHOW_TABLE_ACTIONS_PANEL', false);
-                            /*blocker.unblockTable({
-                                    tableId: this.pressed.tableId,
-                                    zakNo: this.pressed.zakNo,
-                                    uuid: this.$store.state.settings.uuid,
-                                    callback: () => {
-                                        this.pressed.isPressed = false;
-                                    }
+                    } else if (table.status === 1 && table.ocupate !== 0 && table.garson === this.$store.state.waiter.id) {
+                        this.$$('.pressed').removeClass('pressed');
+                        this.$store.commit('SET_PRELOADED_ORDER', {'preloaded': []});
+                        this.$store.commit('SET_SHOW_TABLE_ACTIONS_PANEL', false);
+                        /*blocker.unblockTable({
+                                tableId: this.pressed.tableId,
+                                zakNo: this.pressed.zakNo,
+                                uuid: this.$store.state.settings.uuid,
+                                callback: () => {
+                                    this.pressed.isPressed = false;
                                 }
-                            );*/
+                            }
+                        );*/
 
-                            this.$f7.confirm(`Разблокировать стол №${table.table}?`, 'Стол заблокирован',
-                                () => {
-                                    blocker.unblockTable({
-                                            tableId: table.table,
-                                            zakNo: table.zakNo,
-                                            uuid: this.$store.state.settings.uuid,
-                                            callback: () => {
-                                                this.$router.load({'url': '/tables/', 'reload': true});
-                                            }
+                        this.$f7.confirm(`Разблокировать стол №${table.table}?`, 'Стол заблокирован',
+                            () => {
+                                blocker.unblockTable({
+                                        tableId: table.table,
+                                        zakNo: table.zakNo,
+                                        uuid: this.$store.state.settings.uuid,
+                                        callback: () => {
+                                            this.$router.load({'url': '/tables/', 'reload': true});
                                         }
-                                    );
-                                });
-                        }
+                                    }
+                                );
+                            });
+                    } else if (table.status === 2 && table.ocupate === this.$store.state.waiter.id && table.garson === this.$store.state.waiter.id){
+                        console.log('Попытка разблокировать');
+                        blocker.unblockTable({
+                                tableId: table.table,
+                                zakNo: table.zakNo,
+                                uuid: this.$store.state.settings.uuid,
+                                callback: () => {
+                                    this.$router.load({'url': '/tables/', 'reload': true});
+                                }
+                            }
+                        );
                     }
                 }
             },
@@ -220,7 +229,7 @@
                         color = 'green';
                         break;
                     case 1:
-                        if (table.ocupate !== 0 && table.ocupate === this.usrID){
+                        if (table.ocupate !== 0 && table.ocupate === this.usrID) {
                             color = 'gray';
                         } else {
                             color = 'blue';
@@ -313,7 +322,7 @@
                     'table': table,
                     'guests': 1,
                     'uuid': this.$store.state.settings.uuid
-                }
+                };
 
                 this.axios.get(url, {params: options})
                     .then((resp) => {

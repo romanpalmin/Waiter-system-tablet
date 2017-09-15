@@ -74,7 +74,8 @@
                 name: 'this component',
                 currentInterval: 0,
                 currentTables: [],//_.filter(tables, {waitress:this.$store.state.waiter.id})
-                showMsgForm: false
+                showMsgForm: false,
+                isShowError: true
             }
         },
         destroyed(){
@@ -94,7 +95,7 @@
                 } else {
                     console.log('Не обновляем столы');
                 }
-            }, 10000);
+            }, 1000);
             console.log('Очищаем интервал ', this.$store.state.intervals.updateUserTables);
             clearInterval(this.$store.state.intervals.updateUserTables);
             this.$store.commit('SET_UPDATE_USER_TABLES', {state});
@@ -138,6 +139,7 @@
                 setTimeout(() => {
                     this.axios.get(this.$store.getters.apiUrl, {params: options})
                         .then(resp => {
+                            this.isShowError = true;
                             if (resp && resp.data) {
                                 result = _.filter(resp.data, item => {
                                     return item.garson === this.$store.state.waiter.id; //&& (item.status === 1 || item.status === 5);
@@ -150,7 +152,12 @@
                         })
                         .catch((err => {
                             if (isShowPreloader) this.$f7.hidePreloader();
-                            this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
+                            if (this.isShowError) {
+                                this.isShowError = false;
+                                this.$f7.alert(`Проверьте подключение к WiFi`, 'Ошибка!', ()=>{
+                                    this.isShowError = true;
+                                });
+                            }
                         }));
                     //this.$store.commit('SET_ADD_ORDER_PAGE', {'addorder': false});
                     this.$store.commit('REMOVE_FULL_CURRENT_ORDER');

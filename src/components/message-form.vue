@@ -52,6 +52,7 @@
                 this.$f7.closeModal('.message-form-popup');
             },
             eraseMsg() {
+                console.log('Текущий zakNo', this.$store.state.orders.currentOrderId);
                 this.msg = '';
                 this.isToBar = false;
                 this.isToRest = false;
@@ -74,6 +75,7 @@
                     'table': this.$store.state.currentTable,
                     'usrID': this.$store.state.waiter.id ? this.$store.state.waiter.id : 0,
                     'uuid': this.$store.state.settings.uuid,
+                    'zakNo': this.$store.state.orders.currentOrderId,
                     'numTablet': this.$store.state.tabletNumber
                 };
                 const optionsBar = Object.assign({}, options, {msgBar: this.msg});

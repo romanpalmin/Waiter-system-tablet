@@ -96,6 +96,7 @@
                         this.$store.commit('SET_SHOW_TABLE_ACTIONS_PANEL', false);
                         this.$store.commit('SET_SHOW_PRINTER_BTN', false);
                         this.$store.commit('SET_CURRENT_TABLE', {tableId: 0});
+                        this.$store.commit('SET_CURRENT_ORDER_ID', {'orderId': 0});
                     }
                 });
             }/*,
