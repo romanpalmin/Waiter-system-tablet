@@ -43,7 +43,10 @@
         computed: {
             disabledBtn: function () {
                 return !(this.msg !== '' && (this.isToBar || this.isToRest));
-            }
+            },
+            screeningMsg: function(){
+                return this.msg.replace(/\*|;/g, '');
+            },
         },
         props: ['options'],
         methods: {
@@ -78,9 +81,9 @@
                     'zakNo': this.$store.state.orders.currentOrderId,
                     'numTablet': this.$store.state.tabletNumber
                 };
-                const optionsBar = Object.assign({}, options, {msgBar: this.msg});
-                const optionsRest = Object.assign({}, options, {msgRest: this.msg});
-                if (this.msg !== '') {
+                const optionsBar = Object.assign({}, options, {msgBar: this.screeningMsg});
+                const optionsRest = Object.assign({}, options, {msgRest: this.screeningMsg});
+                if (this.screeningMsg !== '') {
                     if (this.isToBar && this.isToRest) {
                         console.log('Отправляем и на кухню, и на бар');
                         this.sendMsg([
