@@ -177,13 +177,13 @@
             printOrder(){
                 console.log('Print 1');
                 this.$store.commit('SET_ACTIVE_ORDER_PANEL', {'status': 'current'});
-                this.$store.commit('SET_CURRENT_ORDER_ID', {'orderId': 0});
+
                 (_.once(()=>{printer.addStringsToOrder(this)}))();
             },
             backToTables(){
                 console.log('Back');
                 this.$store.commit('SET_ACTIVE_ORDER_PANEL', {'status': 'current'});
-                this.$store.commit('SET_CURRENT_ORDER_ID', {'orderId': 0});
+
                 printer.backToTables(this);
             }
         },

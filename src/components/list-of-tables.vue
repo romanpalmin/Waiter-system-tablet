@@ -163,16 +163,6 @@
                         this.$$('.pressed').removeClass('pressed');
                         this.$store.commit('SET_PRELOADED_ORDER', {'preloaded': []});
                         this.$store.commit('SET_SHOW_TABLE_ACTIONS_PANEL', false);
-                        /*blocker.unblockTable({
-                                tableId: this.pressed.tableId,
-                                zakNo: this.pressed.zakNo,
-                                uuid: this.$store.state.settings.uuid,
-                                callback: () => {
-                                    this.pressed.isPressed = false;
-                                }
-                            }
-                        );*/
-
                         this.$f7.confirm(`Разблокировать стол №${table.table}?`, 'Стол заблокирован',
                             () => {
                                 blocker.unblockTable({

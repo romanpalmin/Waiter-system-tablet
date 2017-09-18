@@ -10,7 +10,7 @@ const store = new Vuex.Store({
             isDebug: true,
             url: '10.100.50.248/planshet_kl/hs/garson',
             urlModel: '10.100.50.248/planshet_kl/hs/model',
-           /* url: '10.10.182.11/planshet/hs/garson',
+            /*url: '10.10.182.11/planshet/hs/garson',
             urlModel: '10.10.182.11/planshet/hs/model',*/
             login: 'planshet',
             pass: 'planshet',

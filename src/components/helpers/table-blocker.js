@@ -24,8 +24,6 @@ function ajax(options) {
     let currentOptions = {
         cmd_garson, table, usrID, zakNo, uuid, numTablet
     };
-
-    console.log(currentOptions);
     axios.get(url, {params:currentOptions})
         .then(function (response) {
             console.log(response.status + ' ::: ' + response.data[0].status  + ' ::: ' + response.data[0].text);

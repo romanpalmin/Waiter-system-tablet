@@ -63,6 +63,7 @@ export default {
                             zakNo,
                             uuid,
                             callback: () => {
+                                store.commit('SET_CURRENT_ORDER_ID', {'orderId': 0});
                                 exitToTables(ctx);
                             }
                         });
@@ -161,7 +162,11 @@ export default {
                     blocker.unblockTable({
                         tableId: table,
                         zakNo,
-                        uuid
+                        uuid,
+                        callback: () => {
+                            //exitToTables(ctx);
+                            self.$store.commit('SET_CURRENT_ORDER_ID', {'orderId': 0});
+                        }
                         //usrId: self.store.state.waiter.waiterId,
 
                     });
