@@ -129,7 +129,7 @@
         <f7-block>
             <category/>
         </f7-block>
-        <f7-popup class="message-form-popup" :opened=showMsgForm @popup:closed="closeMsgForm()">
+       <f7-popup class="message-form-popup" :opened=showMsgForm @popup:closed="closeMsgForm()">
             <f7-block inner no-hairlines>
                 <f7-grid>
                     <f7-col>
@@ -138,9 +138,18 @@
                 </f7-grid>
             </f7-block>
         </f7-popup>
-
+        <!--<f7-popup class="start-popup" :opened=showStartForm @popup:closed="closeStartForm()">
+            <f7-block inner no-hairlines>
+                <f7-grid>
+                    <f7-col>
+                        test
+                    </f7-col>
+                </f7-grid>
+            </f7-block>
+        </f7-popup>
+-->
     </div>
-    <print-order/>
+   <!-- <print-order/>-->
 
 </template>
 <style scoped lang="less">
@@ -260,6 +269,7 @@
     import category from './list-of-ctgs.vue';
     import panel from './buttons-panel.vue';
     import MForm from '../message-form.vue';
+    import ajax from '../helpers/ajax';
 
     export default {
         data() {
@@ -270,7 +280,8 @@
                 //showType: 'byGuests',
                 firstTime: false,
                 testDiv: '',
-                showMsgForm: false
+                showMsgForm: true,
+                showStartForm: true
             }
         },
         watch: {
@@ -417,14 +428,72 @@
             this.openGuest(1);
             this.setHandlers();
             this.$store.commit('SET_ACTIVE_ORDER_PANEL', {'status': 'menu'});
+            //this.showMsgForm = true;
+            //alert('open');
+            /*setTimeout(()=>{
+                alert('now closing... ' + this.showStartForm);
+                //this.showMsgForm = false;
+                this.showStartForm = false;
+                alert('close');
+                this.$router.refreshPage()
+
+            }, 1200);
+            this.$nextTick(()=>{
+                alert('UP');
+                alert(this.showStartForm);
+            })*/
+/*
+            setTimeout(()=>{
+                //this.showStartForm = false;
+                //this.closeMsgForm();
+            }, 5000);
+*/
+
+            console.log('Начинаем оформление заказа, загружаем товары');
+            if (!this.$store.state.pages.addorder){
+                this.$f7.showPreloader('Загружаем заказ стола №' + this.$store.state.currentTable);
+                console.log('Загружаем весь заказ~~~~~~~~~');
+                this.getPrinted();
+            } else {
+                this.closeMsgForm();
+            }
+
 
         },
         methods: {
+            async getPrinted() {
+                let uuid = this.$store.state.settings.uuid;
+                let usrID = this.$store.state.waiter.id;
+                let table = this.$store.state.currentTable;
+                let zakNo = this.$store.state.orders.currentOrderId;
+                let guests = this.$store.state.guestsCount;
+                let numTablet = this.$store.state.tabletNumber;
+
+                let optionsRec = {
+                    'cmd_garson': 'REC', numTablet, zakNo, usrID, table, guests, uuid
+                };
+                try {
+                    const res = await ajax.getData(optionsRec);
+                    let currentPrinted = res.str2 ? res.str2 : [];
+                    this.$store.commit('SET_PRINTED_ORDER', {'printedOrders': currentPrinted});
+                    this.$f7.hidePreloader();
+                    this.closeMsgForm();
+                    //this.$f7.closeModal();
+                }
+                catch (err) {
+                    this.$f7.alert(`Ошибка: ${err}`, 'Ошибка!');
+                    this.$f7.hidePreloader();
+                }
+
+            },
             toggleMsgForm(){
                 this.showMsgForm = !this.showMsgForm;
             },
             closeMsgForm(){
                 this.showMsgForm = false;
+            },
+            closeStartForm(){
+                this.showStartForm = false;
             },
             openMsgForm(){
                 this.showMsgForm = true;

@@ -58,7 +58,6 @@
             </f7-navbar>
         </f7-popup>
         <f7-popup class="select-tablet">
-            <!-- Popup content goes here -->
             <p>
                 <f7-link href="#" close-popup data-popup=".select-tablet">Закрыть</f7-link>
             </p>

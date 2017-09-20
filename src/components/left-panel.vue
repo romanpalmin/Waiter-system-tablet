@@ -32,15 +32,15 @@
             <p><f7-link href="#" close-panel class="remove-from-ls">Очистить LS по ключу</f7-link></p>
             <p><f7-link href="#" close-panel class="clear-ls">Очистить LS</f7-link></p>
         </f7-block>-->
-        <f7-popup class="select-tablet">
-            <!-- Popup content goes here -->
+        <!--<f7-popup class="select-tablet">
+            &lt;!&ndash; Popup content goes here &ndash;&gt;
             <p>
                 <f7-link href="#" close-popup data-popup=".select-tablet">Закрыть</f7-link>
             </p>
             <hr/>
             <select-tablet/>
         </f7-popup>
-        <print-order/>
+        <print-order/>-->
     </div>
 
 </template>
@@ -48,10 +48,10 @@
 
 </style>
 <script>
-    import selectTablet from './select-tablet.vue';
-    import printOrder from './orders/print-order.vue';
+/*    import selectTablet from './select-tablet.vue';
+    import printOrder from './orders/print-order.vue';*/
     import logout from './mixins/logout.js'
-    import print from '../components/helpers/print-orders'
+    /*import print from '../components/helpers/print-orders'*/
 
     export default {
         data() {
@@ -69,8 +69,8 @@
             }
         },
         components: {
-            'select-tablet': selectTablet,
-            'print-order': printOrder
+           /* 'select-tablet': selectTablet,
+            'print-order': printOrder*/
         },
         methods: {
             exit() {
