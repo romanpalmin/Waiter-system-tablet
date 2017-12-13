@@ -6,8 +6,8 @@ Main application functionality
 - Online support for the current status of the menu
 - Ability to work in one of three roles:
   - Waiter
-  - Senior waiter
-  - Cashier
+  - Senior waiter
+  - Cashier
 - Create and edit an order
 - Loading an existing guest order
 - Sending an order for an implementation
